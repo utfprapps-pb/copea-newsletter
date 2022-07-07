@@ -1,0 +1,12 @@
+quarkus:
+  # datasource configuration
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: admin
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/newsletter
+  hibernate-orm:
+    database:
+      # drop and create the database at startup (use `update` to only update the schema)
+      generation: update
