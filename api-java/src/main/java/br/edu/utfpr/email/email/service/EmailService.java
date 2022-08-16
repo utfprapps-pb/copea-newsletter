@@ -9,7 +9,11 @@ import org.apache.commons.mail.HtmlEmail;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.PreencodedMimeBodyPart;
 import javax.persistence.EntityManager;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,9 +51,19 @@ public class EmailService {
             aCollection.add(ie);
         }
 
+        MimeBodyPart filePart = new PreencodedMimeBodyPart("base64");
+        filePart.setFileName("teste.png");
+        filePart.setHeader("Content-ID", "<teste>");
+        filePart.setText(body);
+
+        MimeMultipart mimeMultipart = new MimeMultipart();
+        mimeMultipart.addBodyPart(filePart);
+        htmlEmail.addPart(mimeMultipart);
+
         htmlEmail.setTo(aCollection);
-        htmlEmail.setHtmlMsg(body);
-        if (htmlEmail.getMimeMessage()==null) {
+//        htmlEmail.setHtmlMsg(body);
+        htmlEmail.setHtmlMsg("<img src=\"cid:teste\"/>");
+        if (htmlEmail.getMimeMessage() == null) {
             htmlEmail.buildMimeMessage();
         }
         htmlEmail.sendMimeMessage();
