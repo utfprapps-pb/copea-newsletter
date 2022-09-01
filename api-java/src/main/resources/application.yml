@@ -3,7 +3,7 @@ quarkus:
   datasource:
     db-kind: postgresql
     username: postgres
-    password: admin
+    password: postgres
     jdbc:
       url: jdbc:postgresql://localhost:5432/newsletter
   hibernate-orm:

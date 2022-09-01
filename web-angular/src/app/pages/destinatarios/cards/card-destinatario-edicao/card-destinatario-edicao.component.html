@@ -1,0 +1,27 @@
+<mat-card class="d-m">
+
+    <!-- Título -->
+    <mat-card-title>Destinatário</mat-card-title>
+
+    <!-- Form -->
+    <mat-card-subtitle>
+        <form [formGroup]="form">
+
+            <!-- Email -->
+            <mat-form-field class="full-width d-pad-top" appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" required placeholder="seunome@exemplo.com" type="email">
+            </mat-form-field>
+
+        </form>
+    </mat-card-subtitle>
+
+    <!-- Ações -->
+    <mat-card-actions align="end" class="align-center">
+        <b class="d-m-right">ID:</b> {{form.controls['id'].value || 'Nada (novo registro)'}}
+        <button mat-button class="mat-button-sucess d-m-left" (click)="persistirEdicao()">Gravar</button>
+        <button *ngIf="form.controls['id'].value" mat-button class="mat-button-warn"
+            (click)="removerRegistro()">Remover</button>
+    </mat-card-actions>
+
+</mat-card>

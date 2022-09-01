@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+// TEMA
+$primary: mat-palette($mat-yellow, 800);
+$accent:  mat-palette($mat-yellow, 500);
+$warn:    mat-palette($mat-red, 700);
+$theme:   mat-light-theme($primary, $accent, $warn);
+
+// TEMA "SUAVE"
+$soft-primary: mat-palette($mat-yellow, 200);
+$soft-accent:  mat-palette($mat-yellow, 400);
+$soft-theme:   mat-light-theme($soft-primary, $soft-accent);
+
+// TEMA DE SUCESSO
+$sucess:        mat-palette($mat-green, 400);
+$sucess-accent: mat-palette($mat-green, 700);
+$sucess-theme:  mat-light-theme($sucess, $sucess-accent);
+
+
+// TEMA ESCURO
+$dark:        mat-palette($mat-grey, 700);
+$dark-accent: mat-palette($mat-grey, 800);
+$dark-theme:  mat-light-theme($dark, $dark-accent);
+
+@include angular-material-theme($theme);

@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   public logar(login: any) {
-    const api = environment.apiURL + `/auth`;
+    const api = environment.api + `/auth`;
     return this.http.post(api, login).pipe(map((resposta: any) => {
       this.token = resposta.data.token;
       localStorage.setItem('acess_token', this.token);
@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   public cadastrar(usuario: Usuario): Observable<any> {
-    const api = environment.apiURL + '/auth/singin';
+    const api = environment.api + '/auth/singin';
     return this.http.post(api, usuario);
   }
 

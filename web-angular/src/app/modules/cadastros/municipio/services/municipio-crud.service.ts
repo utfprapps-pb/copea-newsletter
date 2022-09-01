@@ -11,7 +11,7 @@ export class MunicipioCrudService {
   constructor(private http: HttpClient) { }
 
   carregar(id: number) {
-    const url = `${environment.apiURL}/municipio/${id}`;
+    const url = `${environment.api}/municipio/${id}`;
     return this.http.get<Municipio>(url).pipe(
       tap(
         resultado => {
@@ -22,7 +22,7 @@ export class MunicipioCrudService {
   }
 
   incluir(municipio: Municipio) {
-    const url = `${environment.apiURL}/municipio`;
+    const url = `${environment.api}/municipio`;
     return this.http.post<Municipio>(url, municipio).pipe(
       tap(
         resultado => {
@@ -33,7 +33,7 @@ export class MunicipioCrudService {
   }
 
   atualizar(municipio: Municipio) {
-    const url = `${environment.apiURL}/municipio`;
+    const url = `${environment.api}/municipio`;
     return this.http.put<Municipio>(url, municipio).pipe(
       tap(
         resultado => {
@@ -44,7 +44,7 @@ export class MunicipioCrudService {
   }
 
   deletar(id: number) {
-    const url = `${environment.apiURL}/municipio/${id}`;
+    const url = `${environment.api}/municipio/${id}`;
     return this.http.delete<any>(url).pipe(
       tap(
         resultado => {

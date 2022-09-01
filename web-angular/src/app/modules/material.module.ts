@@ -10,6 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
     imports: [
@@ -23,6 +25,8 @@ import { MatMenuModule } from '@angular/material/menu';
         MatFormFieldModule,
         MatSelectModule,
         MatMenuModule,
+        MatTableModule,
+        MatSnackBarModule,
     ],
     exports: [
         MatToolbarModule,
@@ -35,7 +39,9 @@ import { MatMenuModule } from '@angular/material/menu';
         MatFormFieldModule,
         MatSelectModule,
         MatMenuModule,
-    ]
+        MatTableModule,
+        MatSnackBarModule,
+    ],
 })
 export class MaterialModule {
 

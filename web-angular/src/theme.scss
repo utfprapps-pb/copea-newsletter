@@ -1,0 +1,32 @@
+@import "./variables";
+
+$primary: map-get($theme, primary);
+$accent: map-get($theme, accent);
+$warn: map-get($theme, warn);
+$sucess: map-get($sucess-theme, primary);
+$soft-primary: map-get($soft-theme, primary);
+
+.mat-button {
+    color: #fff !important;
+    background-color: mat-color($primary) !important;
+}
+
+.mat-button-sucess { background-color: mat-color($sucess) !important; }
+.mat-button-warn { background-color: mat-color($warn) !important; }
+
+.text-sucess { color: mat-color($sucess); }
+
+.mat-row:hover .mat-cell { 
+    background-color: mat-color($soft-primary); 
+
+    .mat-button-hover-actions {
+        display: inherit !important;
+    }
+}
+
+.mat-button-hover-actions { display: none !important; }
+
+.accent-hover:hover { 
+    background-color: mat-color($primary); 
+    transition: 200ms;
+}

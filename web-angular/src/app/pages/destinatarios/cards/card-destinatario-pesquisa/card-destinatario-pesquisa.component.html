@@ -1,0 +1,45 @@
+<mat-card class="d-m">
+
+    <!-- Título -->
+    <mat-card-title>Pesquisa</mat-card-title>
+
+    <!-- Form -->
+    <mat-card-subtitle>
+
+        <table mat-table [dataSource]="listaRegistros" class="full-width">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="identificador">
+                <th mat-header-cell *matHeaderCellDef> Identificador </th>
+                <td mat-cell *matCellDef="let categoria"> {{categoria.id}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="descricao">
+                <th mat-header-cell *matHeaderCellDef> Email </th>
+                <td mat-cell *matCellDef="let destinatario"> {{destinatario.email}} </td>
+            </ng-container>
+
+            <!-- Ações -->
+            <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef> Ações </th>
+                <td mat-cell *matCellDef="let categoria" style="width: 150px;">
+                    <button mat-icon-button aria-label="Editar" class="mat-button-hover-actions hover-div" (click)="editarRegistro(categoria.id)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button aria-label="Remover" class="mat-button-hover-actions hover-div" (click)="removerRegistro(categoria.id)">
+                        <mat-icon>remove_circle_outline</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <!-- Header -->
+            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+
+            <!-- Rows -->
+            <tr mat-row (click)="editarRegistro(row.id)" *matRowDef="let row; columns: columns;"></tr>
+
+        </table>
+    </mat-card-subtitle>
+
+</mat-card>

@@ -11,7 +11,7 @@ export class MunicipioPesquisaService {
   constructor(private http: HttpClient) { }
 
   listarUFs(): Observable<Municipio[]> {
-    const url = `${environment.apiURL}/municipio/uf/tudo`;
+    const url = `${environment.api}/municipio/uf/tudo`;
     return this.http.get<Municipio[]>(url).pipe(
       tap(
         ufs => {
@@ -22,7 +22,7 @@ export class MunicipioPesquisaService {
   }
 
   pesquisar(valor: any, pagina = 1): Observable<any> {
-    const url = `${environment.apiURL}/municipio/pesquisa`;
+    const url = `${environment.api}/municipio/pesquisa`;
     const options = {
       params: new HttpParams().set('valor', valor).set('pagina', String(pagina))
     };

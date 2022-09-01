@@ -11,7 +11,7 @@ export class Api<T> {
         public http: HttpClient,
         public path: string
     ) {
-        this.url = environment.apiURL + '/api/' + path;
+        this.url = environment.api + '/api/' + path;
     }
 
     public criar(obj: T): Observable<T> {

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiURL: `https://damp-tor-97294.herokuapp.com`
+  api: `https://damp-tor-97294.herokuapp.com`
 };
 
 /*

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+// shared
+import { ConfirmarSenhaValidator } from 'src/app/shared/validators/confirmar-senha-validator';
+import { SenhaValidator } from 'src/app/shared/validators/senha-validator';
 import { AuthService } from 'src/app/services/auth.service';
-import { ConfirmarSenhaValidator } from 'src/app/validators/confirmar-senha-validator';
-import { SenhaValidator } from 'src/app/validators/senha-validator';
 
 @Component({
     selector: 'app-cadastro',
