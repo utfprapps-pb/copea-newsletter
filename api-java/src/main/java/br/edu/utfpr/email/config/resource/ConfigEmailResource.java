@@ -23,7 +23,7 @@ public class ConfigEmailResource {
 
     @PUT
     public Response updateConfigEmail(ConfigEmailEntity configEmail) {
-        configEmailService.updateConfigEmail(configEmail);
+        configEmailService.saveConfigEmail(configEmail);
         return Response.ok(configEmail).build();
     }
 

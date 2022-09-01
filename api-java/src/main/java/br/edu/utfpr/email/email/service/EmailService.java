@@ -2,9 +2,12 @@ package br.edu.utfpr.email.email.service;
 
 import br.edu.utfpr.email.config.entity.ConfigEmailEntity;
 import br.edu.utfpr.email.config.service.ConfigEmailService;
+import br.edu.utfpr.email.email.entity.EmailEntity;
+import br.edu.utfpr.email.email.repository.EmailRepository;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -13,6 +16,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.PreencodedMimeBodyPart;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,8 +25,8 @@ import java.util.List;
 @ApplicationScoped
 public class EmailService {
 
-    @Inject
-    EntityManager entityManager;
+    @Autowired
+    EmailRepository emailRepository;
 
     @Inject
     ConfigEmailService configEmailService;
@@ -82,6 +86,20 @@ public class EmailService {
         htmlEmail.setStartTLSRequired(true);
 
         return htmlEmail;
+    }
+
+    public void saveEmail(EmailEntity email) {
+        emailRepository.save(email);
+    }
+
+    @Transactional
+    public String deleteEmail(Long id) {
+        emailRepository.deleteById(id);
+        return "Registro deletado com sucesso.";
+    }
+
+    public List<EmailEntity> findAllEmail() {
+        return emailRepository.findAll();
     }
 
 }

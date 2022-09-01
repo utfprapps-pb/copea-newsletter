@@ -1,6 +1,8 @@
 package br.edu.utfpr.email.config.service;
 
 import br.edu.utfpr.email.config.entity.ConfigEmailEntity;
+import br.edu.utfpr.email.config.repository.ConfigEmailRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -11,31 +13,20 @@ import java.util.List;
 @ApplicationScoped
 public class ConfigEmailService {
 
-    @Inject
-    EntityManager entityManager;
+    @Autowired
+    ConfigEmailRepository configEmailRepository;
 
-    @Transactional
     public void saveConfigEmail(ConfigEmailEntity configEmail) {
-        entityManager.persist(configEmail);
+        configEmailRepository.save(configEmail);
     }
 
-    @Transactional
-    public void updateConfigEmail(ConfigEmailEntity configEmail) {
-        entityManager.merge(configEmail);
-    }
-
-    @Transactional
     public String deleteConfigEmail(Long id) {
-        ConfigEmailEntity configEmail = entityManager.find(ConfigEmailEntity.class, id);
-        if (configEmail == null)
-            return "Registro não encontrado.";
-        else
-            entityManager.remove(configEmail);
+        configEmailRepository.deleteById(id);
         return "Registro deletado com sucesso.";
     }
 
     public List<ConfigEmailEntity> findAllConfigEmail() {
-        return entityManager.createNamedQuery(ConfigEmailEntity.class.getSimpleName()+".findAll", ConfigEmailEntity.class).getResultList();
+        return configEmailRepository.findAll();
     }
 
 }
