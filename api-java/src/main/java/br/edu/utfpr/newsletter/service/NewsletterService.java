@@ -15,19 +15,27 @@ public class NewsletterService {
 
     public void save(NewsletterEntity newsletterEntity) {
         newsletterEntity.setDataInclusao(LocalDateTime.now());
-        newsletterEntity.setNewsletter(new String(Base64.getDecoder().decode(newsletterEntity.getNewsletter())));
+        convertFieldNewsletterForBase64(newsletterEntity);
         newsletterRepository.save(newsletterEntity);
     }
 
     public void update(NewsletterEntity newsletterEntity) {
         newsletterEntity.setDataAlteracao(LocalDateTime.now());
-        newsletterEntity.setNewsletter(new String(Base64.getDecoder().decode(newsletterEntity.getNewsletter())));
+        convertFieldNewsletterForBase64(newsletterEntity);
         newsletterRepository.save(newsletterEntity);
     }
 
+    private void convertFieldNewsletterForBase64(NewsletterEntity newsletterEntity) {
+        newsletterEntity.setNewsletter(new String(Base64.getDecoder().decode(newsletterEntity.getNewsletter())));
+    }
+
     public String delete(Long id) {
-        newsletterRepository.deleteById(id);
-        return "Registro deletado com sucesso.";
+        if (newsletterRepository.existsById(id)) {
+            newsletterRepository.deleteById(id);
+            return "Registro deletado com sucesso.";
+        } else {
+            return "Registro não econtrado.";
+        }
     }
 
     public List<NewsletterEntity> findAll() {

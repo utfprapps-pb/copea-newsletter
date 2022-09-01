@@ -5,9 +5,6 @@ import br.edu.utfpr.email.config.repository.ConfigEmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
@@ -21,8 +18,12 @@ public class ConfigEmailService {
     }
 
     public String deleteConfigEmail(Long id) {
-        configEmailRepository.deleteById(id);
-        return "Registro deletado com sucesso.";
+        if (configEmailRepository.existsById(id)) {
+            configEmailRepository.deleteById(id);
+            return "Registro deletado com sucesso.";
+        } else {
+            return "Registro não econtrado.";
+        }
     }
 
     public List<ConfigEmailEntity> findAllConfigEmail() {

@@ -15,9 +15,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.PreencodedMimeBodyPart;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -92,10 +89,13 @@ public class EmailService {
         emailRepository.save(email);
     }
 
-    @Transactional
     public String deleteEmail(Long id) {
-        emailRepository.deleteById(id);
-        return "Registro deletado com sucesso.";
+        if (emailRepository.existsById(id)) {
+            emailRepository.deleteById(id);
+            return "Registro deletado com sucesso.";
+        } else {
+            return "Registro não econtrado.";
+        }
     }
 
     public List<EmailEntity> findAllEmail() {

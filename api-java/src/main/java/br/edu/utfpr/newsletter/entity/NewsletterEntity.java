@@ -17,20 +17,19 @@ public class NewsletterEntity {
     @Id
     @SequenceGenerator(name = "newsletter_id_sequence", sequenceName = "newsletter_id_sequence", allocationSize = 1, initialValue = 1)
     @GeneratedValue(generator = "newsletter_id_sequence")
-    @Column(name = "newsletter_id")
     private Long id;
-    @Column(length = 2000)
+    @Column(length = 2000, nullable = false)
     private String descricao;
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     @JsonIgnore
     private LocalDateTime dataInclusao;
     @JsonIgnore
     private LocalDateTime dataAlteracao;
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String newsletter;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "newsletter_emails",
+            name = "newsletter_email",
             joinColumns = @JoinColumn(name = "newsletter_id"),
             inverseJoinColumns = @JoinColumn(name = "email_id")
     )
