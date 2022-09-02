@@ -142,3 +142,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     position: fixed !important;
     bottom: 32px !important;
 }
+
+.hover-button:hover {
+    text-shadow: 0px 1px #0000009c;
+}

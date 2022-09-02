@@ -11,7 +11,7 @@
             <!-- Position Column -->
             <ng-container matColumnDef="identificador">
                 <th mat-header-cell *matHeaderCellDef> Identificador </th>
-                <td mat-cell *matCellDef="let categoria"> {{categoria.id}} </td>
+                <td mat-cell *matCellDef="let destinatario"> {{destinatario.id}} </td>
             </ng-container>
 
             <!-- Name Column -->
@@ -23,11 +23,13 @@
             <!-- Ações -->
             <ng-container matColumnDef="acoes">
                 <th mat-header-cell *matHeaderCellDef> Ações </th>
-                <td mat-cell *matCellDef="let categoria" style="width: 150px;">
-                    <button mat-icon-button aria-label="Editar" class="mat-button-hover-actions hover-div" (click)="editarRegistro(categoria.id)">
+                <td mat-cell *matCellDef="let destinatario" style="width: 150px;">
+                    <button mat-icon-button title="Editar" class="mat-button-hover-actions hover-button"
+                        (click)="editarRegistro(destinatario.id)">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button aria-label="Remover" class="mat-button-hover-actions hover-div" (click)="removerRegistro(categoria.id)">
+                    <button mat-icon-button title="Remover" class="mat-button-hover-actions hover-button text-error"
+                        (click)="removerRegistro(destinatario.id)">
                         <mat-icon>remove_circle_outline</mat-icon>
                     </button>
                 </td>

@@ -15,6 +15,7 @@ $soft-primary: map-get($soft-theme, primary);
 .mat-button-warn { background-color: mat-color($warn) !important; }
 
 .text-sucess { color: mat-color($sucess); }
+.text-error { color: mat-color($warn); }
 
 .mat-row:hover .mat-cell { 
     background-color: mat-color($soft-primary); 
