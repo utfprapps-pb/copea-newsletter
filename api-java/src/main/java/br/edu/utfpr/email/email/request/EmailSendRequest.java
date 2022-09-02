@@ -1,19 +1,13 @@
 package br.edu.utfpr.email.email.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmailSendRequest {
+public class EmailSendRequest extends AbstractEmailSendRequest {
 
-    private String title;
-    private String body;
     @JsonProperty("emails-list")
     private String[] emailsList;
 
