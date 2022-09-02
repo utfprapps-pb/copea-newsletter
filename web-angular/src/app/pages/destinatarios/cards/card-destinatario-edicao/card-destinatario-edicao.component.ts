@@ -1,6 +1,6 @@
 
 import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 
 @Component({
@@ -25,6 +25,10 @@ export class CardDestinatarioEdicaoComponent {
     private _removerRegistroEvent: Subject<number> = new Subject();
 
     constructor() { }
+
+    public get email(): AbstractControl {
+        return this.form.get('email')!;
+    }
 
     /**
      * @description Lança o evento de persistência da edição

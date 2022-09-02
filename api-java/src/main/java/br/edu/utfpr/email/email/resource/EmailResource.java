@@ -52,6 +52,7 @@ public class EmailResource {
     }
 
     @GET
+    @Path("/find-all")
     public Response findAllConfigEmail() {
         return Response.ok(emailService.findAllEmail()).build();
     }

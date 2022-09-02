@@ -32,7 +32,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .auth-container{
     height: 100%;
-    background-color: #ef6c00;
+    background-color: #424242;
     display: flex;
     justify-content: center;
     align-items: center;

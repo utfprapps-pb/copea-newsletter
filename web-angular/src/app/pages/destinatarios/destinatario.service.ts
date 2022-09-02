@@ -12,7 +12,7 @@ import { Destinatario } from './model/destinatario';
 export class DestinatarioService extends CrudService<Destinatario> {
 
     constructor(public override http: HttpClient) {
-        super('email', http);
+        super('/v1/email', http);
     }
 
     public get novoRegistro(): Observable<Destinatario> {

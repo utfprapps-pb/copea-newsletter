@@ -7,6 +7,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // material
 import { MaterialModule } from 'src/app/modules/material.module';
 
+// formulário
+import { FormularioModule } from 'src/app/modules/formulario/formulario.module';
+
 // aplicação
 import { DestinatarioComponent } from './destinatario.page';
 import { CardDestinatarioEdicaoComponent } from './cards/card-destinatario-edicao/card-destinatario-edicao.component';
@@ -33,6 +36,9 @@ const routes: Routes = [
 
         // material
         MaterialModule,
+        
+        // formulário
+        FormularioModule
     ],
     exports: [],
     providers: [],
