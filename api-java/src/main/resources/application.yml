@@ -12,4 +12,4 @@ quarkus:
       generation: drop-and-create
   http:
     cors: true
-    port: 8081
+    port: 8082

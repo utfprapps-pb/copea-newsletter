@@ -6,7 +6,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmailSendRequest extends AbstractEmailSendRequest {
+public class SendEmailRequest extends AbstractEmailSendRequest {
 
     @JsonProperty("emails-list")
     private String[] emailsList;

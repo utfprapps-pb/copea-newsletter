@@ -19,12 +19,14 @@ public class NewsletterEntity {
     @GeneratedValue(generator = "newsletter_id_sequence")
     private Long id;
     @Column(length = 2000, nullable = false)
-    private String descricao;
+    private String description;
+    @Column(length = 2000, nullable = false)
+    private String subject;
     @Column(updatable = false, nullable = false)
     @JsonIgnore
-    private LocalDateTime dataInclusao;
+    private LocalDateTime inclusionDate;
     @JsonIgnore
-    private LocalDateTime dataAlteracao;
+    private LocalDateTime alterationDate;
     @Column(columnDefinition = "TEXT", nullable = false)
     private String newsletter;
     @ManyToMany(cascade = CascadeType.ALL)
