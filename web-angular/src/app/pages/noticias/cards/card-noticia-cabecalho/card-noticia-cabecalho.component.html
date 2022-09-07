@@ -1,0 +1,40 @@
+<mat-card class="d-m">
+
+    <!-- Título -->
+    <mat-card-title>Cabeçalho</mat-card-title>
+
+    <!-- Form -->
+    <mat-card-subtitle class="d-pad-top">
+        <form [formGroup]="form">
+
+            <!-- Título -->
+            <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Título</mat-label>
+                <input matInput formControlName="descricao" placeholder="Digite o título da sua noticia..." cdkFocusInitial
+                    required>
+            </mat-form-field>
+
+            <!-- Erros do título -->
+            <mat-error class="d-m-bottom" *ngIf="tituloControl!.errors?.['maxLenght']">
+                O <b>título</b> não pode possuir mais do que 80 caracteres!
+            </mat-error>
+
+            <!-- Destinatários TODO: Chips com autocomplete -->
+            <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Destinatários</mat-label>
+                <input #categoriaInput type="text" placeholder="Selecione..." aria-label="Destinatários" matInput
+                    [matAutocomplete]="auto" formControlName="destinatarios" (input)="filtrarCategoria()"
+                    (focus)="destinatarioAutocomplete.onFocusAutocomplete()" required
+                    [value]="destinatariosControl?.value | idDescricao">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of destinatarioAutocomplete.optionsFiltradas | async"
+                        [value]="option">
+                        {{option | idDescricao}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+        </form>
+    </mat-card-subtitle>
+
+</mat-card>

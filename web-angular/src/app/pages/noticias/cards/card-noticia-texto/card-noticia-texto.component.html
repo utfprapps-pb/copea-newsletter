@@ -1,0 +1,35 @@
+<mat-card class="d-m">
+
+    <!-- Título -->
+    <mat-card-title>
+        <div class="d-flex justify-between">
+
+            <!-- Texto -->
+            <span>Texto</span>
+
+            <!-- Slide toggle -->
+            <mat-slide-toggle class="title-slide-toggle" [checked]="slideChecked" (toggleChange)="onSlideChange()">
+                Visualizar HTML gerado
+            </mat-slide-toggle>
+
+        </div>
+    </mat-card-title>
+
+    <!-- Form -->
+    <mat-card-subtitle class="d-pad-top">
+        <form [formGroup]="form">
+
+            <!-- Campo (texto) -->
+            <div *ngIf="!slideChecked; else visualizacaoTexto" class="full-width">
+                <angular-editor formControlName="texto" [config]="editorConfig"></angular-editor>
+            </div>
+
+            <!-- Texto como HTML -->
+            <ng-template #visualizacaoTexto>
+                <div class="full-width text-justify" [innerHtml]="texto"></div>
+            </ng-template>
+
+        </form>
+    </mat-card-subtitle>
+
+</mat-card>

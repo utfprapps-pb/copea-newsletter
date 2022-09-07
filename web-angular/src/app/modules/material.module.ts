@@ -11,7 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     imports: [
@@ -27,6 +29,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         MatMenuModule,
         MatTableModule,
         MatSnackBarModule,
+        MatAutocompleteModule,
+        MatSlideToggleModule,
     ],
     exports: [
         MatToolbarModule,
@@ -41,6 +45,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         MatMenuModule,
         MatTableModule,
         MatSnackBarModule,
+        MatAutocompleteModule,
+        MatSlideToggleModule,
     ],
 })
 export class MaterialModule {

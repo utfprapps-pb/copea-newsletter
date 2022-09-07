@@ -22,7 +22,7 @@ export abstract class AdvancedCrudCard<T> implements CrudCard<T> {
         this.form.reset(registro);
     }
 
-    setRegistro(registro: T): void {
+    setRegistro(registro: any): void {
         Object.assign(registro, this.form.getRawValue())
     }
 

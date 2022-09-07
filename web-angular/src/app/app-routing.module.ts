@@ -15,7 +15,8 @@ const routes: Routes = [
         children: [
             { path: 'empresa', loadChildren: () => import('./modules/cadastros/empresa/empresa.module').then(x => x.EmpresaModule) },
             { path: 'teste', loadChildren: () => import('./modules/cadastros/municipio/municipio.module').then(mod => mod.MunicipioModule) },
-            { path: 'destinatario', loadChildren: () => import('./pages/destinatarios/destinatario.module').then(mod => mod.DestinatarioModule) }
+            { path: 'destinatario', loadChildren: () => import('./pages/destinatarios/destinatario.module').then(mod => mod.DestinatarioModule) },
+            { path: 'noticia', loadChildren: () => import('./pages/noticias/noticia.module').then(mod => mod.NoticiaModule) }
         ]
     }
 ];
