@@ -2,9 +2,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-// editor
-import { AngularEditorConfig } from '@kolkov/angular-editor';
-
 // shared
 import { AdvancedCrudCard } from 'src/app/shared/crud/advanced-crud-card';
 import { AdvancedCrudController } from 'src/app/shared/crud/advanced-crud.controller';
@@ -12,6 +9,11 @@ import { AdvancedCrudController } from 'src/app/shared/crud/advanced-crud.contro
 // aplicação
 import { Noticia } from '../../models/noticia';
 import { getNoticiaEditorConfig } from '../../core/noticia-editor-config';
+
+import Quill from 'quill'
+import ImageResize from 'quill-image-resize-module'
+Quill.register('modules/imageResize', ImageResize)
+
 
 @Component({
     selector: 'app-card-noticia-texto',
@@ -23,14 +25,15 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> {
     /**
      * @description Armazena a configuração do editor de texto
      */
-    public editorConfig: AngularEditorConfig;
+    public editorConfig: any;
 
     /**
      * @description Flag que controla o estado 'checado' do slide-toggle
      */
     public slideChecked: boolean;
 
-    // TODO: Criar componente próprio para escrever texto (se der tempo)
+    public quillModules;
+
     constructor(
         public override crudController: AdvancedCrudController<Noticia>,
         public override formBuilder: FormBuilder,
@@ -43,12 +46,12 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> {
     }
 
     public get texto(): string {
-        return this.form.get('texto')?.value;
+        return this.form.get('newsletter')?.value;
     }
 
     criarForm(): FormGroup {
         return this.formBuilder.group({
-            texto: [null, Validators.required],
+            newsletter: [null, Validators.required],
         })
     }
 

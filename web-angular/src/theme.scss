@@ -1,5 +1,7 @@
 @import "./variables";
 
+@import '~quill/dist/quill.bubble.css'; 
+
 $primary: map-get($theme, primary);
 $accent: map-get($theme, accent);
 $warn: map-get($theme, warn);

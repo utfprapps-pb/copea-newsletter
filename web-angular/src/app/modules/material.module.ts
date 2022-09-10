@@ -14,6 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
     imports: [
@@ -31,6 +32,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatSnackBarModule,
         MatAutocompleteModule,
         MatSlideToggleModule,
+        MatChipsModule,
     ],
     exports: [
         MatToolbarModule,
@@ -47,6 +49,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatSnackBarModule,
         MatAutocompleteModule,
         MatSlideToggleModule,
+        MatChipsModule,
     ],
 })
 export class MaterialModule {

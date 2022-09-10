@@ -15,6 +15,7 @@ import { NoticiaService } from './noticia.service';
 @Component({
     selector: 'app-noticia',
     templateUrl: 'noticia.page.html',
+    styleUrls: ['./noticia.page.scss'],
     providers: [
         AdvancedCrudController,
         NoticiaService,

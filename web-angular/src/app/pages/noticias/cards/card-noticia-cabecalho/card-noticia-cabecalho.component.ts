@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // material
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 // shared
 import { AdvancedCrudCard } from 'src/app/shared/crud/advanced-crud-card';
@@ -13,6 +14,7 @@ import { SysAutocompleteControl } from 'src/app/shared/components/autocomplete/s
 // pages
 import { DestinatarioService } from 'src/app/pages/destinatarios/destinatario.service';
 import { AdvancedCrudController } from 'src/app/shared/crud/advanced-crud.controller';
+import { Destinatario } from 'src/app/pages/destinatarios/model/destinatario';
 
 // aplicação
 import { Noticia } from '../../models/noticia';
@@ -24,11 +26,10 @@ import { Noticia } from '../../models/noticia';
 })
 export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> implements OnInit {
 
-    @ViewChild('chipInput') public palavrasChaveInput!: ElementRef<HTMLInputElement>;
-    @ViewChild('categoriaInput') public categoriaInput!: ElementRef<HTMLInputElement>;
+    @ViewChild('destinatarioInput') public destinatarioInput!: ElementRef<HTMLInputElement>;
 
     /**
-     * @description Classe de controle do auto-complete de categoria
+     * @description Classe de controle do auto-complete de destinatários
      */
     public destinatarioAutocomplete!: SysAutocompleteControl;
 
@@ -46,7 +47,11 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
     }
 
     public get destinatariosControl() {
-        return this.form.get('destinatarios');
+        return this.form.get('emails');
+    }
+    
+    public get destinatarios(): Destinatario[] {
+        return this.form.get('emails')?.value || [];
     }
 
     ngOnInit(): void {
@@ -55,22 +60,41 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
 
     private registerControls() {
         this.destinatarioAutocomplete = new SysAutocompleteControl(
-            this.destinatarioService.pesquisarTodos.bind(this.destinatarioService), this.snackBar
+            this.destinatarioService.pesquisarTodos.bind(this.destinatarioService), 
+            this.snackBar,
+            'email'
         );
     }
 
     criarForm(): FormGroup {
         return this.formBuilder.group({
             descricao: [null, [Validators.required, MaxLenghtValidator(80)]],
-            destinatarios: [null]
+            emails: [null]
         })
     }
 
     /**
-     * @description Filtra o auto-complete de categoria
+     * @description Inclui um destinatário na lista e limpa o input
      */
-    public filtrarCategoria() {
-        this.destinatarioAutocomplete.filtrar(this.categoriaInput.nativeElement.value);
+    public addDestinatario(event: MatAutocompleteSelectedEvent): void {
+        this.destinatarios.push(event.option.value);
+        this.destinatariosControl?.reset(this.destinatarios);
+        this.destinatarioInput.nativeElement.value = '';
+    }
+
+    /**
+     * @description Remove um destinatário na lista
+     */
+    public removeDestinatario(index: number): void {
+        this.destinatarios.splice(index, 1);
+        this.destinatariosControl?.reset(this.destinatarios);
+    }
+
+    /**
+     * @description Filtra o auto-complete de destinatários
+     */
+    public filtrarDestinatarios() {
+        this.destinatarioAutocomplete.filtrar(this.destinatarioInput.nativeElement.value);
     }
 
 }

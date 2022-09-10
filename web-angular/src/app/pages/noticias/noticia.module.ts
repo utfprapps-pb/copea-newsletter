@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/modules/material.module';
 
 // text-editor
-import { AngularEditorModule } from '@kolkov/angular-editor';
+import { QuillModule } from 'ngx-quill';
 
 // shared
 import { SysPipesModule } from 'src/app/shared/pipes/sys-pipes.module';
@@ -44,7 +44,7 @@ const routes: Routes = [
         MaterialModule,
 
         // text-editor
-        AngularEditorModule,
+        QuillModule.forRoot(),
 
         // shared
         SysPipesModule,

@@ -21,7 +21,8 @@
 
             <!-- Campo (texto) -->
             <div *ngIf="!slideChecked; else visualizacaoTexto" class="full-width">
-                <angular-editor formControlName="texto" [config]="editorConfig"></angular-editor>
+                <quill-editor formControlName="newsletter" [modules]="editorConfig">
+                </quill-editor>
             </div>
 
             <!-- Texto como HTML -->

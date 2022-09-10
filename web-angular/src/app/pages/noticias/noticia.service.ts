@@ -12,7 +12,7 @@ import { Noticia } from './models/noticia';
 export class NoticiaService extends CrudService<Noticia> {
 
     constructor(public override http: HttpClient) {
-        super('/v1/email', http);
+        super('/v1/newsletter', http);
     }
 
     public get novoRegistro(): Observable<Noticia> {
