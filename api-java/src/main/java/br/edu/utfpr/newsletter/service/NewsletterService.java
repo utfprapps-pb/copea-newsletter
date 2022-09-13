@@ -14,13 +14,12 @@ public class NewsletterService {
     NewsletterRepository newsletterRepository;
 
     public void save(NewsletterEntity newsletterEntity) {
-        newsletterEntity.setDataInclusao(LocalDateTime.now());
-        convertFieldNewsletterForBase64(newsletterEntity);
+        newsletterEntity.setInclusionDate(LocalDateTime.now());
         newsletterRepository.save(newsletterEntity);
     }
 
     public void update(NewsletterEntity newsletterEntity) {
-        newsletterEntity.setDataAlteracao(LocalDateTime.now());
+        newsletterEntity.setAlterationDate(LocalDateTime.now());
         convertFieldNewsletterForBase64(newsletterEntity);
         newsletterRepository.save(newsletterEntity);
     }
