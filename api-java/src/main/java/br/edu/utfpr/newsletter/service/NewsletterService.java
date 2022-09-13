@@ -20,7 +20,6 @@ public class NewsletterService {
 
     public void update(NewsletterEntity newsletterEntity) {
         newsletterEntity.setAlterationDate(LocalDateTime.now());
-        convertFieldNewsletterForBase64(newsletterEntity);
         newsletterRepository.save(newsletterEntity);
     }
 
