@@ -29,7 +29,7 @@ public class NewsletterEntity {
     private LocalDateTime alterationDate;
     @Column(columnDefinition = "TEXT", nullable = false)
     private String newsletter;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(
             name = "newsletter_email",
             joinColumns = @JoinColumn(name = "newsletter_id"),

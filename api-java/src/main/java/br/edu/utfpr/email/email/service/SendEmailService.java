@@ -46,18 +46,19 @@ public class SendEmailService {
 
             htmlEmail.setSubject(title);
 
-            MimeBodyPart filePart = new PreencodedMimeBodyPart("base64");
-            filePart.setFileName("teste.png");
-            filePart.setHeader("Content-ID", "<teste>");
-            filePart.setText(body);
+//            MimeBodyPart filePart = new PreencodedMimeBodyPart("base64");
+//            filePart.setFileName("teste.png");
+//            filePart.setHeader("Content-ID", "<teste>");
+//            filePart.setText(body);
 
-            MimeMultipart mimeMultipart = new MimeMultipart();
-            mimeMultipart.addBodyPart(filePart);
-            htmlEmail.addPart(mimeMultipart);
+//            MimeMultipart mimeMultipart = new MimeMultipart();
+//            mimeMultipart.addBodyPart(filePart);
+//            htmlEmail.addPart(mimeMultipart);
 
             htmlEmail.setTo(getEmailsForSend(emailsList));
-//        htmlEmail.setHtmlMsg(body);
-            htmlEmail.setHtmlMsg("<img src=\"cid:teste\"/>");
+            htmlEmail.setHtmlMsg(body);
+//            htmlEmail.setHtmlMsg("<img src=\"cid:teste\"/>");
+
             if (htmlEmail.getMimeMessage() == null) {
                 htmlEmail.buildMimeMessage();
             }
@@ -65,7 +66,7 @@ public class SendEmailService {
 
             return true;
         } catch (Exception e) {
-            return false;
+            throw new Exception(e.getMessage());
         }
     }
 

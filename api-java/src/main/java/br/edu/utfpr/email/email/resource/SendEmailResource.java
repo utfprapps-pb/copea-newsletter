@@ -48,7 +48,7 @@ public class SendEmailResource {
                             .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
                             .message("Erro ao enviar email." +
                                      System.lineSeparator() +
-                                     "Motivo: " + e.getMessage()))
+                                     "Motivo: " + e.getMessage()).build())
                     .build();
         }
     }

@@ -22,20 +22,40 @@ public class EmailResource {
     }
 
     @PUT
-    public Response updateConfigEmail(EmailEntity email) {
+    public Response updateEmail(EmailEntity email) {
         emailService.saveEmail(email);
         return Response.ok(email).build();
     }
 
     @DELETE
     @Path("/{id}")
-    public Response deleteConfigEmail(@PathParam("id") Long id) {
+    public Response deleteEmail(@PathParam("id") Long id) {
         return Response.ok(emailService.deleteEmail(id)).build();
     }
 
     @GET
-    public Response findAllConfigEmail() {
+    @Path("/find-all")
+    public Response findAllEmail() {
         return Response.ok(emailService.findAllEmail()).build();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response findEmailById(@PathParam("id") Long id) {
+        try {
+            return Response.ok(emailService.findEmailById(id)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    public Response findEmail(@QueryParam("email") String email) {
+        try {
+            return Response.ok(emailService.findEmail(email)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
     }
 
 }

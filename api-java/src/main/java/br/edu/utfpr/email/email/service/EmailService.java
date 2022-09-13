@@ -15,6 +15,7 @@ import javax.mail.internet.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class EmailService {
@@ -37,6 +38,24 @@ public class EmailService {
 
     public List<EmailEntity> findAllEmail() {
         return emailRepository.findAll();
+    }
+
+    public EmailEntity findEmailById(Long id) throws Exception {
+        Optional<EmailEntity> email = emailRepository.findById(id);
+
+        if (email.isPresent())
+            return email.get();
+        else
+            throw new Exception("Registro não encontrado.");
+    }
+
+    public List<EmailEntity> findEmail(String email) throws Exception {
+        List<EmailEntity> emails = emailRepository.findAllByEmailContaining(email);
+
+        if (emails.isEmpty())
+            throw new Exception("Nenhum registro encontrado.");
+        else
+            return emails;
     }
 
 }

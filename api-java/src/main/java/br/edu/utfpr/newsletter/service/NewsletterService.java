@@ -15,7 +15,6 @@ public class NewsletterService {
 
     public void save(NewsletterEntity newsletterEntity) {
         newsletterEntity.setInclusionDate(LocalDateTime.now());
-        convertFieldNewsletterForBase64(newsletterEntity);
         newsletterRepository.save(newsletterEntity);
     }
 
