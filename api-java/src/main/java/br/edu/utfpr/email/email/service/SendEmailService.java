@@ -3,9 +3,12 @@ package br.edu.utfpr.email.email.service;
 import br.edu.utfpr.email.config.entity.ConfigEmailEntity;
 import br.edu.utfpr.email.config.service.ConfigEmailService;
 import br.edu.utfpr.email.email.entity.EmailEntity;
+import br.edu.utfpr.newsletter.dtos.htmlfiles.HtmlFileDTO;
+import br.edu.utfpr.newsletter.dtos.htmlfiles.HtmlFilesWithCidInsteadBase64DTO;
 import br.edu.utfpr.newsletter.entity.NewsletterEntity;
 import br.edu.utfpr.newsletter.repository.NewsletterRepository;
 import br.edu.utfpr.reponses.DefaultResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -15,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mail.internet.*;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -23,6 +30,9 @@ public class SendEmailService {
 
     @Inject
     ConfigEmailService configEmailService;
+
+    @Inject
+    EntityManager entityManager;
 
     @Autowired
     NewsletterRepository newsletterRepository;
@@ -46,18 +56,36 @@ public class SendEmailService {
 
             htmlEmail.setSubject(title);
 
-//            MimeBodyPart filePart = new PreencodedMimeBodyPart("base64");
-//            filePart.setFileName("teste.png");
-//            filePart.setHeader("Content-ID", "<teste>");
-//            filePart.setText(body);
+            MimeMultipart mimeMultipart = new MimeMultipart();
 
-//            MimeMultipart mimeMultipart = new MimeMultipart();
-//            mimeMultipart.addBodyPart(filePart);
-//            htmlEmail.addPart(mimeMultipart);
+            Query query = entityManager.createNativeQuery("select cast(to_json(get_html_files_with_cid_instead_base64(:body)) as varchar)");
+            query.setParameter("body", body);
+            String result = (String) query.getSingleResult();
+
+            if ((result != null) && (!result.isEmpty())) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                HtmlFilesWithCidInsteadBase64DTO htmlFilesWithCidInsteadBase64DTO =
+                        objectMapper.readValue(result, HtmlFilesWithCidInsteadBase64DTO.class);
+
+                if (htmlFilesWithCidInsteadBase64DTO != null) {
+                    for (HtmlFileDTO htmlFileDTO : htmlFilesWithCidInsteadBase64DTO.getHtml_files()) {
+                        MimeBodyPart filePart = new PreencodedMimeBodyPart("base64");
+                        filePart.setHeader("Content-ID", "<" + htmlFileDTO.getContent_id() + ">");
+                        filePart.setFileName(htmlFileDTO.getContent_id() + '.' + htmlFileDTO.getType_file());
+                        filePart.setText(htmlFileDTO.getJustbase64());
+
+                        mimeMultipart.addBodyPart(filePart);
+                    }
+                    body = htmlFilesWithCidInsteadBase64DTO.getHtml_with_content_id_instead_base64();
+                }
+            }
+
+            if (mimeMultipart.getCount() > 0)
+                htmlEmail.addPart(mimeMultipart);
 
             htmlEmail.setTo(getEmailsForSend(emailsList));
+
             htmlEmail.setHtmlMsg(body);
-//            htmlEmail.setHtmlMsg("<img src=\"cid:teste\"/>");
 
             if (htmlEmail.getMimeMessage() == null) {
                 htmlEmail.buildMimeMessage();
