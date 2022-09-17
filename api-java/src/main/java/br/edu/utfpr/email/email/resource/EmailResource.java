@@ -17,15 +17,22 @@ public class EmailResource {
     EmailService emailService;
 
     @POST
-    public Response saveEmail(@Valid EmailEntity configEmail) {
-        emailService.saveEmail(configEmail);
-        return Response.ok(configEmail).build();
+    public Response saveEmail(@Valid EmailEntity email) {
+        return saveUpdateEmail(email);
     }
 
     @PUT
     public Response updateEmail(@Valid EmailEntity email) {
-        emailService.saveEmail(email);
-        return Response.ok(email).build();
+        return saveUpdateEmail(email);
+    }
+
+    public Response saveUpdateEmail(EmailEntity email) {
+        try {
+            emailService.saveEmail(email);
+            return Response.ok(email).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @DELETE

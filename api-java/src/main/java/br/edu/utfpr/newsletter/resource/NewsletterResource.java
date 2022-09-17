@@ -1,5 +1,6 @@
 package br.edu.utfpr.newsletter.resource;
 
+import br.edu.utfpr.email.email.entity.EmailEntity;
 import br.edu.utfpr.newsletter.entity.NewsletterEntity;
 import br.edu.utfpr.newsletter.service.NewsletterService;
 
@@ -17,24 +18,49 @@ public class NewsletterResource {
 
     @POST
     public Response saveNewsletter(@Valid NewsletterEntity newsletterEntity) {
-        newsletterService.save(newsletterEntity);
-        return Response.ok(newsletterEntity).build();
+        return saveUpdateNewsletter(newsletterEntity);
     }
 
     @PUT
     public Response updateNewsletter(@Valid NewsletterEntity newsletterEntity) {
-        newsletterService.update(newsletterEntity);
-        return Response.ok(newsletterEntity).build();
+        return saveUpdateNewsletter(newsletterEntity);
+    }
+
+    public Response saveUpdateNewsletter(NewsletterEntity newsletterEntity) {
+        try {
+            newsletterService.save(newsletterEntity);
+            return Response.ok(newsletterEntity).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
     @DELETE
     @Path("/{id}")
     public Response deleteNewsletter(@PathParam("id") Long id) {
-        return Response.ok(newsletterService.delete(id)).build();
+        try {
+            return Response.ok(newsletterService.delete(id)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
     }
 
     @GET
-    public Response findAllNewsletter(@QueryParam("id") Long id) {
-        return Response.ok(newsletterService.findAll()).build();
+    public Response findAllNewsletter() {
+        try {
+            return Response.ok(newsletterService.findAll()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response findNewsletterById(@PathParam("id") Long id) {
+        try {
+            return Response.ok(newsletterService.findNewsletterById(id)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
     }
 }
