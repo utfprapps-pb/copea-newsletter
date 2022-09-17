@@ -2,8 +2,7 @@ import { Destinatario } from "../../destinatarios/model/destinatario";
 
 export interface Noticia {
     id?: number;
-    descricao?: string; // Título
+    description?: string; // Título
+    subject?: string;
     emails?: Destinatario[];
-    dataInclusao?: Date;
-    dataAlteracao?: Date;
 }

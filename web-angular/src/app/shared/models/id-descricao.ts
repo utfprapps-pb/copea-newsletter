@@ -1,4 +1,4 @@
-export interface IdDescricao {
+export interface Iddescription {
     id?: number;
-    descricao: string;
+    description: string;
 }

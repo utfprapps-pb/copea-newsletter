@@ -1,4 +1,4 @@
-package br.edu.utfpr.newsletter.dtos.htmlfiles;
+package br.edu.utfpr.htmlfileswithcidinsteadbase64.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HtmlFileDTO {
+public class HtmlFileModel {
     private String content_id;
     private String type_file;
     private String justbase64;

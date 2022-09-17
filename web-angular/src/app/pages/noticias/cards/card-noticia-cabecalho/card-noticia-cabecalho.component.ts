@@ -43,7 +43,11 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
     }
 
     public get tituloControl() {
-        return this.form.get('descricao');
+        return this.form.get('description');
+    }
+
+    public get subjectControl() {
+        return this.form.get('subject');
     }
 
     public get destinatariosControl() {
@@ -68,7 +72,8 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
 
     criarForm(): FormGroup {
         return this.formBuilder.group({
-            descricao: [null, [Validators.required, MaxLenghtValidator(80)]],
+            description: [null, [Validators.required, MaxLenghtValidator(80)]],
+            subject: [null, [Validators.required, MaxLenghtValidator(100)]],
             emails: [null]
         })
     }

@@ -3,8 +3,9 @@ package br.edu.utfpr.email.email.service;
 import br.edu.utfpr.email.config.entity.ConfigEmailEntity;
 import br.edu.utfpr.email.config.service.ConfigEmailService;
 import br.edu.utfpr.email.email.entity.EmailEntity;
-import br.edu.utfpr.newsletter.dtos.htmlfiles.HtmlFileDTO;
-import br.edu.utfpr.newsletter.dtos.htmlfiles.HtmlFilesWithCidInsteadBase64DTO;
+import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFileModel;
+import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
+import br.edu.utfpr.htmlfileswithcidinsteadbase64.service.HtmlFilesWithCidInsteadBase64Service;
 import br.edu.utfpr.newsletter.entity.NewsletterEntity;
 import br.edu.utfpr.newsletter.repository.NewsletterRepository;
 import br.edu.utfpr.reponses.DefaultResponse;
@@ -21,9 +22,6 @@ import javax.mail.internet.*;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class SendEmailService {
@@ -31,11 +29,11 @@ public class SendEmailService {
     @Inject
     ConfigEmailService configEmailService;
 
-    @Inject
-    EntityManager entityManager;
-
     @Autowired
     NewsletterRepository newsletterRepository;
+
+    @Autowired
+    HtmlFilesWithCidInsteadBase64Service htmlFilesWithCidInsteadBase64Service;
 
     private ConfigEmailEntity configEmail;
 
@@ -57,29 +55,19 @@ public class SendEmailService {
             htmlEmail.setSubject(title);
 
             MimeMultipart mimeMultipart = new MimeMultipart();
+            HtmlFilesWithCidInsteadBase64Model htmlFilesWithCidInsteadBase64Model =
+                    htmlFilesWithCidInsteadBase64Service.findHtmlFilesWithCidInsteadBase64Model(body);
+            if (htmlFilesWithCidInsteadBase64Model != null) {
+                for (HtmlFileModel htmlFileModel : htmlFilesWithCidInsteadBase64Model.getHtml_files()) {
+                    MimeBodyPart filePart = new PreencodedMimeBodyPart("base64");
+                    filePart.setHeader("Content-ID", "<" + htmlFileModel.getContent_id() + ">");
+                    filePart.setFileName(htmlFileModel.getContent_id() + '.' + htmlFileModel.getType_file());
+                    filePart.setText(htmlFileModel.getJustbase64());
 
-            Query query = entityManager.createNativeQuery("select cast(to_json(get_html_files_with_cid_instead_base64(:body)) as varchar)");
-            query.setParameter("body", body);
-            String result = (String) query.getSingleResult();
-
-            if ((result != null) && (!result.isEmpty())) {
-                ObjectMapper objectMapper = new ObjectMapper();
-                HtmlFilesWithCidInsteadBase64DTO htmlFilesWithCidInsteadBase64DTO =
-                        objectMapper.readValue(result, HtmlFilesWithCidInsteadBase64DTO.class);
-
-                if (htmlFilesWithCidInsteadBase64DTO != null) {
-                    for (HtmlFileDTO htmlFileDTO : htmlFilesWithCidInsteadBase64DTO.getHtml_files()) {
-                        MimeBodyPart filePart = new PreencodedMimeBodyPart("base64");
-                        filePart.setHeader("Content-ID", "<" + htmlFileDTO.getContent_id() + ">");
-                        filePart.setFileName(htmlFileDTO.getContent_id() + '.' + htmlFileDTO.getType_file());
-                        filePart.setText(htmlFileDTO.getJustbase64());
-
-                        mimeMultipart.addBodyPart(filePart);
-                    }
-                    body = htmlFilesWithCidInsteadBase64DTO.getHtml_with_content_id_instead_base64();
+                    mimeMultipart.addBodyPart(filePart);
                 }
+                body = htmlFilesWithCidInsteadBase64Model.getHtml_with_content_id_instead_base64();
             }
-
             if (mimeMultipart.getCount() > 0)
                 htmlEmail.addPart(mimeMultipart);
 
@@ -90,6 +78,7 @@ public class SendEmailService {
             if (htmlEmail.getMimeMessage() == null) {
                 htmlEmail.buildMimeMessage();
             }
+
             htmlEmail.sendMimeMessage();
 
             return true;

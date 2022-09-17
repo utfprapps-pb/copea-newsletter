@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 
 // aplicação
-import { IdDescricaoPipe } from './id-descricao.pipe';
+import { IddescriptionPipe } from './id-description.pipe';
 
 @NgModule({
     imports: [],
-    exports: [IdDescricaoPipe],
-    declarations: [IdDescricaoPipe],
+    exports: [IddescriptionPipe],
+    declarations: [IddescriptionPipe],
     providers: [],
 })
 export class SysPipesModule { }

@@ -32,7 +32,7 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
     /**
      * @description Armazena as colunas da tabela
      */
-    public columns: string[] = ['identificador', 'descricao', 'acoes'];
+    public columns: string[] = ['identificador', 'description', 'acoes'];
 
     /**
      * @description Evento de edição do registro

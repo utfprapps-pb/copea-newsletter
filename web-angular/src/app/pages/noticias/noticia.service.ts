@@ -16,7 +16,7 @@ export class NoticiaService extends CrudService<Noticia> {
     }
 
     public get novoRegistro(): Observable<Noticia> {
-        return of({ descricao: '' });
+        return of({ description: '', subject: '' });
     }
 
 }

@@ -25,7 +25,7 @@ export class SysAutocompleteControl {
         private filterKey?: string
     ) {
         if (!this.filterKey) {
-            this.filterKey = 'descricao'
+            this.filterKey = 'description'
         }
     }
 

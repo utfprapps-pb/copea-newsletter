@@ -10,13 +10,23 @@
             <!-- Título -->
             <mat-form-field class="full-width" appearance="fill">
                 <mat-label>Título</mat-label>
-                <input matInput formControlName="descricao" placeholder="Digite o título da sua noticia..."
+                <input matInput formControlName="description" placeholder="Digite o título da sua noticia..."
                     cdkFocusInitial required>
             </mat-form-field>
 
             <!-- Erros do título -->
             <mat-error class="d-m-bottom" *ngIf="tituloControl!.errors?.['maxLenght']">
                 O <b>título</b> não pode possuir mais do que 80 caracteres!
+            </mat-error>
+
+            <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Assunto</mat-label>
+                <input matInput formControlName="subject" placeholder="Digite o assunto da sua noticia..."
+                    cdkFocusInitial required>
+            </mat-form-field>
+            <!-- Erros do título -->
+            <mat-error class="d-m-bottom" *ngIf="subjectControl!.errors?.['maxLenght']">
+                O <b>assunto</b> não pode possuir mais do que 100 caracteres!
             </mat-error>
 
             <!-- Destinatários -->
@@ -29,7 +39,7 @@
                 <mat-chip-list #chipList aria-label="Destinatários">
                     <mat-chip *ngFor="let destinatario of destinatariosControl?.value; index as i"
                         (removed)="removeDestinatario(i)">
-                        {{destinatario | idDescricao : '' : 'email'}}
+                        {{destinatario | iddescription : '' : 'email'}}
                         <button matChipRemove>
                             <mat-icon>cancel</mat-icon>
                         </button>
@@ -44,7 +54,7 @@
                     (optionSelected)="addDestinatario($event)">
                     <mat-option *ngFor="let option of destinatarioAutocomplete.optionsFiltradas | async"
                         [value]="option">
-                        {{option | idDescricao : '' : 'email'}}
+                        {{option | iddescription : '' : 'email'}}
                     </mat-option>
                 </mat-autocomplete>
 
