@@ -5,6 +5,7 @@ import br.edu.utfpr.email.config.service.ConfigEmailService;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -16,13 +17,13 @@ public class ConfigEmailResource {
     ConfigEmailService configEmailService;
 
     @POST
-    public Response saveConfigEmail(ConfigEmailEntity configEmail) {
+    public Response saveConfigEmail(@Valid ConfigEmailEntity configEmail) {
         configEmailService.saveConfigEmail(configEmail);
         return Response.ok(configEmail).build();
     }
 
     @PUT
-    public Response updateConfigEmail(ConfigEmailEntity configEmail) {
+    public Response updateConfigEmail(@Valid ConfigEmailEntity configEmail) {
         configEmailService.saveConfigEmail(configEmail);
         return Response.ok(configEmail).build();
     }

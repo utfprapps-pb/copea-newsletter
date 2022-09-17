@@ -3,13 +3,22 @@ quarkus:
   datasource:
     db-kind: postgresql
     username: postgres
-    password: postgres
+    password: admin
     jdbc:
       url: jdbc:postgresql://localhost:5432/newsletter
+
   hibernate-orm:
     database:
       # drop and create the database at startup (use `update` to only update the schema)
       generation: update #drop-and-create
+
   http:
     cors: true
-    port: 8082
+    port: 8081
+    auth:
+      basic: true
+
+  flyway:
+    migrate-at-start: true
+    baseline-on-migrate: true
+    locations: db/migration

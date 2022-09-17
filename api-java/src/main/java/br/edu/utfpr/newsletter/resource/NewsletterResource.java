@@ -5,6 +5,7 @@ import br.edu.utfpr.newsletter.service.NewsletterService;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -15,25 +16,25 @@ public class NewsletterResource {
     NewsletterService newsletterService;
 
     @POST
-    public Response saveConfigEmail(NewsletterEntity newsletterEntity) {
+    public Response saveNewsletter(@Valid NewsletterEntity newsletterEntity) {
         newsletterService.save(newsletterEntity);
         return Response.ok(newsletterEntity).build();
     }
 
     @PUT
-    public Response updateConfigEmail(NewsletterEntity newsletterEntity) {
+    public Response updateNewsletter(@Valid NewsletterEntity newsletterEntity) {
         newsletterService.update(newsletterEntity);
         return Response.ok(newsletterEntity).build();
     }
 
     @DELETE
     @Path("/{id}")
-    public Response deleteConfigEmail(@PathParam("id") Long id) {
+    public Response deleteNewsletter(@PathParam("id") Long id) {
         return Response.ok(newsletterService.delete(id)).build();
     }
 
     @GET
-    public Response findAllConfigEmail() {
+    public Response findAllNewsletter(@QueryParam("id") Long id) {
         return Response.ok(newsletterService.findAll()).build();
     }
 }

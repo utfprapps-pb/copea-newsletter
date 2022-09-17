@@ -5,6 +5,7 @@ import br.edu.utfpr.email.email.service.EmailService;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -16,13 +17,13 @@ public class EmailResource {
     EmailService emailService;
 
     @POST
-    public Response saveEmail(EmailEntity configEmail) {
+    public Response saveEmail(@Valid EmailEntity configEmail) {
         emailService.saveEmail(configEmail);
         return Response.ok(configEmail).build();
     }
 
     @PUT
-    public Response updateEmail(EmailEntity email) {
+    public Response updateEmail(@Valid EmailEntity email) {
         emailService.saveEmail(email);
         return Response.ok(email).build();
     }

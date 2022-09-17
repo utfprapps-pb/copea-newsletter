@@ -5,7 +5,6 @@ import br.edu.utfpr.newsletter.repository.NewsletterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.enterprise.context.ApplicationScoped;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.List;
 
 @ApplicationScoped
@@ -21,10 +20,6 @@ public class NewsletterService {
     public void update(NewsletterEntity newsletterEntity) {
         newsletterEntity.setAlterationDate(LocalDateTime.now());
         newsletterRepository.save(newsletterEntity);
-    }
-
-    private void convertFieldNewsletterForBase64(NewsletterEntity newsletterEntity) {
-        newsletterEntity.setNewsletter(new String(Base64.getDecoder().decode(newsletterEntity.getNewsletter())));
     }
 
     public String delete(Long id) {
