@@ -17,6 +17,25 @@ quarkus:
     port: 8081
     auth:
       basic: true
+      #implementa autenticacao de admin para todas as requisicoes
+      policy:
+        role-allowed-policys:
+          roles-allowed: admin
+      permission:
+        roles-all:
+          paths: /*
+          policy: role-allowed-policys
+
+  security:
+    users:
+      embedded:
+        enabled: true
+        plain-text: true
+        #cria o usuario e senha que sera usado no basic auth
+        roles:
+          admin: admin
+        users:
+          admin: Pg@%J0$uw53J5FqAlarRoQkFjIHIEvtDcIbhYGsoW!q&Bo1CfG
 
   flyway:
     migrate-at-start: true

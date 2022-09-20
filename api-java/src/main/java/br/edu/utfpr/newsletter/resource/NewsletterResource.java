@@ -1,10 +1,10 @@
 package br.edu.utfpr.newsletter.resource;
 
-import br.edu.utfpr.email.email.entity.EmailEntity;
 import br.edu.utfpr.newsletter.entity.NewsletterEntity;
 import br.edu.utfpr.newsletter.service.NewsletterService;
 
 import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
