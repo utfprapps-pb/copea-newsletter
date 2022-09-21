@@ -1,4 +1,7 @@
 quarkus:
+  banner:
+    path: banner.txt
+
   # datasource configuration
   datasource:
     db-kind: postgresql

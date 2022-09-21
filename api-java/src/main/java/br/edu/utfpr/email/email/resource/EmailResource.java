@@ -50,20 +50,12 @@ public class EmailResource {
     @GET
     @Path("/{id}")
     public Response findEmailById(@PathParam("id") Long id) {
-        try {
-            return Response.ok(emailService.findEmailById(id)).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
-        }
+        return Response.ok(emailService.findEmailById(id)).build();
     }
 
     @GET
     public Response findEmail(@QueryParam("email") String email) {
-        try {
-            return Response.ok(emailService.findEmail(email)).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
-        }
+        return Response.ok(emailService.findEmail(email)).build();
     }
 
 }
