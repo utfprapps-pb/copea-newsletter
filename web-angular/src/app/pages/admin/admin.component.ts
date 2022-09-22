@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { LoginService } from 'src/app/shared/services/login.service';
 
 @Component({
     selector: 'app-admin',
@@ -9,14 +9,14 @@ import { AuthService } from 'src/app/services/auth.service';
 export class AdminComponent implements OnInit {
 
     constructor(
-        private auth: AuthService
+        private _loginService: LoginService
     ) { }
 
     ngOnInit() {
     }
 
     public sair() {
-        this.auth.sair();
+        this._loginService.logout();
     }
 
 }

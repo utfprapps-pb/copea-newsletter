@@ -13,9 +13,6 @@ import { QuillModule } from 'ngx-quill';
 // shared
 import { SysPipesModule } from 'src/app/shared/pipes/sys-pipes.module';
 
-// formulário
-import { FormularioModule } from 'src/app/modules/formulario/formulario.module';
-
 // aplicação
 import { NoticiaComponent } from './noticia.page';
 import { CardNoticiaTextoComponent } from './cards/card-noticia-texto/card-noticia-texto.component';
@@ -48,10 +45,6 @@ const routes: Routes = [
 
         // shared
         SysPipesModule,
-        
-        // formulário
-        FormularioModule,
-
     ],
     exports: [],
     providers: [],

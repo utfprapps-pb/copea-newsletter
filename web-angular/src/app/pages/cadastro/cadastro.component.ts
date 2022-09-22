@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 // shared
 import { ConfirmarSenhaValidator } from 'src/app/shared/validators/confirmar-senha-validator';
 import { SenhaValidator } from 'src/app/shared/validators/senha-validator';
-import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-cadastro',
@@ -19,7 +18,6 @@ export class CadastroComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private auth: AuthService,
         private router: Router,
     ) {
         this.form = this.formBuilder.group({
@@ -62,13 +60,13 @@ export class CadastroComponent implements OnInit {
         // TODO: Adicionar a propriedade confirmarSenha na API
         delete usuario.corfirmarSenha;
         this.loading = true;
-        this.auth.cadastrar(usuario).subscribe(() => {
-            this.loading = false;
-            this.router.navigateByUrl('login');
-        }, () => {
-            this.loading = false;
-            alert('Ocorreu algum erro ao cadastrar');
-        });
+        // this.auth.cadastrar(usuario).subscribe(() => {
+        //     this.loading = false;
+        //     this.router.navigateByUrl('login');
+        // }, () => {
+        //     this.loading = false;
+        //     alert('Ocorreu algum erro ao cadastrar');
+        // });
     }
 
 }

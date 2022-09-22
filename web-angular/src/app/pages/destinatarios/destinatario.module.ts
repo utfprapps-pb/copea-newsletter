@@ -7,8 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // material
 import { MaterialModule } from 'src/app/modules/material.module';
 
-// formulário
-import { FormularioModule } from 'src/app/modules/formulario/formulario.module';
+// shared
+import { SysPipesModule } from 'src/app/shared/pipes/sys-pipes.module';
 
 // aplicação
 import { DestinatarioComponent } from './destinatario.page';
@@ -36,9 +36,9 @@ const routes: Routes = [
 
         // material
         MaterialModule,
-        
-        // formulário
-        FormularioModule
+
+        // shared
+        SysPipesModule,
     ],
     exports: [],
     providers: [],
