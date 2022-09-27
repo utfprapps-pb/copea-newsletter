@@ -1,7 +1,5 @@
-package br.edu.utfpr.email.config.service;
+package br.edu.utfpr.email.config;
 
-import br.edu.utfpr.email.config.entity.ConfigEmailEntity;
-import br.edu.utfpr.email.config.repository.ConfigEmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -13,7 +11,7 @@ public class ConfigEmailService {
     @Autowired
     ConfigEmailRepository configEmailRepository;
 
-    public void saveConfigEmail(ConfigEmailEntity configEmail) {
+    public void saveConfigEmail(ConfigEmail configEmail) {
         configEmailRepository.save(configEmail);
     }
 
@@ -26,7 +24,7 @@ public class ConfigEmailService {
         }
     }
 
-    public List<ConfigEmailEntity> findAllConfigEmail() {
+    public List<ConfigEmail> findAllConfigEmail() {
         return configEmailRepository.findAll();
     }
 

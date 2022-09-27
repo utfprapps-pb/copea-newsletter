@@ -1,4 +1,4 @@
-package br.edu.utfpr.htmlfileswithcidinsteadbase64.service;
+package br.edu.utfpr.htmlfileswithcidinsteadbase64;
 
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -46,7 +46,7 @@ export abstract class CrudService<T> {
      * @returns Vetor com todos os registro do objeto
      */
     public pesquisarTodos(): Observable<T[]> {
-        return this.http.get<T[]>(this.baseUrl + this.url + '/find-all');
+        return this.http.get<T[]>(this.baseUrl + this.url);
     }
 
     /**

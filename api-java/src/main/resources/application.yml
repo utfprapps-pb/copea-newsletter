@@ -1,46 +1,66 @@
+postgreSQL-app-name: newsletter
+
 quarkus:
   banner:
     path: banner.txt
-
   # datasource configuration
   datasource:
     db-kind: postgresql
     username: postgres
     password: admin
     jdbc:
-      url: jdbc:postgresql://localhost:5432/newsletter
-
+      url: jdbc:postgresql://localhost:5432/newsletter?ApplicationName=${postgreSQL-app-name}
   hibernate-orm:
     database:
       # drop and create the database at startup (use `update` to only update the schema)
       generation: update #drop-and-create
-
   http:
     cors: true
     port: 8081
+    test-port: 8083
     auth:
-      basic: true
-      #implementa autenticacao de admin para todas as requisicoes
       policy:
-        role-allowed-policys:
-          roles-allowed: admin
+        role-policy-admin:
+          roles-allowed: ADMIN
       permission:
-        roles-all:
-          paths: /*
-          policy: role-allowed-policys
-
-  security:
-    users:
-      embedded:
+        basic-or-bearer:
+          policy: authenticated
+        #adiciona autenticação de ADMIN para todos os métodos depois de /api/...
+        role-admin:
+          policy: role-policy-admin
+          paths: ${quarkus.http.root-path}/*
+        #remove autenticação dos métodos contidos no paths
+        public:
+          paths: ${quarkus.http.root-path}/login,${quarkus.http.root-path}/user
+          policy: permit
+    resteasy:
+      gzip:
         enabled: true
-        plain-text: true
-        #cria o usuario e senha que sera usado no basic auth
-        roles:
-          admin: admin
-        users:
-          admin: Pg@%J0$uw53J5FqAlarRoQkFjIHIEvtDcIbhYGsoW!q&Bo1CfG
-
+        max-input: 10M
+    smallrye-jwt:
+      enabled: true
+    root-path: /api
   flyway:
     migrate-at-start: true
     baseline-on-migrate: true
     locations: db/migration
+
+#Informacoes locais do jwt
+jwt-newsletter:
+  duration: 3600
+  password:
+    iteration: 33
+    keylength: 256
+    secret: newsletter
+  publickey-location: /jwt-key/publickey.pem
+  privatekey-location: /jwt-key/privatekey.pem
+
+newsletter:
+  dns: newsletter.jwt
+
+mp:
+  jwt:
+    verify:
+      issuer: ${newsletter.dns}
+      publickey:
+        location: ${jwt-newsletter.publickey-location}

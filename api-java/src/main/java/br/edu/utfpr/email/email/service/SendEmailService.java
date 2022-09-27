@@ -1,15 +1,14 @@
 package br.edu.utfpr.email.email.service;
 
-import br.edu.utfpr.email.config.entity.ConfigEmailEntity;
-import br.edu.utfpr.email.config.service.ConfigEmailService;
-import br.edu.utfpr.email.email.entity.EmailEntity;
+import br.edu.utfpr.email.config.ConfigEmail;
+import br.edu.utfpr.email.config.ConfigEmailService;
+import br.edu.utfpr.email.email.Email;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFileModel;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
-import br.edu.utfpr.htmlfileswithcidinsteadbase64.service.HtmlFilesWithCidInsteadBase64Service;
-import br.edu.utfpr.newsletter.entity.NewsletterEntity;
-import br.edu.utfpr.newsletter.repository.NewsletterRepository;
+import br.edu.utfpr.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
+import br.edu.utfpr.newsletter.Newsletter;
+import br.edu.utfpr.newsletter.NewsletterRepository;
 import br.edu.utfpr.reponses.DefaultResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -19,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mail.internet.*;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.*;
 
 @ApplicationScoped
@@ -35,10 +32,10 @@ public class SendEmailService {
     @Autowired
     HtmlFilesWithCidInsteadBase64Service htmlFilesWithCidInsteadBase64Service;
 
-    private ConfigEmailEntity configEmail;
+    private ConfigEmail configEmail;
 
-    private ConfigEmailEntity setFirstConfigEmail() throws Exception {
-        List<ConfigEmailEntity> configEmails = configEmailService.findAllConfigEmail();
+    private ConfigEmail setFirstConfigEmail() throws Exception {
+        List<ConfigEmail> configEmails = configEmailService.findAllConfigEmail();
         if (configEmails.size() > 0)
             configEmail = configEmails.get(0);
         else
@@ -113,14 +110,14 @@ public class SendEmailService {
     }
 
     public DefaultResponse sendNewsletterByEmail(Long newsletterId) throws Exception {
-        Optional<NewsletterEntity> optionalNewsletterEntity = newsletterRepository.findById(newsletterId);
+        Optional<Newsletter> optionalNewsletterEntity = newsletterRepository.findById(newsletterId);
         if (!optionalNewsletterEntity.isPresent())
             return new DefaultResponse().builder()
                     .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
                     .message("Nenhuma newsletter encontrada para o parâmetro informado.")
                     .build();
 
-        NewsletterEntity newsletterEntity = optionalNewsletterEntity.get();
+        Newsletter newsletterEntity = optionalNewsletterEntity.get();
 
         this.send(
                 newsletterEntity.getSubject(),
@@ -133,11 +130,11 @@ public class SendEmailService {
                 .build();
     }
 
-    private String[] convertArrayEmailEntityToStringArray(Set<EmailEntity> array) {
+    private String[] convertArrayEmailEntityToStringArray(Set<Email> array) {
 
         String stringArray = "";
 
-        for (EmailEntity emailEntity : array) {
+        for (Email emailEntity : array) {
             stringArray += " " + emailEntity.getEmail();
         }
 

@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-@Path("api/v1/email/send")
+@Path("v1/email/send")
 public class SendEmailResource {
 
     @Inject

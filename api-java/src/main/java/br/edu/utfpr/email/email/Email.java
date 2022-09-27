@@ -1,4 +1,4 @@
-package br.edu.utfpr.email.email.entity;
+package br.edu.utfpr.email.email;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @Entity(name = "email")
-public class EmailEntity {
+public class Email {
 
     @Id
     @SequenceGenerator(name = "email_id_sequence", sequenceName = "email_id_sequence", allocationSize = 1, initialValue = 1)

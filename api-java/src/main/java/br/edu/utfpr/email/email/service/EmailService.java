@@ -1,49 +1,26 @@
 package br.edu.utfpr.email.email.service;
 
-import br.edu.utfpr.email.email.entity.EmailEntity;
-import br.edu.utfpr.email.email.repository.EmailRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.edu.utfpr.email.email.Email;
+import br.edu.utfpr.email.email.EmailRepository;
+import br.edu.utfpr.generic.crud.GenericService;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-@ApplicationScoped
-public class EmailService {
+@RequestScoped
+public class EmailService extends GenericService<Email, Long, EmailRepository> {
 
-    @Autowired
-    EmailRepository emailRepository;
-
-    public void saveEmail(EmailEntity email) {
-        emailRepository.save(email);
+    public List<Email> findAllEmail() {
+        return getRepository().findAll();
     }
 
-    public String deleteEmail(Long id) {
-        if (emailRepository.existsById(id)) {
-            emailRepository.deleteById(id);
-            return "Registro deletado com sucesso.";
-        } else {
-            return "Registro não econtrado.";
-        }
-    }
-
-    public List<EmailEntity> findAllEmail() {
-        return emailRepository.findAll();
-    }
-
-    public EmailEntity findEmailById(Long id) {
-        Optional<EmailEntity> email = emailRepository.findById(id);
-
-        return email.orElse(null);
-    }
-
-    public List<EmailEntity> findEmail(String email) {
-        List<EmailEntity> emails;
+    public List<Email> findEmail(String email) {
+        List<Email> emails;
         if (Objects.isNull(email))
-            emails = emailRepository.findAll();
+            emails = getRepository().findAll();
         else
-            emails = emailRepository.findAllByEmailContaining(email);
+            emails = getRepository().findAllByEmailContaining(email);
 
         return emails;
     }

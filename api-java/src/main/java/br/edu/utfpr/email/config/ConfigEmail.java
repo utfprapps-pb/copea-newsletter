@@ -1,4 +1,4 @@
-package br.edu.utfpr.email.config.entity;
+package br.edu.utfpr.email.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @NamedQuery(name = "ConfigEmailEntity.findAll",
             query = "SELECT ce FROM configemail ce",
             hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
-public class ConfigEmailEntity {
+public class ConfigEmail {
 
     @Id
     @SequenceGenerator(name = "configemail_id_sequence", sequenceName = "configemail_id_sequence", allocationSize = 1, initialValue = 1)
