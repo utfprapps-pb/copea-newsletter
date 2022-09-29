@@ -4,21 +4,19 @@
             <mat-card-title>Login</mat-card-title>
         </mat-card-header>
         <mat-card-content>
+
             <mat-form-field [appearance]="'outline'">
                 <mat-label>E-mail</mat-label>
-                <input matInput formControlName="email" required placeholder="seunome@examplo.com" type="text">
+                <input matInput formControlName="username" required placeholder="seunome@examplo.com" type="text">
                 <mat-error>Email obrigatório</mat-error>
             </mat-form-field>
 
             <mat-form-field [appearance]="'outline'">
                 <mat-label>Senha</mat-label>
-                <input matInput type="password" formControlName="senha" required>
+                <input matInput type="password" formControlName="password" required>
                 <mat-error>Senha obrigatória</mat-error>
             </mat-form-field>
 
-            <div *ngIf="mensagemErro">
-                <mat-error>{{mensagemErro}}</mat-error>
-            </div>
         </mat-card-content>
         <mat-card-actions>
             <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="end center">
@@ -26,5 +24,10 @@
                 <button color="primary" [disabled]="form.invalid" (click)="login()" mat-raised-button>Entrar</button>
             </div>
         </mat-card-actions>
+
+        <div *ngIf="mensagemErro" class="text-center">
+            <mat-error>{{mensagemErro}}</mat-error>
+        </div>
+
     </mat-card>
 </form>

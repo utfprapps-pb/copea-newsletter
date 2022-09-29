@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // modules
 import { MaterialModule } from './modules/material.module';
+
+// shared
+import { TokenInterceptor } from './shared/interceptors/token-interceptor.interceptor';
 
 // pages
 import { CadastroModule } from './pages/cadastro/cadastro.module';
@@ -33,5 +36,11 @@ import { AppComponent } from './app.component';
     LoginModule,
   ],
   bootstrap: [AppComponent],
+  providers: [
+    TokenInterceptor,
+        
+    // interceptors
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
+  ]
 })
 export class AppModule { }

@@ -1,11 +1,13 @@
 <div class="main">
     <mat-toolbar fxLayout="row" color="primary">
         <button (click)="drawer.toggle()" class="menu-btn" mat-icon-button>
-            <mat-icon>menu</mat-icon>
+            <mat-icon class="no-margin">menu</mat-icon>
         </button>
-        <span fxFlex>Newsletter</span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-            <mat-icon>more_vert</mat-icon>
+        <span class="flex">
+            <b class="hover-div d-pad mouse-pointer border-r-med" [routerLink]="['/admin/']">Newsletter</b>
+        </span>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="NewsletterExample icon-button with a menu">
+            <mat-icon class="no-margin">more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
             <button (click)="sair()" mat-menu-item>
@@ -17,20 +19,20 @@
     <mat-drawer-container class="main-content">
         <mat-drawer [opened]="true" mode="side" class="menu" #drawer>
             <mat-nav-list>
-                <mat-list-item>
-                    <a matLine class="link" [routerLink]="['/admin/destinatario']" routerLinkActive="link-activated">
+                <mat-list-item [routerLink]="['/admin/destinatario']" >
+                    <a matLine class="link" routerLinkActive="link-activated">
                         <mat-icon>person</mat-icon>
                         <span>Destinatários</span>
                     </a>
                 </mat-list-item>
-                <mat-list-item>
-                    <a matLine class="link" [routerLink]="['/admin/noticia']" routerLinkActive="link-activated">
+                <mat-list-item [routerLink]="['/admin/noticia']" >
+                    <a matLine class="link" routerLinkActive="link-activated">
                         <mat-icon>newspaper</mat-icon>
                         <span>Newsletter</span>
                     </a>
                 </mat-list-item>
-                <mat-list-item>
-                    <a matLine class="link" [routerLink]="['/admin/noticia-pesquisa']" routerLinkActive="link-activated">
+                <mat-list-item [routerLink]="['/admin/noticia-pesquisa']">
+                    <a matLine class="link" routerLinkActive="link-activated">
                         <mat-icon>list</mat-icon>
                         <span>Publicações</span>
                     </a>

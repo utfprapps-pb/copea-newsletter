@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 
-export const ERROR_DETAIL = '. Por favor, tente novamente mais tarde ou entre em contato com o suporte técnico.'
+export const ERROR_DETAIL = '\nPor favor, tente novamente mais tarde ou entre em contato com o suporte técnico.'
 
 export function errorTransform(error: HttpErrorResponse): string {
     if (error) {

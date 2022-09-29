@@ -6,6 +6,9 @@ import { Observable, Subject, Subscription, interval } from "rxjs";
 // environment
 import { environment } from "src/environments/environment";
 
+// shared
+import { errorTransform } from "src/app/shared/pipes/error-transform";
+
 // aplicação
 import { LoginRequest } from "../models/login-request";
 
@@ -38,7 +41,7 @@ export abstract class LoginService {
      * @description Retorna as informações do usuário logado
      */
     public get authInfo(): string | null {
-        return localStorage.getItem("access_token");
+        return localStorage.getItem("token");
     }
 
     /**
@@ -46,7 +49,7 @@ export abstract class LoginService {
      * // TODO: tipar
      */
     public get isAuthenticated(): boolean {
-        return !!localStorage.getItem("access_token");
+        return !!localStorage.getItem("token");
     }
 
     /**
@@ -68,10 +71,11 @@ export abstract class LoginService {
                 observer.complete();
             }
 
-            const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
-            const body = 'username=' + request.username + '&password=' + request.password;
+            const httpOptions = {
+                headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+            }
 
-            this._http.post<{ access_token: string }>(this._url + 'login', body, { headers: headers }).subscribe(response => {
+            this._http.post<{ access_token: string }>(this._url + '/login', request, httpOptions).subscribe(response => {
                 this.storeToken(response);
 
                 if (this.isAuthenticated) {
@@ -80,10 +84,8 @@ export abstract class LoginService {
 
                 observer.next(this.isAuthenticated);
                 observer.complete();
-                
-                window.location.reload();
             }, error => {
-                observer.error(error);
+                observer.error(errorTransform(error));
                 observer.complete();
             })
         });
@@ -93,12 +95,12 @@ export abstract class LoginService {
      * @description Armazena/remove o token de acesso
      */
     private storeToken(response?: { access_token: string }) {
-        const token = response ? response['access_token'] : null;
+        const token = response ? response['token'] : null;
 
         if (token) {
-            localStorage.setItem('access_token', token);
+            localStorage.setItem('token', token);
         } else {
-            localStorage.removeItem('access_token')
+            localStorage.removeItem('token')
         }
 
         this._loginEvent.next(this.isAuthenticated);
@@ -143,10 +145,10 @@ export abstract class LoginService {
      * @description Desloga do sistema
      */
     public logout() {
-        localStorage.removeItem("access_token");
+        localStorage.removeItem('token');
         this._loginEvent.next(false);
         this.stopRefreshInterval();
-        this._router.navigateByUrl("").then(res => res);
+        this._router.navigateByUrl('').then(res => res);
     }
 
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // material
@@ -9,6 +9,7 @@ import { MaterialModule } from 'src/app/modules/material.module';
 
 // shared
 import { SysPipesModule } from 'src/app/shared/pipes/sys-pipes.module';
+import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.interceptor';
 
 // aplicação
 import { DestinatarioComponent } from './destinatario.page';
@@ -22,7 +23,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         DestinatarioComponent,
-        
+
         // cards
         CardDestinatarioEdicaoComponent,
         CardDestinatarioPesquisaComponent,
@@ -41,6 +42,11 @@ const routes: Routes = [
         SysPipesModule,
     ],
     exports: [],
-    providers: [],
+    providers: [
+        TokenInterceptor,
+
+        // interceptors
+        { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
+    ]
 })
 export class DestinatarioModule { }

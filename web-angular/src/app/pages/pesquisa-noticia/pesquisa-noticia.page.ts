@@ -64,7 +64,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
     }
 
     private criarForm(): FormGroup {
-        return this.formBuilder.group({ filtro: [null, Validators.required] })
+        return this.formBuilder.group({ filtro: [null] })
     }
 
     private implementChanges() {
@@ -83,11 +83,6 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
      * @param filtro Filtro da pesquisa
      */
     public filtrarNoticias(filtro = this.form.get('filtro')!.value) {
-        if (!filtro) {
-            this.form.updateValueAndValidity();
-            return;
-        }
-
         this.loading = true;
         this.noticiaService.pesquisarTodos().subscribe(res => {
             this.loading = false;
