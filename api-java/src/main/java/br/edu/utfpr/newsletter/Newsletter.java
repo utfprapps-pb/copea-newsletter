@@ -4,10 +4,6 @@ import br.edu.utfpr.email.email.Email;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.SelectBeforeUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -35,10 +31,10 @@ public class Newsletter {
 
     @Column(updatable = false,  nullable = true)
     @JsonIgnore
-    private LocalDateTime dataInclusao;
+    private LocalDateTime inclusionDate;
 
     @JsonIgnore
-    private LocalDateTime dataAlteracao;
+    private LocalDateTime alterationDate;
 
     @NotBlank(message = "Parameter newsletter is required.")
     @Column(columnDefinition = "TEXT", nullable = false)
