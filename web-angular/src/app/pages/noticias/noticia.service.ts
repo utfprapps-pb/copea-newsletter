@@ -19,4 +19,8 @@ export class NoticiaService extends CrudService<Noticia> {
         return of({ description: '', subject: '' });
     }
 
+    public enviarNoticia(id: number): any {
+        return this.http.get<any>(this.baseUrl + '/v1/email/send/newsletter/' + id);
+    }
+
 }

@@ -20,7 +20,8 @@ import { CardNoticiaCabecalhoComponent } from './cards/card-noticia-cabecalho/ca
 import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.interceptor';
 
 const routes: Routes = [
-    { path: '', component: NoticiaComponent }
+    { path: '', component: NoticiaComponent },
+    { path: ':id', component: NoticiaComponent },
 ];
 
 @NgModule({

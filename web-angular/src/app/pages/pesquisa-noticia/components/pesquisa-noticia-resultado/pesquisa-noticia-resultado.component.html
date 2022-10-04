@@ -1,7 +1,6 @@
-<div [routerLink]="['/noticia', noticiaDto.id]"
-    class="d-m d-pad hover-div row align-center mouse-pointer">
-    <span class="half-width"><b>{{noticiaDto.description}}</b></span>
+<a [routerLink]="['/admin/noticia', dto.id]" class="d-m d-pad hover-div row align-center mouse-pointer">
+    <span class="d-flex grow"><b>{{dto.description}}</b></span>
     <button class="button-outline" mat-icon-button aria-label="Acessar">
         <mat-icon>open_in_browser</mat-icon>
     </button>
-</div>
+</a>

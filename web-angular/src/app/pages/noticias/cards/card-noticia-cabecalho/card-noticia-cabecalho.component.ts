@@ -22,6 +22,7 @@ import { Noticia } from '../../models/noticia';
 @Component({
     selector: 'app-card-noticia-cabecalho',
     templateUrl: 'card-noticia-cabecalho.component.html',
+    styleUrls: ['./card-noticia-cabecalho.component.scss'],
     providers: [DestinatarioService],
 })
 export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> implements OnInit {
@@ -53,7 +54,7 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
     public get destinatariosControl() {
         return this.form.get('emails');
     }
-    
+
     public get destinatarios(): Destinatario[] {
         return this.form.get('emails')?.value || [];
     }
@@ -62,9 +63,17 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
         this.registerControls();
     }
 
+    public override setForm(registro: Noticia) {
+        super.setForm(registro);
+
+        if (!registro.emails) {
+            this.form.get('emails')?.reset([]);
+        }
+    }
+
     private registerControls() {
         this.destinatarioAutocomplete = new SysAutocompleteControl(
-            this.destinatarioService.pesquisarTodos.bind(this.destinatarioService), 
+            this.destinatarioService.pesquisarTodos.bind(this.destinatarioService),
             this.snackBar,
             'email'
         );

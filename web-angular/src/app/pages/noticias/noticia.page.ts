@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 // shared
 import { AdvancedCrudComponent } from 'src/app/shared/crud/advanced-crud-component';
 import { AdvancedCrudController } from 'src/app/shared/crud/advanced-crud.controller';
+import { errorTransform } from 'src/app/shared/pipes/error-transform';
 
 // aplicação
 import { Noticia } from './models/noticia';
@@ -37,9 +38,25 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
     }
 
     /**
-     * @description Executa no click do botão publicar
+     * @description Executa no click do botão "enviar"
      */
-    public onClickPublicar() {
+    public onClickEnviar() {
+        if (super.possuiAlteracoesPendentes()) {
+            this.snackBar.open('Existem alterações pendentes! Por favor, salve o registro antes de enviá-lo.', 'OK');
+            return;
+        }
+
+        this.service.enviarNoticia(this.registro.id!).subscribe(res => {
+            this.snackBar.open('A notícia foi enviada com sucesso!', 'OK');
+        }, error => {
+            this.snackBar.open(errorTransform(error) + '', 'OK');
+        })
+    }
+
+    /**
+     * @description Executa no click do botão salvar
+     */
+    public onClickSalvar() {
         super.persistirAlteracoes(this.registro.id != null);
     }
 

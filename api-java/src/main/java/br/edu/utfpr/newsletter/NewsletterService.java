@@ -26,10 +26,10 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     }
 
     private void setDatesByNewOrUpdate(Newsletter entity) {
-        if ((!Objects.isNull(entity.getId())) && (getRepository().existsById(entity.getId())))
-            entity.setAlterationDate(LocalDateTime.now());
+        if (!Objects.isNull(entity.getId()) && getRepository().existsById(entity.getId()))
+            entity.setDataAlteracao(LocalDateTime.now());
         else
-            entity.setInclusionDate(LocalDateTime.now());
+            entity.setDataInclusao(LocalDateTime.now());
     }
 
 }

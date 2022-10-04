@@ -10,7 +10,7 @@ import { Noticia } from 'src/app/pages/noticias/models/noticia';
 
 export class PesquisaNoticiaResultadoComponent implements OnInit {
 
-    @Input() public noticiaDto!: Noticia;
+    @Input() public dto!: Noticia;
 
     constructor() { }
 

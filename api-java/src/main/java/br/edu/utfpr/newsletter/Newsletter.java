@@ -35,10 +35,10 @@ public class Newsletter {
 
     @Column(updatable = false,  nullable = true)
     @JsonIgnore
-    private LocalDateTime inclusionDate;
+    private LocalDateTime dataInclusao;
 
     @JsonIgnore
-    private LocalDateTime alterationDate;
+    private LocalDateTime dataAlteracao;
 
     @NotBlank(message = "Parameter newsletter is required.")
     @Column(columnDefinition = "TEXT", nullable = false)

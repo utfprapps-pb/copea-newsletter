@@ -51,9 +51,9 @@
                 <!-- Lista de resultados -->
                 <ng-template #resultados>
                     <div class="d-flex column">
-                        <app-pesquisa-artigo-resultado class="full-width border-bottom"
-                            *ngFor="let dto of listaResultado" [artigoDto]="dto">
-                        </app-pesquisa-artigo-resultado>
+                        <app-pesquisa-noticia-resultado class="full-width border-bottom"
+                            *ngFor="let dto of listaResultado" [dto]="dto">
+                        </app-pesquisa-noticia-resultado>
                     </div>
                 </ng-template>
 
