@@ -1,7 +1,5 @@
-package br.edu.utfpr.email.email.service;
+package br.edu.utfpr.email;
 
-import br.edu.utfpr.email.email.Email;
-import br.edu.utfpr.email.email.EmailRepository;
 import br.edu.utfpr.generic.crud.GenericService;
 
 import javax.enterprise.context.RequestScoped;

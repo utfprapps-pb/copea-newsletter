@@ -1,5 +1,6 @@
 package br.edu.utfpr.generic.crud;
 
+import br.edu.utfpr.auth.AuthSecurityFilter;
 import br.edu.utfpr.reponses.GenericResponse;
 import lombok.Getter;
 
@@ -9,9 +10,12 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
 
+@Getter
 public abstract class GenericService<T, ID, R extends GenericRepository> {
 
-    @Getter
+    @Inject
+    AuthSecurityFilter authSecurityFilter;
+
     @Inject
     R repository;
 
@@ -46,7 +50,7 @@ public abstract class GenericService<T, ID, R extends GenericRepository> {
         return GenericResponse.getGenericResponse("Registro deletado com sucesso.", Response.Status.OK.getStatusCode());
     }
 
-    private void throwNotFoundException() {
+    public void throwNotFoundException() {
         throw new NotFoundException("Registro não encontrado.");
     }
 

@@ -1,4 +1,4 @@
-package br.edu.utfpr.email.email;
+package br.edu.utfpr.email;
 
 import lombok.Getter;
 import lombok.Setter;

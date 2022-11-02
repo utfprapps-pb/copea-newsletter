@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1da2ec1a-59eb-4ed3-aeb1-4dd3ea62f4ba" name="Changes" comment="" />
+    <list default="true" id="1da2ec1a-59eb-4ed3-aeb1-4dd3ea62f4ba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/api-java/src/main/java/br/edu/utfpr/newsletter/Newsletter.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-java/src/main/java/br/edu/utfpr/newsletter/Newsletter.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,7 +32,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/api-java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/api-java/pom.xml" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -42,7 +44,11 @@
       <updated>1662076275048</updated>
       <workItem from="1662076278361" duration="18000" />
       <workItem from="1662155751869" duration="40000" />
+      <workItem from="1667338858543" duration="140000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

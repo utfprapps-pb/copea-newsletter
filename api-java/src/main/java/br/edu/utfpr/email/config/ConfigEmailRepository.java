@@ -1,6 +1,17 @@
 package br.edu.utfpr.email.config;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import br.edu.utfpr.generic.crud.GenericRepository;
+import br.edu.utfpr.user.User;
+import org.springframework.stereotype.Repository;
 
-public interface ConfigEmailRepository extends JpaRepository<ConfigEmail, Long> {
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface ConfigEmailRepository extends GenericRepository<ConfigEmail, Long> {
+
+    Optional<ConfigEmail> findByIdAndUser(Long id, User user);
+
+    List<ConfigEmail> findByUser(User user);
+
 }

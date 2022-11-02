@@ -1,4 +1,4 @@
-package br.edu.utfpr.email.email;
+package br.edu.utfpr.email;
 
 import br.edu.utfpr.generic.crud.GenericRepository;
 import org.springframework.stereotype.Repository;

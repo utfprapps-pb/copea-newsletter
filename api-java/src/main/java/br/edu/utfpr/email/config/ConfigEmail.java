@@ -1,17 +1,16 @@
 package br.edu.utfpr.email.config;
 
+import br.edu.utfpr.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Entity(name = "configemail")
-@NamedQuery(name = "ConfigEmailEntity.findAll",
-            query = "SELECT ce FROM configemail ce",
-            hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
 public class ConfigEmail {
 
     @Id
@@ -28,7 +27,10 @@ public class ConfigEmail {
     @NotBlank(message = "Parameter sendHost is required.")
     private String sendHost;
 
-    @NotBlank(message = "Parameter sendPort is required.")
+    @NotNull(message = "Parameter sendPort is required.")
     private Integer sendPort;
+
+    @OneToOne(optional = false)
+    private User user;
 
 }

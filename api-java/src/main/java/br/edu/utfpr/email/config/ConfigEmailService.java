@@ -1,31 +1,56 @@
 package br.edu.utfpr.email.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import br.edu.utfpr.generic.crud.GenericService;
+import br.edu.utfpr.newsletter.Newsletter;
+import br.edu.utfpr.reponses.GenericResponse;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
-@ApplicationScoped
-public class ConfigEmailService {
+@RequestScoped
+public class ConfigEmailService extends GenericService<ConfigEmail, Long, ConfigEmailRepository> {
 
-    @Autowired
-    ConfigEmailRepository configEmailRepository;
-
-    public void saveConfigEmail(ConfigEmail configEmail) {
-        configEmailRepository.save(configEmail);
+    @Override
+    public GenericResponse save(ConfigEmail entity) {
+        return saveOrUpdate(entity);
     }
 
-    public String deleteConfigEmail(Long id) {
-        if (configEmailRepository.existsById(id)) {
-            configEmailRepository.deleteById(id);
-            return "Registro deletado com sucesso.";
-        } else {
-            return "Registro não econtrado.";
-        }
+    @Override
+    public GenericResponse update(ConfigEmail entity) {
+        return saveOrUpdate(entity);
     }
 
-    public List<ConfigEmail> findAllConfigEmail() {
-        return configEmailRepository.findAll();
+    private GenericResponse saveOrUpdate(ConfigEmail entity) {
+        setDefaultValues(entity);
+        return super.save(entity);
+    }
+
+    private void setDefaultValues(ConfigEmail entity) {
+        if (Objects.isNull(entity.getUser()))
+            entity.setUser(getAuthSecurityFilter().getAuthUserContext().findByToken());
+    }
+
+    public List<ConfigEmail> findByUser() {
+        List<ConfigEmail> configEmailList =
+                getRepository().findByUser(getAuthSecurityFilter().getAuthUserContext().findByToken());
+
+        if (configEmailList.isEmpty())
+            return new ArrayList<>();
+
+        return configEmailList;
+    }
+
+    public ConfigEmail findByIdAndUser(Long id) {
+        Optional<ConfigEmail> configEmailOptional =
+                getRepository().findByIdAndUser(id, getAuthSecurityFilter().getAuthUserContext().findByToken());
+
+        if (configEmailOptional.isEmpty())
+            throwNotFoundException();
+
+        return configEmailOptional.get();
     }
 
 }

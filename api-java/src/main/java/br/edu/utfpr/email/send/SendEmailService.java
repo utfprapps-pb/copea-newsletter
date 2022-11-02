@@ -1,13 +1,16 @@
-package br.edu.utfpr.email.email.service;
+package br.edu.utfpr.email.send;
 
 import br.edu.utfpr.email.config.ConfigEmail;
 import br.edu.utfpr.email.config.ConfigEmailService;
-import br.edu.utfpr.email.email.Email;
+import br.edu.utfpr.email.Email;
+import br.edu.utfpr.email.send.log.SendEmailLog;
+import br.edu.utfpr.email.send.log.SendEmailLogService;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFileModel;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
 import br.edu.utfpr.newsletter.Newsletter;
 import br.edu.utfpr.newsletter.NewsletterRepository;
+import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.reponses.DefaultResponse;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
@@ -27,15 +30,15 @@ public class SendEmailService {
     ConfigEmailService configEmailService;
 
     @Autowired
-    NewsletterRepository newsletterRepository;
-
-    @Autowired
     HtmlFilesWithCidInsteadBase64Service htmlFilesWithCidInsteadBase64Service;
+
+    @Inject
+    SendEmailLogService sendEmailLogService;
 
     private ConfigEmail configEmail;
 
     private ConfigEmail setFirstConfigEmail() throws Exception {
-        List<ConfigEmail> configEmails = configEmailService.findAllConfigEmail();
+        List<ConfigEmail> configEmails = configEmailService.findByUser();
         if (configEmails.size() > 0)
             configEmail = configEmails.get(0);
         else
@@ -43,11 +46,13 @@ public class SendEmailService {
         return configEmail;
     }
 
-    public Boolean send(String title, String body, String ...emailsList) throws Exception {
+    public SendEmailLog send(String title, String body, String ...emailsList) throws Exception {
+        HtmlEmail htmlEmail = new HtmlEmail();
         try {
+
             setFirstConfigEmail();
 
-            HtmlEmail htmlEmail = buildEmail();
+            htmlEmail = buildEmail();
 
             htmlEmail.setSubject(title);
 
@@ -78,9 +83,12 @@ public class SendEmailService {
 
             htmlEmail.sendMimeMessage();
 
-            return true;
+            return sendEmailLogService.saveLog(htmlEmail, body, null);
+
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+
+            return sendEmailLogService.saveLog(htmlEmail, body, e.getMessage());
+
         }
     }
 
@@ -109,28 +117,7 @@ public class SendEmailService {
         return htmlEmail;
     }
 
-    public DefaultResponse sendNewsletterByEmail(Long newsletterId) throws Exception {
-        Optional<Newsletter> optionalNewsletterEntity = newsletterRepository.findById(newsletterId);
-        if (!optionalNewsletterEntity.isPresent())
-            return new DefaultResponse().builder()
-                    .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
-                    .message("Nenhuma newsletter encontrada para o parâmetro informado.")
-                    .build();
-
-        Newsletter newsletterEntity = optionalNewsletterEntity.get();
-
-        this.send(
-                newsletterEntity.getSubject(),
-                newsletterEntity.getNewsletter(),
-                convertArrayEmailEntityToStringArray(newsletterEntity.getEmails()));
-
-        return new DefaultResponse().builder()
-                .httpStatus(RestResponse.StatusCode.OK)
-                .message("Newsletter enviada aos emails vinculados com sucesso.")
-                .build();
-    }
-
-    private String[] convertArrayEmailEntityToStringArray(Set<Email> array) {
+    public String[] convertArrayEmailEntityToStringArray(Set<Email> array) {
 
         String stringArray = "";
 
@@ -141,4 +128,5 @@ public class SendEmailService {
         return stringArray.trim().split(" ");
 
     }
+
 }

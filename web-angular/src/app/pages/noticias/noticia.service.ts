@@ -20,7 +20,7 @@ export class NoticiaService extends CrudService<Noticia> {
     }
 
     public enviarNoticia(id: number): any {
-        return this.http.get<any>(this.baseUrl + '/v1/email/send/newsletter/' + id);
+        return this.http.get<any>(this.baseUrl + '/v1/newsletter/' + id + '/send-email');
     }
 
 }

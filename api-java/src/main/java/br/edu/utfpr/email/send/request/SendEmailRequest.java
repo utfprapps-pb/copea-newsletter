@@ -1,7 +1,9 @@
-package br.edu.utfpr.email.email.request;
+package br.edu.utfpr.email.send.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor

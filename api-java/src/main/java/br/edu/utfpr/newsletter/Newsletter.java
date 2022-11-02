@@ -1,6 +1,8 @@
 package br.edu.utfpr.newsletter;
 
-import br.edu.utfpr.email.email.Email;
+import br.edu.utfpr.email.Email;
+import br.edu.utfpr.email.send.log.SendEmailLog;
+import br.edu.utfpr.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,5 +49,16 @@ public class Newsletter {
             inverseJoinColumns = @JoinColumn(name = "email_id")
     )
     private Set<Email> emails = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "newsletter_send_email_log",
+            joinColumns = @JoinColumn(name = "newsletter_id"),
+            inverseJoinColumns = @JoinColumn(name = "send_email_log_id")
+    )
+    private Set<SendEmailLog> sendEmailLogs = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    private User user;
 
 }
