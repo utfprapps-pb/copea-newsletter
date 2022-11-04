@@ -21,7 +21,8 @@
             <!-- Botões -->
             <ng-template #actionButtons>
 
-                <button mat-stroked-button class="d-m-right" (click)="resetFormNovo()">Novo registro</button>
+                <button mat-stroked-button class="d-m-right" [routerLink]="['/admin/noticia']"
+                    (click)="resetFormNovo()">Novo registro</button>
 
                 <button *ngIf="registro.id" mat-button class="mat-button-accent d-m-right" (click)="onClickEnviar()"
                     title="Enviar notícia para os destinatários">Enviar email</button>
