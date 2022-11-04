@@ -167,4 +167,5 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
             this.snackBar.open(errorTransform(error), 'OK');
         });
     }
+
 }

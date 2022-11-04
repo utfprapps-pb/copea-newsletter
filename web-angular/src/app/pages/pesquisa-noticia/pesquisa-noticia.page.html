@@ -11,29 +11,50 @@
 
         <!-- Slide toggle -->
         <div class="full-width row d-m justify-end">
-            <mat-slide-toggle class="d-pad-right" [checked]="autoBusca" (toggleChange)="onAutoBuscaChange()">
+            <mat-slide-toggle class="d-pad-right" [checked]="autoBusca" color="primary"
+                (toggleChange)="onAutoBuscaChange()">
                 Busca automática
             </mat-slide-toggle>
         </div>
 
-        <div class="row align-center">
+        <!-- Filtro -->
+        <mat-card>
 
-            <!-- Campo -->
-            <mat-form-field class="d-flex grow d-pad-top d-m-right" appearance="fill">
-                <mat-label>Filtro</mat-label>
-                <input matInput formControlName="filtro" placeholder="Pesquise por título ou palavra-chave...">
-            </mat-form-field>
+            <!-- Título -->
+            <mat-card-title>Filtro</mat-card-title>
 
-            <!-- Botão pesquisa -->
-            <button class="d-flex button-outline d-m-bottom" mat-icon-button aria-label="pesquisar"
-                (click)="filtrarNoticias()">
-                <mat-icon>search</mat-icon>
-            </button>
+            <!-- Conteúdo -->
+            <mat-card-content>
+                <div class="row align-center">
 
-        </div>
+                    <!-- Campo -->
+                    <mat-form-field class="d-flex grow d-pad-top d-m-right" appearance="fill">
+                        <mat-label>Filtro</mat-label>
+                        <input matInput formControlName="filtro" placeholder="Pesquise por título ou palavra-chave...">
+                    </mat-form-field>
+
+                    <!-- Botão pesquisa -->
+                    <button class="d-flex button-outline d-m-bottom" mat-icon-button aria-label="pesquisar"
+                        (click)="filtrarNoticias()">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                </div>
+
+                <!-- Check "não enviadas" -->
+                <div class="full-width row">
+                    <mat-checkbox formControlName="naoEnviadas" color="primary">
+                        Apenas notícias não enviadas
+                    </mat-checkbox>
+                </div>
+
+            </mat-card-content>
+
+        </mat-card>
 
     </form>
 
+    <!-- Resultados -->
     <div class="d-pad-card-container">
         <mat-card>
 

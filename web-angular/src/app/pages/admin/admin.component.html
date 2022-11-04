@@ -10,7 +10,11 @@
             <mat-icon class="no-margin">more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button (click)="sair()" mat-menu-item>
+            <button mat-menu-item (click)="abrirConfiguracoes()">
+                <mat-icon>settings</mat-icon>
+                <span fxFlex>Configurações</span>
+            </button>
+            <button mat-menu-item (click)="sair()">
                 <mat-icon>close</mat-icon>
                 <span fxFlex>Sair do sistema</span>
             </button>
@@ -19,13 +23,13 @@
     <mat-drawer-container class="main-content">
         <mat-drawer [opened]="true" mode="side" class="menu" #drawer>
             <mat-nav-list>
-                <mat-list-item [routerLink]="['/admin/destinatario']" >
+                <mat-list-item [routerLink]="['/admin/destinatario']">
                     <a matLine class="link" routerLinkActive="link-activated">
                         <mat-icon>person</mat-icon>
                         <span>Destinatários</span>
                     </a>
                 </mat-list-item>
-                <mat-list-item [routerLink]="['/admin/noticia']" >
+                <mat-list-item [routerLink]="['/admin/noticia']">
                     <a matLine class="link" routerLinkActive="link-activated">
                         <mat-icon>newspaper</mat-icon>
                         <span>Newsletter</span>

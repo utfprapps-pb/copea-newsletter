@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit {
         password: new FormControl(),
     });
 
-    ngOnInit() { }
+    ngOnInit() {
+        this._loginService.logout();
+    }
 
     public login() {
         this._loginService.login(this.form.value).subscribe((resposta: any) => {
