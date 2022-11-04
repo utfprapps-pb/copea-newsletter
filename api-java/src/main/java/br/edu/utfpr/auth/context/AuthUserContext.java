@@ -9,17 +9,5 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @RequestScoped
-public class AuthUserContext {
-
-    @Inject
-    UserRepository userRepository;
-
-    @Setter
-    private String username;
-
-    public User findByToken() {
-        Optional<User> userOptional = userRepository.findById(Long.parseLong(username));
-        return userOptional.orElse(null);
-    }
-
+public class AuthUserContext extends AuthContextGeneric<User, Long, UserRepository> {
 }

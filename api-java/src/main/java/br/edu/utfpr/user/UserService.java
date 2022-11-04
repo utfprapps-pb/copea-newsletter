@@ -14,4 +14,9 @@ public class UserService extends GenericService<User, Long, UserRepository> {
         entity.setPassword(BcryptUtil.bcryptHash(entity.getPassword()));
         return super.save(entity);
     }
+
+    public User findByUsername(String username) {
+        return getRepository().findByUsername(username);
+    }
+
 }

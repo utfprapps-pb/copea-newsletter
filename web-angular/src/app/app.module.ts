@@ -38,7 +38,7 @@ import { AppComponent } from './app.component';
   bootstrap: [AppComponent],
   providers: [
     TokenInterceptor,
-        
+
     // interceptors
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
   ]

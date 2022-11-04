@@ -98,7 +98,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mouse-pointer, .sys-link { cursor: pointer; }
 
-.hover-div:hover { 
+.hover-div:hover {
     background-color: #0000001c;
     transition: 200ms;
 }
@@ -147,4 +147,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .hover-button:hover {
     text-shadow: 0px 1px #0000009c;
+}
+
+.mat-tab-label .mat-tab-label-content {
+  color: #f9a825;
 }

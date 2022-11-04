@@ -11,6 +11,7 @@ import { errorTransform } from "src/app/shared/pipes/error-transform";
 
 // aplicação
 import { LoginRequest } from "../models/login-request";
+import { LoginCadastroRequest } from "../models/login-cadastro-request";
 
 @Injectable({ providedIn: 'root' })
 export abstract class LoginService {
@@ -90,6 +91,33 @@ export abstract class LoginService {
             })
         });
     }
+
+    public cadastrar(request: LoginCadastroRequest): Observable<boolean> {
+      return new Observable(observer => {
+          if (!request) {
+              observer.error({ message: 'É obrigatório informar o Nome completo, email, usuário e senha para se cadastrar no sistema.' });
+              observer.complete();
+          }
+
+          const httpOptions = {
+              headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+          }
+
+          this._http.post<{ access_token: string }>(this._url + '/login', request, httpOptions).subscribe(response => {
+              this.storeToken(response);
+
+              if (this.isAuthenticated) {
+                  this.startRefreshInterval();
+              }
+
+              observer.next(this.isAuthenticated);
+              observer.complete();
+          }, error => {
+              observer.error(errorTransform(error));
+              observer.complete();
+          })
+      });
+  }
 
     /**
      * @description Armazena/remove o token de acesso

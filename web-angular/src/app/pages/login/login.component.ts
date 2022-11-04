@@ -26,6 +26,13 @@ export class LoginComponent implements OnInit {
         password: new FormControl(),
     });
 
+    public formCadastro: FormGroup = new FormGroup({
+      fullname: new FormControl(),
+      email: new FormControl(),
+      username: new FormControl(),
+      password: new FormControl(),
+  });
+
     ngOnInit() { }
 
     public login() {
@@ -39,5 +46,15 @@ export class LoginComponent implements OnInit {
         });
     }
 
+    public cadastrar() {
+      this._loginService.login(this.form.value).subscribe((resposta: any) => {
+          // this.auth.token = resposta.data.token;
+          this.mensagemErro = '';
+          this.router.navigateByUrl('admin');
+      }, error => {
+          console.error(error);
+          this.mensagemErro = error;
+      });
+  }
 
 }
