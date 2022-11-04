@@ -16,7 +16,7 @@ import { Noticia } from '../noticias/models/noticia';
 @Component({
     selector: 'app-pesquisa-noticia',
     templateUrl: 'pesquisa-noticia.page.html',
-    providers: [ FormBuilder ]
+    providers: [FormBuilder]
 })
 export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
 
@@ -64,7 +64,10 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
     }
 
     private criarForm(): FormGroup {
-        return this.formBuilder.group({ filtro: [null] })
+        return this.formBuilder.group({ 
+            filtro: [null],
+            naoEnviadas: [false]
+        })
     }
 
     private implementChanges() {

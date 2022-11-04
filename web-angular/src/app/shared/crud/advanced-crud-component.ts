@@ -172,12 +172,12 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 
         return true;
     }
-    
+
     /**
      * @description Valida se os forms dos cards possuem alterações pendentes
      * @returns True se pelo menos um form possuir alterações
      */
-     public possuiAlteracoesPendentes(): boolean {
+    public possuiAlteracoesPendentes(): boolean {
         for (const card of this.crudController.cardList) {
             if (card.form.dirty) {
                 return true;
@@ -186,7 +186,7 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 
         return false;
     }
-
+    
     /**
      * @description Reseta o form com o valor de um novo registro 
      */

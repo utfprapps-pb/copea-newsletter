@@ -22,4 +22,9 @@ public class ConfigEmailResource extends GenericResource<ConfigEmail, Long, Conf
         return Response.ok(getService().findByIdAndUser(aLong)).build();
     }
 
+    @Override
+    public Response save(@Valid ConfigEmail genericClass) {
+        return super.save(genericClass);
+    }
+
 }

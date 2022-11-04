@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
+// shared
 import { LoginService } from 'src/app/shared/services/login.service';
+
+// aplicação
+import { ConfiguracaoComponent } from '../configuracao/configuracao.component';
 
 @Component({
     selector: 'app-admin',
@@ -9,10 +15,15 @@ import { LoginService } from 'src/app/shared/services/login.service';
 export class AdminComponent implements OnInit {
 
     constructor(
-        private _loginService: LoginService
+        private _loginService: LoginService,
+        public dialog: MatDialog,
     ) { }
 
     ngOnInit() {
+    }
+
+    public abrirConfiguracoes() {
+        this.dialog.open(ConfiguracaoComponent);
     }
 
     public sair() {

@@ -7,6 +7,7 @@ import { MaterialModule } from 'src/app/modules/material.module';
 
 // aplicação
 import { AdminComponent } from './admin.component';
+import { ConfiguracaoModule } from '../configuracao/configuracao.module';
 
 const routes: Routes = [
     {
@@ -25,7 +26,12 @@ const routes: Routes = [
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
+
+        // modules
         MaterialModule,
+
+        // aplicação
+        ConfiguracaoModule,
     ],
     exports: [AdminComponent],
     providers: [],
