@@ -10,7 +10,11 @@ import javax.ws.rs.core.Response;
 
 @Path("v1/email/config")
 @Resource
-public class ConfigEmailResource extends GenericResource<ConfigEmail, Long, ConfigEmailService> {
+public class ConfigEmailResource extends GenericResource<ConfigEmail, ConfigEmail, Long, ConfigEmailService> {
+
+    public ConfigEmailResource() {
+        super(ConfigEmail.class, ConfigEmail.class);
+    }
 
     @Override
     public Response get() {

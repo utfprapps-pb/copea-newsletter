@@ -12,7 +12,11 @@ import javax.ws.rs.core.Response;
 
 @Path("v1/newsletter")
 @RequestScoped
-public class NewsletterResource extends GenericResource<Newsletter, Long, NewsletterService> {
+public class NewsletterResource extends GenericResource<Newsletter, Newsletter, Long, NewsletterService> {
+
+    public NewsletterResource() {
+        super(Newsletter.class, Newsletter.class);
+    }
 
     @Override
     public Response get() {

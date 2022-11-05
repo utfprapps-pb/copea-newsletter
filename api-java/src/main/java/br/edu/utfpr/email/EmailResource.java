@@ -10,7 +10,11 @@ import javax.ws.rs.core.Response;
 
 @Path("v1/email")
 @RequestScoped
-public class EmailResource extends GenericResource<Email, Long, EmailService> {
+public class EmailResource extends GenericResource<Email, Email, Long, EmailService> {
+
+    public EmailResource() {
+        super(Email.class, Email.class);
+    }
 
     @GET
     @Path("find-email")

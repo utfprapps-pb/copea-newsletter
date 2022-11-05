@@ -1,5 +1,6 @@
 package br.edu.utfpr.generic.crud;
 
+import br.edu.utfpr.utils.ModelMapperUtils;
 import lombok.Getter;
 
 import javax.inject.Inject;
@@ -8,7 +9,13 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-public abstract class GenericResource<T, ID, S extends GenericService> {
+public abstract class GenericResource<T, DTO, ID, S extends GenericService> {
+
+    private final ModelMapperUtils<T, DTO> modelMapperUtils;
+
+    public GenericResource(Class<T> entityClass, Class<DTO> dtoClass) {
+        this.modelMapperUtils = new ModelMapperUtils<>(entityClass, dtoClass);
+    }
 
     @Getter
     @Inject
@@ -27,14 +34,18 @@ public abstract class GenericResource<T, ID, S extends GenericService> {
 
     @POST
     @Transactional
-    public Response save(@Valid T genericClass) {
-        return Response.status(Response.Status.CREATED).entity(service.save(genericClass)).build();
+    public Response save(@Valid DTO requestBody) {
+        return Response.status(Response.Status.CREATED)
+                .entity(service.save(
+                            modelMapperUtils.convertToEntity(requestBody)
+                        )
+                ).build();
     }
 
     @PUT
     @Transactional
-    public Response update(@Valid T genericClass) {
-        return Response.ok(service.update(genericClass)).build();
+    public Response update(@Valid DTO requestBody) {
+        return Response.ok(service.update(modelMapperUtils.convertToEntity(requestBody))).build();
     }
 
     @DELETE
