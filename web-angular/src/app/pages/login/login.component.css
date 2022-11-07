@@ -1,7 +1,12 @@
-.mat-tab-label .mat-tab-label-content{
-  background:aqua;
+.mat-tab-label .mat-tab-label-content {
+  background: aqua;
   color: blue !important;
   width: 60px;
   height: 50px;
   font-size: 20px;
+}
+
+.link-esqueceu-senha {
+  float: right;
+  font-size: small;
 }

@@ -1,36 +1,36 @@
 <mat-card class="d-m">
 
-    <!-- Título -->
-    <mat-card-title>
-        <div class="d-flex justify-between">
+  <!-- Título -->
+  <mat-card-title>
+      <div class="d-flex justify-between">
 
-            <!-- Texto -->
-            <span>Texto</span>
+          <!-- Texto -->
+          <span>Texto</span>
 
-            <!-- Slide toggle -->
-            <mat-slide-toggle class="title-slide-toggle" [checked]="slideChecked" (toggleChange)="onSlideChange()">
-                Visualizar HTML gerado
-            </mat-slide-toggle>
+          <!-- Slide toggle -->
+          <mat-slide-toggle class="title-slide-toggle" [checked]="slideChecked" (toggleChange)="onSlideChange()">
+              Visualizar HTML gerado
+          </mat-slide-toggle>
 
-        </div>
-    </mat-card-title>
+      </div>
+  </mat-card-title>
 
-    <!-- Form -->
-    <mat-card-subtitle class="d-pad-top">
-        <form [formGroup]="form">
+  <!-- Form -->
+  <mat-card-subtitle class="d-pad-top">
+      <form [formGroup]="form">
 
-            <!-- Campo (texto) -->
-            <div *ngIf="!slideChecked; else visualizacaoTexto" class="full-width">
-                <quill-editor formControlName="newsletter" [modules]="editorConfig">
-                </quill-editor>
-            </div>
+          <!-- Campo (texto) -->
+          <div *ngIf="!slideChecked; else visualizacaoTexto" class="full-width">
+              <quill-editor #quillEditor formControlName="newsletter" [modules]="editorConfig">
+              </quill-editor>
+          </div>
 
-            <!-- Texto como HTML -->
-            <ng-template #visualizacaoTexto>
+          <!-- Texto como HTML -->
+          <ng-template #visualizacaoTexto>
                 <div class="full-width text-justify" [innerHtml]="texto"></div>
-            </ng-template>
+          </ng-template>
 
-        </form>
-    </mat-card-subtitle>
+      </form>
+  </mat-card-subtitle>
 
 </mat-card>

@@ -4,9 +4,13 @@ export const ERROR_DETAIL = '\nPor favor, tente novamente mais tarde ou entre em
 
 export function errorTransform(error: HttpErrorResponse): string {
     if (error) {
+        if (error.status == 401)
+          return error.error.message;
+
         if (error.error && error.error.message) {
             return error.error.message + ERROR_DETAIL;
         }
+
         if (error.message) {
             switch (error.status) {
                 case 403:

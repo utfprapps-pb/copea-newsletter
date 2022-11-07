@@ -103,14 +103,8 @@ export abstract class LoginService {
               headers: new HttpHeaders({ 'Content-Type': 'application/json' })
           }
 
-          this._http.post<{ access_token: string }>(this._url + '/login', request, httpOptions).subscribe(response => {
-              this.storeToken(response);
-
-              if (this.isAuthenticated) {
-                  this.startRefreshInterval();
-              }
-
-              observer.next(this.isAuthenticated);
+          this._http.post(this._url + '/user', request, httpOptions).subscribe(response => {
+              observer.next();
               observer.complete();
           }, error => {
               observer.error(errorTransform(error));
