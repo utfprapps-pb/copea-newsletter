@@ -19,6 +19,8 @@ import { CardNoticiaTextoComponent } from './cards/card-noticia-texto/card-notic
 import { CardNoticiaCabecalhoComponent } from './cards/card-noticia-cabecalho/card-noticia-cabecalho.component';
 import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.interceptor';
 
+import { EditorModule } from '@tinymce/tinymce-angular';
+
 const routes: Routes = [
     { path: '', component: NoticiaComponent },
     { path: ':id', component: NoticiaComponent },
@@ -47,6 +49,8 @@ const routes: Routes = [
 
         // shared
         SysPipesModule,
+
+        EditorModule,
     ],
     exports: [],
     providers: [

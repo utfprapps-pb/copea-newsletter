@@ -1,38 +1,39 @@
 <mat-card class="d-m">
 
-  <!-- Título -->
-  <mat-card-title>
-      <div class="d-flex justify-between">
+    <!-- Título -->
+    <mat-card-title>
+        <div class="d-flex justify-between">
 
-          <!-- Texto -->
-          <span>Texto</span>
+            <!-- Texto -->
+            <span>Texto</span>
 
-          <!-- Slide toggle -->
-          <mat-slide-toggle class="title-slide-toggle" [checked]="slideChecked" (toggleChange)="onSlideChange()">
-              Visualizar HTML gerado
-          </mat-slide-toggle>
+            <!-- Slide toggle -->
+            <mat-slide-toggle class="title-slide-toggle" [checked]="slideChecked" (toggleChange)="onSlideChange()">
+                Visualizar HTML gerado
+            </mat-slide-toggle>
 
-      </div>
-  </mat-card-title>
+        </div>
+    </mat-card-title>
 
-  <!-- Form -->
-  <mat-card-subtitle class="d-pad-top">
-      <form [formGroup]="form">
+    <!-- Form -->
+    <mat-card-subtitle class="d-pad-top">
+        <form [formGroup]="form">
 
-          <!-- Campo (texto) -->
-          <div *ngIf="!slideChecked; else visualizacaoTexto">
-              <quill-editor class="full-width" #quillEditor formControlName="newsletter" [modules]="editorConfig">
-              </quill-editor>
-          </div>
+            <!-- Campo (texto) -->
+            <div *ngIf="!slideChecked; else visualizacaoTexto">
+                <!-- <quill-editor class="full-width" #quillEditor formControlName="newsletter" [modules]="editorConfig">
+              </quill-editor> -->
+                <editor class="full-width" [init]="getInitData()" formControlName="newsletter" apiKey="oy0mou7olj3k7ooe5jqudtv3dsoiq1ce500hymtnucmplgh8"></editor>
+            </div>
 
-          <!-- Texto como HTML -->
-          <ng-template #visualizacaoTexto>
+            <!-- Texto como HTML -->
+            <ng-template #visualizacaoTexto>
                 <!-- usado a função bypassSecurityTrustHtml pois o Angular bloqueia a
                      inserção do HTML direto pelo innerHtml, isso é feito para evitar ataques de injeção de código XSS -->
                 <div class="full-width text-justify" [innerHtml]="sanitizer.bypassSecurityTrustHtml(texto)"></div>
-          </ng-template>
+            </ng-template>
 
-      </form>
-  </mat-card-subtitle>
+        </form>
+    </mat-card-subtitle>
 
 </mat-card>
