@@ -1,5 +1,7 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { DomSanitizer } from '@angular/platform-browser';
 
 // shared
 import { AdvancedCrudCard } from 'src/app/shared/crud/advanced-crud-card';
@@ -25,10 +27,6 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> {
    */
   public editorConfig: any;
 
-  @ViewChild('quillEditor') quillEditorComponent: any;
-
-  quillEditorComponentteste: any;
-
   /**
    * @description Flag que controla o estado 'checado' do slide-toggle
    */
@@ -39,6 +37,7 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> {
   constructor(
     public override crudController: AdvancedCrudController<Noticia>,
     public override formBuilder: FormBuilder,
+    public sanitizer: DomSanitizer
   ) {
     super(crudController, formBuilder);
 
@@ -64,8 +63,6 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> {
    * @description Executa no toggleChange do do slide-toggle
    */
   public onSlideChange() {
-    console.log(this.texto);
-    console.log(this.quillEditorComponent);
     this.slideChecked = !this.slideChecked;
   }
 

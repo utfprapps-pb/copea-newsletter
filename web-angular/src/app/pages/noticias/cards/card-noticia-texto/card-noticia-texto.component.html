@@ -20,14 +20,16 @@
       <form [formGroup]="form">
 
           <!-- Campo (texto) -->
-          <div *ngIf="!slideChecked; else visualizacaoTexto" class="full-width">
-              <quill-editor #quillEditor formControlName="newsletter" [modules]="editorConfig">
+          <div *ngIf="!slideChecked; else visualizacaoTexto">
+              <quill-editor class="full-width" #quillEditor formControlName="newsletter" [modules]="editorConfig">
               </quill-editor>
           </div>
 
           <!-- Texto como HTML -->
           <ng-template #visualizacaoTexto>
-                <div class="full-width text-justify" [innerHtml]="texto"></div>
+                <!-- usado a função bypassSecurityTrustHtml pois o Angular bloqueia a
+                     inserção do HTML direto pelo innerHtml, isso é feito para evitar ataques de injeção de código XSS -->
+                <div class="full-width text-justify" [innerHtml]="sanitizer.bypassSecurityTrustHtml(texto)"></div>
           </ng-template>
 
       </form>
