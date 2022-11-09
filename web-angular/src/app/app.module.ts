@@ -18,6 +18,7 @@ import { LoginModule } from './pages/login/login.module';
 // aplicação
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DrawerService } from './pages/admin/drawer.service';
 
 
 @NgModule({
@@ -38,7 +39,7 @@ import { AppComponent } from './app.component';
   bootstrap: [AppComponent],
   providers: [
     TokenInterceptor,
-
+    DrawerService,
     // interceptors
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
   ]

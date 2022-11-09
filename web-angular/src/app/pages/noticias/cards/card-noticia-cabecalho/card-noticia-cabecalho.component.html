@@ -1,66 +1,64 @@
 <mat-card class="d-m">
 
-    <!-- Título -->
-    <mat-card-title>Cabeçalho</mat-card-title>
+  <!-- Título -->
+  <!-- <mat-card-title>Cabeçalho</mat-card-title> -->
 
-    <!-- Form -->
-    <mat-card-subtitle class="d-pad-top">
-        <form [formGroup]="form">
+  <!-- Form -->
+  <mat-card-subtitle class="d-pad-top">
+    <form [formGroup]="form">
 
-            <!-- Título -->
-            <mat-form-field class="full-width" appearance="fill">
-                <mat-label>Título</mat-label>
-                <input matInput formControlName="description" placeholder="Digite o título da sua noticia..."
-                    cdkFocusInitial required>
-            </mat-form-field>
+      <!-- Título -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Título</mat-label>
+        <input #titleInput matInput formControlName="description" placeholder="Digite o título da sua notícia..." cdkFocusInitial
+          required>
+      </mat-form-field>
 
-            <!-- Erros do título -->
-            <mat-error class="d-m-bottom" *ngIf="tituloControl!.errors?.['maxLenght']">
-                O <b>título</b> não pode possuir mais do que 80 caracteres!
-            </mat-error>
+      <!-- Erros do título -->
+      <mat-error class="d-m-bottom" *ngIf="tituloControl!.errors?.['maxLenght']">
+        O <b>título</b> não pode possuir mais do que 80 caracteres!
+      </mat-error>
 
-            <mat-form-field class="full-width" appearance="fill">
-                <mat-label>Assunto</mat-label>
-                <input matInput formControlName="subject" placeholder="Digite o assunto da sua noticia..."
-                    cdkFocusInitial required>
-            </mat-form-field>
-            <!-- Erros do título -->
-            <mat-error class="d-m-bottom" *ngIf="subjectControl!.errors?.['maxLenght']">
-                O <b>assunto</b> não pode possuir mais do que 100 caracteres!
-            </mat-error>
+      <!-- Destinatários -->
+      <mat-form-field class="full-width" appearance="fill">
 
-            <!-- Destinatários -->
-            <mat-form-field class="full-width" appearance="fill">
+        <!-- Label -->
+        <mat-label>Destinatários</mat-label>
 
-                <!-- Label -->
-                <mat-label>Destinatários</mat-label>
+        <!-- Chips -->
+        <mat-chip-list #chipList aria-label="Destinatários">
+          <mat-chip *ngFor="let destinatario of destinatariosControl?.value; index as i"
+            (removed)="removeDestinatario(i)">
+            {{destinatario | iddescription : '' : 'email'}}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input #destinatarioInput placeholder="Adicionar os destinatários que irão receber a notícia por email..."
+            [matAutocomplete]="auto" [matChipInputFor]="chipList" (input)="filtrarDestinatarios()"
+            (focus)="destinatarioAutocomplete.onFocusAutocomplete()" required>
+        </mat-chip-list>
 
-                <!-- Chips -->
-                <mat-chip-list #chipList aria-label="Destinatários">
-                    <mat-chip *ngFor="let destinatario of destinatariosControl?.value; index as i"
-                        (removed)="removeDestinatario(i)">
-                        {{destinatario | iddescription : '' : 'email'}}
-                        <button matChipRemove>
-                            <mat-icon>cancel</mat-icon>
-                        </button>
-                    </mat-chip>
-                    <input #destinatarioInput placeholder="Adicionar destinatário..." [matAutocomplete]="auto"
-                        [matChipInputFor]="chipList" (input)="filtrarDestinatarios()"
-                        (focus)="destinatarioAutocomplete.onFocusAutocomplete()" required>
-                </mat-chip-list>
+        <!-- Autocomplete -->
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="addDestinatario($event)">
+          <mat-option *ngFor="let option of destinatarioAutocomplete.optionsFiltradas | async" [value]="option">
+            {{option | iddescription : '' : 'email'}}
+          </mat-option>
+        </mat-autocomplete>
 
-                <!-- Autocomplete -->
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
-                    (optionSelected)="addDestinatario($event)">
-                    <mat-option *ngFor="let option of destinatarioAutocomplete.optionsFiltradas | async"
-                        [value]="option">
-                        {{option | iddescription : '' : 'email'}}
-                    </mat-option>
-                </mat-autocomplete>
+      </mat-form-field>
 
-            </mat-form-field>
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Assunto</mat-label>
+        <input matInput formControlName="subject"
+          placeholder="Digite o assunto que será enviado no email da sua notícia..." cdkFocusInitial required>
+      </mat-form-field>
+      <!-- Erros do título -->
+      <mat-error class="d-m-bottom" *ngIf="subjectControl!.errors?.['maxLenght']">
+        O <b>assunto</b> não pode possuir mais do que 100 caracteres!
+      </mat-error>
 
-        </form>
-    </mat-card-subtitle>
+    </form>
+  </mat-card-subtitle>
 
 </mat-card>

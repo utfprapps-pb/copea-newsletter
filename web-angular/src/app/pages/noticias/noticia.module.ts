@@ -7,9 +7,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // material
 import { MaterialModule } from 'src/app/modules/material.module';
 
-// text-editor
-import { QuillModule } from 'ngx-quill';
-
 // shared
 import { SysPipesModule } from 'src/app/shared/pipes/sys-pipes.module';
 
@@ -29,7 +26,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         NoticiaComponent,
-        
+
         // cards
         CardNoticiaCabecalhoComponent,
         CardNoticiaTextoComponent,
@@ -44,9 +41,6 @@ const routes: Routes = [
         // material
         MaterialModule,
 
-        // text-editor
-        QuillModule.forRoot(),
-
         // shared
         SysPipesModule,
 
@@ -55,7 +49,6 @@ const routes: Routes = [
     exports: [],
     providers: [
         TokenInterceptor,
-
         // interceptors
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
     ],

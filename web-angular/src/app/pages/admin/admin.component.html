@@ -20,8 +20,8 @@
             </button>
         </mat-menu>
     </mat-toolbar>
-    <mat-drawer-container class="main-content">
-        <mat-drawer [opened]="true" mode="side" class="menu" #drawer>
+    <mat-drawer-container #drawerContainer class="main-content">
+        <mat-drawer #drawer [opened]="true" mode="side" class="menu" (openedChange)="onOpenedChange($event)">
             <mat-nav-list>
                 <mat-list-item [routerLink]="['/admin/destinatario']">
                     <a matLine class="link" routerLinkActive="link-activated">
