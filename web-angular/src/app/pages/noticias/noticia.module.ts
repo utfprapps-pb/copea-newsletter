@@ -1,3 +1,4 @@
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
@@ -45,6 +46,7 @@ const routes: Routes = [
         SysPipesModule,
 
         EditorModule,
+        MatCheckboxModule
     ],
     exports: [],
     providers: [

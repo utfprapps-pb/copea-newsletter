@@ -1,5 +1,5 @@
 import { DrawerService } from '../../../admin/drawer.service';
-import { Component, ViewChild, OnInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { DomSanitizer } from '@angular/platform-browser';
@@ -39,6 +39,7 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
   criarForm(): FormGroup {
     return this.formBuilder.group({
       newsletter: [null, Validators.required],
+      newsletterTemplate: [false],
     })
   }
 

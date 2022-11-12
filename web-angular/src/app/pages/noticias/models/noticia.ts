@@ -5,5 +5,6 @@ export interface Noticia {
     description?: string; // Título
     subject?: string;
     newsletter?: string;
+    newsletterTemplate?: boolean;
     emails?: Destinatario[];
 }

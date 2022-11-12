@@ -1,44 +1,46 @@
 <div class="d-flex column d-pad">
 
-    <div class="d-pad-card-container">
+  <div class="d-pad-card-container">
 
-        <!-- Título -->
-        <h2 class="d-flex align-center d-m align-self-start">
-            <b class="d-m-right">Notícia</b>
-            <mat-icon class="icon-offset-top">newspaper</mat-icon>
-        </h2>
+    <!-- Título -->
+    <h2 class="d-flex align-center d-m align-self-start">
+      <b class="d-m-right">Notícia</b>
+      <mat-icon class="icon-offset-top">newspaper</mat-icon>
+    </h2>
 
-        <!-- Card cabeçalho -->
-        <app-card-noticia-cabecalho class="full-width"></app-card-noticia-cabecalho>
+    <!-- Card cabeçalho -->
+    <app-card-noticia-cabecalho class="full-width"></app-card-noticia-cabecalho>
 
-        <!-- Ações -->
-        <div class="d-flex justify-end d-m-vertical">
+    <!-- Ações -->
+    <div class="d-flex justify-end d-m-vertical">
 
-            <!-- Spinner -->
-            <mat-progress-spinner *ngIf="loading; else actionButtons" class="d-m-right full-width" mode="indeterminate">
-            </mat-progress-spinner>
+      <!-- Spinner -->
+      <mat-progress-spinner *ngIf="loading; else actionButtons" class="d-m-right full-width" mode="indeterminate">
+      </mat-progress-spinner>
 
-            <!-- Botões -->
-            <ng-template #actionButtons>
+      <!-- Botões -->
+      <ng-template #actionButtons>
 
-                <button mat-stroked-button class="d-m-right" [routerLink]="['/admin/noticia']"
-                    (click)="resetFormNovo()">Novo registro</button>
+        <button mat-stroked-button class="d-m-right" [routerLink]="['/admin/noticia']" (click)="resetFormNovo()">Selecionar modelo</button>
 
-                <button *ngIf="registro.id" mat-button class="mat-button-accent d-m-right" (click)="onClickEnviar()"
-                    title="Enviar notícia para os destinatários">Enviar email</button>
+        <button mat-stroked-button class="d-m-right" [routerLink]="['/admin/noticia']" (click)="resetFormNovo()">Novo
+          registro</button>
 
-                <button mat-button class="mat-button-sucess d-m-right" (click)="onClickSalvar()">Salvar</button>
+        <button *ngIf="registro.id" mat-button class="mat-button-accent d-m-right" (click)="onClickEnviar()"
+          title="Enviar notícia para os destinatários">Enviar email</button>
 
-                <button *ngIf="registro.id" mat-button class="mat-button-warn d-m-right"
-                    (click)="onClickRemover()">Excluir</button>
+        <button mat-button class="mat-button-sucess d-m-right" (click)="onClickSalvar()">Salvar</button>
 
-            </ng-template>
+        <button *ngIf="registro.id" mat-button class="mat-button-warn d-m-right"
+          (click)="onClickRemover()">Excluir</button>
 
-        </div>
-
-        <!-- Card texto -->
-        <app-card-noticia-texto class="full-width"></app-card-noticia-texto>
+      </ng-template>
 
     </div>
+
+    <!-- Card texto -->
+    <app-card-noticia-texto class="full-width"></app-card-noticia-texto>
+
+  </div>
 
 </div>

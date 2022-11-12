@@ -1,25 +1,34 @@
 <mat-card class="d-m">
 
-    <!-- Título -->
-    <mat-card-title>
-        <div class="d-flex justify-between">
+  <!-- Título -->
+  <mat-card-title>
+    <div class="d-flex justify-between">
 
-            <!-- Texto -->
-            <!-- <span>Texto</span> -->
+      <!-- Texto -->
+      <!-- <span>Texto</span> -->
 
-        </div>
-    </mat-card-title>
+      <!-- Slide toggle -->
+      <!-- [checked]="slideChecked" (toggleChange)="onSlideChange() -->
+      <form [formGroup]="form">
+      <mat-slide-toggle class="title-slide-toggle" formControlName="newsletterTemplate">
+        Notícia modelo
+    </mat-slide-toggle>
+  </form>
 
-    <!-- Form -->
-    <mat-card-subtitle class="d-pad-top">
-        <form [formGroup]="form">
+    </div>
+  </mat-card-title>
 
-            <!-- Campo (texto) -->
-            <div>
-                <editor #editor class="full-width" [init]="getInitData()" formControlName="newsletter" apiKey="oy0mou7olj3k7ooe5jqudtv3dsoiq1ce500hymtnucmplgh8"></editor>
-            </div>
+  <!-- Form -->
+  <mat-card-subtitle class="d-pad-top">
+    <form [formGroup]="form">
 
-        </form>
-    </mat-card-subtitle>
+      <!-- Campo (texto) -->
+      <div>
+        <editor #editor class="full-width" [init]="getInitData()" formControlName="newsletter"
+          apiKey="oy0mou7olj3k7ooe5jqudtv3dsoiq1ce500hymtnucmplgh8"></editor>
+      </div>
+
+    </form>
+  </mat-card-subtitle>
 
 </mat-card>
