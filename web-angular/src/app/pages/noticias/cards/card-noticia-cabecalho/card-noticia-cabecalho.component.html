@@ -13,6 +13,13 @@
                 <input #titleInput matInput formControlName="description"
                     placeholder="Digite o título da sua notícia..." cdkFocusInitial required>
             </mat-form-field>
+            
+            <!-- Assunto  -->
+            <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Assunto</mat-label>
+                <input matInput formControlName="subject"
+                    placeholder="Digite o assunto que será enviado no email da sua notícia..." cdkFocusInitial required>
+            </mat-form-field>
 
             <!-- Erros do título -->
             <mat-error class="d-m-bottom" *ngIf="tituloControl!.errors?.['maxLenght']">
@@ -60,13 +67,6 @@
                 </div>
 
             </div>
-
-            <!-- Assunto  -->
-            <mat-form-field class="full-width" appearance="fill">
-                <mat-label>Assunto</mat-label>
-                <input matInput formControlName="subject"
-                    placeholder="Digite o assunto que será enviado no email da sua notícia..." cdkFocusInitial required>
-            </mat-form-field>
             
             <!-- Erros do assunto -->
             <mat-error class="d-m-bottom" *ngIf="subjectControl!.errors?.['maxLenght']">

@@ -1,11 +1,11 @@
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // material
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MaterialModule } from 'src/app/modules/material.module';
 
 // shared
@@ -51,6 +51,7 @@ const routes: Routes = [
     exports: [],
     providers: [
         TokenInterceptor,
+
         // interceptors
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
     ],
