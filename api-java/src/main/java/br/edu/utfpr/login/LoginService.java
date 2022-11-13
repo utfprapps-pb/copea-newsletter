@@ -26,7 +26,7 @@ public class LoginService {
     public Optional<TokenResponse> logar(LoginRequest loginRequest) throws Exception {
         Optional<TokenResponse> token = Optional.empty();
 
-        Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername()).stream().findFirst();
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByUsername(loginRequest.getUsername()));
 
         Boolean gerarToken = ((userOptional.isPresent()) && (verifyPassword(loginRequest.getPassword(), userOptional.get().getPassword())));
         if (gerarToken)

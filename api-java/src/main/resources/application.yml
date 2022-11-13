@@ -44,6 +44,8 @@ quarkus:
     migrate-at-start: true
     baseline-on-migrate: true
     locations: db/migration
+  hibernate-validator:
+    method-validation: none
 
 #Informacoes locais do jwt
 jwt-newsletter:

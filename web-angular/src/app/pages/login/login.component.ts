@@ -7,39 +7,38 @@ import { AuthService } from 'src/app/services/auth.service';
 import { LoginService } from 'src/app/shared/services/login.service';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
 
-    public mensagemErro: String = '';
+  public mensagemErro: String = '';
 
-    constructor(
-        private auth: AuthService,
-        private _loginService: LoginService,
-        private router: Router
-    ) { }
+  constructor(
+    private auth: AuthService,
+    private _loginService: LoginService,
+    private router: Router
+  ) { }
 
-    public form: FormGroup = new FormGroup({
-        username: new FormControl(),
-        password: new FormControl(),
+  public form: FormGroup = new FormGroup({
+    username: new FormControl(),
+    password: new FormControl(),
+  });
+
+  ngOnInit() {
+    this._loginService.logout();
+  }
+
+  public login() {
+    this._loginService.login(this.form.value).subscribe((resposta: any) => {
+      // this.auth.token = resposta.data.token;
+      this.mensagemErro = '';
+      this.router.navigateByUrl('admin');
+    }, error => {
+      console.error(error);
+      this.mensagemErro = error;
     });
-
-    ngOnInit() {
-        this._loginService.logout();
-    }
-
-    public login() {
-        this._loginService.login(this.form.value).subscribe((resposta: any) => {
-            // this.auth.token = resposta.data.token;
-            this.mensagemErro = '';
-            this.router.navigateByUrl('admin');
-        }, error => {
-            console.error(error);
-            this.mensagemErro = error;
-        });
-    }
-
+  }
 
 }

@@ -1,3 +1,4 @@
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
@@ -6,9 +7,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // material
 import { MaterialModule } from 'src/app/modules/material.module';
-
-// text-editor
-import { QuillModule } from 'ngx-quill';
 
 // shared
 import { SysPipesModule } from 'src/app/shared/pipes/sys-pipes.module';
@@ -19,6 +17,8 @@ import { CardNoticiaTextoComponent } from './cards/card-noticia-texto/card-notic
 import { CardNoticiaCabecalhoComponent } from './cards/card-noticia-cabecalho/card-noticia-cabecalho.component';
 import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.interceptor';
 
+import { EditorModule } from '@tinymce/tinymce-angular';
+
 const routes: Routes = [
     { path: '', component: NoticiaComponent },
     { path: ':id', component: NoticiaComponent },
@@ -27,7 +27,7 @@ const routes: Routes = [
 @NgModule({
     declarations: [
         NoticiaComponent,
-        
+
         // cards
         CardNoticiaCabecalhoComponent,
         CardNoticiaTextoComponent,
@@ -42,16 +42,15 @@ const routes: Routes = [
         // material
         MaterialModule,
 
-        // text-editor
-        QuillModule.forRoot(),
-
         // shared
         SysPipesModule,
+
+        EditorModule,
+        MatCheckboxModule
     ],
     exports: [],
     providers: [
         TokenInterceptor,
-
         // interceptors
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
     ],

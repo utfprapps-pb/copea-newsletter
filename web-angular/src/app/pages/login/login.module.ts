@@ -1,3 +1,4 @@
+import { CadastroModule } from './../cadastro/cadastro.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
@@ -8,6 +9,8 @@ import { MaterialModule } from 'src/app/modules/material.module';
 
 // aplicação
 import { LoginComponent } from './login.component';
+
+import { MatTabsModule } from '@angular/material/tabs';
 
 const routes: Routes = [
     { path: '', component: LoginComponent }
@@ -21,6 +24,7 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         MaterialModule,
+        MatTabsModule
     ],
     exports: [],
     providers: [],

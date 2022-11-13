@@ -1,33 +1,38 @@
 <form [formGroup]="form" class="auth-container">
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>Login</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Login</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
 
-            <mat-form-field [appearance]="'outline'">
-                <mat-label>Usuário</mat-label>
-                <input matInput formControlName="username" required placeholder="Usuário" type="text">
-                <mat-error>Usuário obrigatório</mat-error>
-            </mat-form-field>
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Usuário</mat-label>
+        <input matInput formControlName="username" required placeholder="Informe seu usuário" type="text">
+        <mat-error>Usuário obrigatório</mat-error>
+      </mat-form-field>
 
-            <mat-form-field [appearance]="'outline'">
-                <mat-label>Senha</mat-label>
-                <input matInput type="password" formControlName="password" required>
-                <mat-error>Senha obrigatória</mat-error>
-            </mat-form-field>
 
-        </mat-card-content>
-        <mat-card-actions>
-            <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="end center">
-                <!-- <button color="secondary" (click)="cadastrar()" mat-raised-button>Cadstre-se</button> -->
-                <button color="primary" [disabled]="form.invalid" (click)="login()" mat-raised-button>Entrar</button>
-            </div>
-        </mat-card-actions>
+      <a tabindex="-1" class="link-esqueceu-senha" routerLink="">Esqueceu?</a>
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" formControlName="password" placeholder="Informe sua senha" required>
+        <mat-error>Senha obrigatória</mat-error>
+      </mat-form-field>
 
-        <div *ngIf="mensagemErro" class="text-center">
-            <mat-error>{{mensagemErro}}</mat-error>
-        </div>
 
-    </mat-card>
+    </mat-card-content>
+    <mat-card-actions>
+      <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="end center">
+        <button class="width-500px" color="primary" [disabled]="form.invalid" (click)="login()"
+          mat-raised-button>Entrar</button>
+      </div>
+    </mat-card-actions>
+
+    <div *ngIf="mensagemErro" class="text-center d-pad-bottom">
+      <mat-error>{{mensagemErro}}</mat-error>
+    </div>
+
+    <div class="text-center"> <span>Não possui conta? </span> <a routerLink="/cadastro">Cadastre-se aqui</a> </div>
+
+  </mat-card>
 </form>

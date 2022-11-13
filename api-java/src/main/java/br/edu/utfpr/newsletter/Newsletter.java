@@ -61,4 +61,7 @@ public class Newsletter {
     @ManyToOne(optional = false)
     private User user;
 
+    @Column(name = "newsletter_template")
+    private Boolean newsletterTemplate;
+
 }

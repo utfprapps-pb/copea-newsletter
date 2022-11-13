@@ -26,8 +26,7 @@ public class AuthSecurityFilter implements ContainerRequestFilter {
         if (Objects.isNull(securityCtx.getUserPrincipal()))
             return;
 
-        authUserContext.setUsername(securityCtx.getUserPrincipal().getName());
-
+        authUserContext.setUsername(Long.valueOf(securityCtx.getUserPrincipal().getName()));
     }
 
 }

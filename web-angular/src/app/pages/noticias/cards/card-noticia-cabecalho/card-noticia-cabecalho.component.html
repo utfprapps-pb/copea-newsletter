@@ -10,8 +10,8 @@
             <!-- Título -->
             <mat-form-field class="full-width" appearance="fill">
                 <mat-label>Título</mat-label>
-                <input matInput formControlName="description" placeholder="Digite o título da sua noticia..."
-                    cdkFocusInitial required>
+                <input #titleInput matInput formControlName="description"
+                    placeholder="Digite o título da sua notícia..." cdkFocusInitial required>
             </mat-form-field>
 
             <!-- Erros do título -->
@@ -19,19 +19,10 @@
                 O <b>título</b> não pode possuir mais do que 80 caracteres!
             </mat-error>
 
-            <mat-form-field class="full-width" appearance="fill">
-                <mat-label>Assunto</mat-label>
-                <input matInput formControlName="subject" placeholder="Digite o assunto da sua noticia..."
-                    cdkFocusInitial required>
-            </mat-form-field>
-            <!-- Erros do título -->
-            <mat-error class="d-m-bottom" *ngIf="subjectControl!.errors?.['maxLenght']">
-                O <b>assunto</b> não pode possuir mais do que 100 caracteres!
-            </mat-error>
-
+            <!-- Destinatários -->
             <div class="full-width d-flex align-center">
 
-                <!-- Destinatários -->
+                <!-- Autocomplete -->
                 <mat-form-field class="full-width" appearance="fill">
                     <!-- Label -->
                     <mat-label>Destinatários</mat-label>
@@ -69,6 +60,18 @@
                 </div>
 
             </div>
+
+            <!-- Assunto  -->
+            <mat-form-field class="full-width" appearance="fill">
+                <mat-label>Assunto</mat-label>
+                <input matInput formControlName="subject"
+                    placeholder="Digite o assunto que será enviado no email da sua notícia..." cdkFocusInitial required>
+            </mat-form-field>
+            
+            <!-- Erros do assunto -->
+            <mat-error class="d-m-bottom" *ngIf="subjectControl!.errors?.['maxLenght']">
+                O <b>assunto</b> não pode possuir mais do que 100 caracteres!
+            </mat-error>
 
         </form>
     </mat-card-subtitle>

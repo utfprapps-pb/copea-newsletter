@@ -186,9 +186,9 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 
         return false;
     }
-    
+
     /**
-     * @description Reseta o form com o valor de um novo registro 
+     * @description Reseta o form com o valor de um novo registro
      */
     public resetFormNovo() {
         this.loading = true;

@@ -26,15 +26,18 @@ public class SendEmailLog implements Serializable {
 
     private String emailFrom;
 
+    @Column(columnDefinition = "TEXT")
     private String sentEmails;
 
     private String sentSubject;
 
+    @Column(columnDefinition = "TEXT")
     private String sentMessage;
 
     @Enumerated(EnumType.STRING)
     private SendEmailLogStatusEnum sentStatus;
 
+    @Column(columnDefinition = "TEXT")
     private String error;
 
 }
