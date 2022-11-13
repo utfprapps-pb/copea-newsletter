@@ -13,8 +13,10 @@ import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.
 
 // aplicação
 import { DestinatarioComponent } from './destinatario.page';
+import { GrupoDestinatarioModule } from '../grupo-destinatarios/grupo-destinatario.module';
 import { CardDestinatarioEdicaoComponent } from './cards/card-destinatario-edicao/card-destinatario-edicao.component';
 import { CardDestinatarioPesquisaComponent } from './cards/card-destinatario-pesquisa/card-destinatario-pesquisa.component';
+import { DestinatariosGruposPipe } from './pipes/destinatario-grupos.pipe';
 
 const routes: Routes = [
     { path: '', component: DestinatarioComponent }
@@ -27,6 +29,9 @@ const routes: Routes = [
         // cards
         CardDestinatarioEdicaoComponent,
         CardDestinatarioPesquisaComponent,
+
+        // pipes
+        DestinatariosGruposPipe,
     ],
     imports: [
         CommonModule,
@@ -40,6 +45,9 @@ const routes: Routes = [
 
         // shared
         SysPipesModule,
+
+        // aplicação
+        GrupoDestinatarioModule,
     ],
     exports: [],
     providers: [

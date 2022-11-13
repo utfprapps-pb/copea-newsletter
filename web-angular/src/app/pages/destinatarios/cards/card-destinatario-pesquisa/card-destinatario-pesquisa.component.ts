@@ -15,7 +15,8 @@ import { Destinatario } from '../../model/destinatario';
 
 @Component({
     selector: 'app-card-destinatario-pesquisa',
-    templateUrl: 'card-destinatario-pesquisa.component.html'
+    templateUrl: 'card-destinatario-pesquisa.component.html',
+    styleUrls: ['./card-destinatario-pesquisa.component.scss']
 })
 export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
 
@@ -32,7 +33,7 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
     /**
      * @description Armazena as colunas da tabela
      */
-    public columns: string[] = ['identificador', 'description', 'acoes'];
+    public columns: string[] = ['id', 'description', 'groups', 'acoes'];
 
     /**
      * @description Evento de edição do registro

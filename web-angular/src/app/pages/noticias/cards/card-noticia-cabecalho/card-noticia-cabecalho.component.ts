@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // material
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
@@ -18,6 +19,7 @@ import { Destinatario } from 'src/app/pages/destinatarios/model/destinatario';
 
 // aplicação
 import { Noticia } from '../../models/noticia';
+import { GrupoDestinatarioPesquisaDialogComponent } from 'src/app/pages/grupo-destinatarios/components/grupo-destinatario-pesquisa-dialog/grupo-destinatario-pesquisa-dialog.component';
 
 @Component({
     selector: 'app-card-noticia-cabecalho',
@@ -39,6 +41,7 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
         public override formBuilder: FormBuilder,
         public destinatarioService: DestinatarioService,
         public snackBar: MatSnackBar,
+        public dialog: MatDialog,
     ) {
         super(crudController, formBuilder);
     }
@@ -109,6 +112,13 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
      */
     public filtrarDestinatarios() {
         this.destinatarioAutocomplete.filtrar(this.destinatarioInput.nativeElement.value);
+    }
+
+    /**
+     * @description Abre a modal de importação do grupo
+     */
+    public importarGrupo() {
+        this.dialog.open(GrupoDestinatarioPesquisaDialogComponent)
     }
 
 }

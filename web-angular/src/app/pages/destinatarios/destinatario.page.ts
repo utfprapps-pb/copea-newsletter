@@ -13,6 +13,7 @@ import { CrudController } from 'src/app/shared/crud/crud.controller';
 // aplicação
 import { Destinatario } from './model/destinatario';
 import { DestinatarioService } from './destinatario.service';
+import { GrupoDestinatarioService } from '../grupo-destinatarios/grupo-destinatario.service';
 import { CardDestinatarioEdicaoComponent } from './cards/card-destinatario-edicao/card-destinatario-edicao.component';
 import { CardDestinatarioPesquisaComponent } from './cards/card-destinatario-pesquisa/card-destinatario-pesquisa.component';
 
@@ -22,6 +23,7 @@ import { CardDestinatarioPesquisaComponent } from './cards/card-destinatario-pes
     providers: [
         CrudController,
         DestinatarioService,
+        GrupoDestinatarioService,
     ]
 })
 export class DestinatarioComponent extends BasicCrudComponent<Destinatario> implements AfterViewInit, OnDestroy {
@@ -65,7 +67,8 @@ export class DestinatarioComponent extends BasicCrudComponent<Destinatario> impl
     public criarForm(): FormGroup {
         return this.formBuilder.group({
             id: [null],
-            email: [null, [Validators.required, Validators.email]]
+            email: [null, [Validators.required, Validators.email]],
+            groups: [null]
         })
     }
 

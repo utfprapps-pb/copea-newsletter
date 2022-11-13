@@ -6,17 +6,17 @@ import { Observable, of } from 'rxjs';
 import { CrudService } from 'src/app/shared/crud/crud.service';
 
 // aplicação
-import { Destinatario } from './model/destinatario';
+import { GrupoDestinatario } from './model/grupo-destinatario';
 
 @Injectable()
-export class DestinatarioService extends CrudService<Destinatario> {
+export class GrupoDestinatarioService extends CrudService<GrupoDestinatario> {
 
     constructor(public override http: HttpClient) {
-        super('/v1/email', http);
+        super('/v1/email-group', http);
     }
 
-    public get novoRegistro(): Observable<Destinatario> {
-        return of({ email: '', groups: [] });
+    public get novoRegistro(): Observable<GrupoDestinatario> {
+        return of({ name: '' });
     }
 
 }

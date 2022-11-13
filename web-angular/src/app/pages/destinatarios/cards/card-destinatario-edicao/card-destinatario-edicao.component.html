@@ -15,6 +15,48 @@
                 <mat-error>{{email.errors | erro}}</mat-error>
             </mat-form-field>
 
+            <!-- Grupos -->
+            <div class="full-width d-flex align-center">
+
+                <!-- Form-Field -->
+                <mat-form-field class="grow" appearance="fill">
+                    <!-- Label -->
+                    <mat-label>Grupos</mat-label>
+
+                    <!-- Chips -->
+                    <mat-chip-list #chipList aria-label="Grupos">
+                        <mat-chip *ngFor="let grupo of gruposControl?.value; index as i" (removed)="removeGrupo(i)">
+                            {{grupo | iddescription : '' : 'name'}}
+                            <button class="mat-chip-remove" (click)="abrirModalCadastroGrupo(grupo)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button matChipRemove>
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip>
+                        <input #grupoInput placeholder="Adicionar grupo..." [matAutocomplete]="auto"
+                            [matChipInputFor]="chipList" (input)="filtrarGrupos()"
+                            (focus)="grupoAutocomplete.onFocusAutocomplete()" required>
+                    </mat-chip-list>
+
+                    <!-- Autocomplete -->
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="addGrupo($event)">
+                        <mat-option *ngFor="let option of grupoAutocomplete.optionsFiltradas | async" [value]="option">
+                            {{option | iddescription : '' : 'name'}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <!-- Botão incluir novo -->
+                <div class="d-m-bottom-lg">
+                    <button class="button-outline" mat-icon-button color="primary" (click)="abrirModalCadastroGrupo()"
+                        title="Incluir novo">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
         </form>
     </mat-card-subtitle>
 

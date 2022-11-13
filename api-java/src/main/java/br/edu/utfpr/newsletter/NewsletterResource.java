@@ -8,6 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 @Path("v1/newsletter")
@@ -41,6 +42,15 @@ public class NewsletterResource extends GenericResource<Newsletter, Long, Newsle
                                     "Motivo: " + e.getMessage()).build())
                     .build();
         }
+    }
+
+    @GET
+    @Path("pesquisar-noticias")
+    public Response pesquisarNoticias(
+            @QueryParam("filtro") String filtro,
+            @QueryParam("somenteNaoEnviadas") boolean somenteNaoEnviadas
+    ) {
+        return super.get();
     }
 
 }

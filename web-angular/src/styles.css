@@ -89,6 +89,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .d-pad-top { padding-top: 8px !important; }
 .d-pad-horizontal { padding: 8px 0px !important; }
 
+.d-m-bottom-lg { margin-bottom: 16px !important; }
+
 .d-pad-card-container { padding: 8px 5vw !important; }
 
 .text-m-right { margin-right: 4px !important; }
@@ -147,4 +149,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .hover-button:hover {
     text-shadow: 0px 1px #0000009c;
+}
+
+.text-overflow-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

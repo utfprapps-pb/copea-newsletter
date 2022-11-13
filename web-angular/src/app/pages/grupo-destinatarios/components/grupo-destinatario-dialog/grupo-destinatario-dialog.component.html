@@ -1,0 +1,28 @@
+<mat-dialog-content class="grupo-destinatario-dialog" (keyup.enter)="persistirAlteracoes()">
+
+    <!-- Form -->
+    <form [formGroup]="form" *ngIf="!loading">
+
+        <!-- Nome -->
+        <mat-form-field class="full-width" appearance="fill">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="name" placeholder="Insira o nome do grupo..." type="text" required
+                cdkFocusInitial>
+            <mat-error>{{form.controls['name'].errors | erro}}</mat-error>
+        </mat-form-field>
+
+    </form>
+
+    <!-- Spinner -->
+    <div *ngIf="loading" class="d-flex justify-center full-width">
+        <mat-progress-spinner class="d-m-right full-width" mode="indeterminate">
+        </mat-progress-spinner>
+    </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="!loading" align="end">
+    <button mat-button (click)="persistirAlteracoes()" color="accent">Gravar</button>
+    <button *ngIf="id" mat-button class="mat-button-warn" (click)="onClickRemover()">Excluir</button>
+    <button mat-stroked-button mat-dialog-close>Fechar</button>
+</mat-dialog-actions>

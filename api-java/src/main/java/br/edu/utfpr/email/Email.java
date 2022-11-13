@@ -1,10 +1,12 @@
 package br.edu.utfpr.email;
 
+import br.edu.utfpr.emailgroup.EmailGroup;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +21,13 @@ public class Email {
     @NotBlank(message = "Parameter email is required.")
     @Column(nullable = false)
     private String email;
+
+    @ManyToMany(cascade = { CascadeType.MERGE  })
+    @JoinTable(
+            name = "email_group_email",
+            joinColumns = { @JoinColumn(name = "email_id") },
+            inverseJoinColumns = { @JoinColumn(name = "email_group_id") }
+    )
+    private List<EmailGroup> groups;
 
 }
