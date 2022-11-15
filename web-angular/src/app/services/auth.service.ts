@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   public cadastrar(usuario: Usuario): Observable<any> {
-    const api = environment.api + '/auth/singin';
+    const api = environment.api + '/user';
     return this.http.post(api, usuario);
   }
 

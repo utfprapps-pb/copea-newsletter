@@ -4,24 +4,31 @@
       <mat-card-title>Cadastro</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <!-- Nome -->
+      <!-- Nome completo -->
       <mat-form-field [appearance]="'outline'">
-        <mat-label>Nome</mat-label>
-        <input matInput formControlName="nome" type="text">
+        <mat-label>Nome completo</mat-label>
+        <input matInput formControlName="fullname" type="text">
         <mat-error>{{nome.errors | erro}}</mat-error>
+      </mat-form-field>
+
+      <!-- Nome de usuário -->
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Nome de usuário</mat-label>
+        <input matInput formControlName="username" type="text" (ngModelChange)="changeUsername()">
+        <mat-error>{{username.errors | erro}}</mat-error>
       </mat-form-field>
 
       <!-- Email -->
       <mat-form-field [appearance]="'outline'">
-        <mat-label>E-mail</mat-label>
-        <input matInput formControlName="email" required placeholder="seunome@exemplo.com" type="email">
+        <mat-label>E-mail para recuperar senha</mat-label>
+        <input matInput formControlName="email" required placeholder="seunome@exemplo.com" type="email" (ngModelChange)="changeEmail()">
         <mat-error>{{email.errors | erro}}</mat-error>
       </mat-form-field>
 
       <!-- Senha -->
       <mat-form-field [appearance]="'outline'">
         <mat-label>Senha</mat-label>
-        <input matInput formControlName="senha" required placeholder="Crie uma senha" type="password">
+        <input matInput formControlName="password" required placeholder="Crie uma senha" type="password">
         <mat-error>{{senha.errors | erro}}</mat-error>
       </mat-form-field>
 

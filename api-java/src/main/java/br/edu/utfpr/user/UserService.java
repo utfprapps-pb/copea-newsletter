@@ -33,4 +33,8 @@ public class UserService extends GenericService<User, Long, UserRepository> {
         return getRepository().findByEmail(email);
     }
 
+    public User findByUsernameOrEmail(String username, String email) {
+        return getRepository().findByUsernameOrEmail(username, email);
+    }
+
 }
