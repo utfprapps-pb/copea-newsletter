@@ -10,3 +10,7 @@
   float: right;
   font-size: small;
 }
+
+.btn-entrar {
+  max-width: 500px;
+}

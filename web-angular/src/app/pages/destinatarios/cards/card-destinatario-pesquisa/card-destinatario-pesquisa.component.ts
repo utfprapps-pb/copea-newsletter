@@ -24,6 +24,11 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
      * @description Armazena a lista de registros retornada pela api
      */
     public listaRegistros: Destinatario[];
+    
+    /**
+     * @description Armazena a lista de registros filtrados
+     */
+     public listaRegistrosFiltro: Destinatario[];
 
     /**
      * @description Flag que identifica o estado de "carregamento"
@@ -34,6 +39,11 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
      * @description Armazena as colunas da tabela
      */
     public columns: string[] = ['id', 'description', 'groups', 'acoes'];
+
+    /**
+     * @description Filtro da tabela
+     */
+    public filtro: string;
 
     /**
      * @description Evento de edição do registro
@@ -78,10 +88,26 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
         this.service.pesquisarTodos().subscribe(res => {
             this.loading = false;
             this.listaRegistros = res;
+            this.filtrarTabela();
         }, error => {
             this.loading = false;
             this.snackBar.open(errorTransform(error), 'OK');
         })
+    }
+
+    /**
+     * @description Filtra os registros da tabela (carregados)
+     */
+    public filtrarTabela() {
+        if (this.filtro) {
+            this.listaRegistrosFiltro = this.listaRegistros.filter(item =>
+                item.id === +this.filtro ||
+                item.email?.includes(this.filtro) ||
+                item.groups?.find(grupo => grupo.name?.includes(this.filtro))
+            );
+        } else {
+            this.listaRegistrosFiltro = this.listaRegistros;
+        }
     }
 
     /**

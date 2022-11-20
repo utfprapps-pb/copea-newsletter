@@ -34,6 +34,10 @@ body {
   margin: 0 !important;
 }
 
+.d-no-pad-bottom {
+  padding-bottom: 0px !important;
+}
+
 .tela mat-card-actions {
   margin: 0 !important;
 }
