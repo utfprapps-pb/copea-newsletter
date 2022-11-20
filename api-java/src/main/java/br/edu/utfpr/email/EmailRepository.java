@@ -10,4 +10,6 @@ public interface EmailRepository extends GenericRepository<Email, Long> {
 
     List<Email> findAllByEmailContaining(String email);
 
+    //List<Email> findByGroupId(Long groupId);
+
 }

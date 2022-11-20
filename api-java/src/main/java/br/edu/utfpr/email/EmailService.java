@@ -23,4 +23,9 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
         return emails;
     }
 
+    public List<Email> findByGroupId(Long groupId) {
+        //return findByGroupId(groupId);
+        return null;
+    }
+
 }
