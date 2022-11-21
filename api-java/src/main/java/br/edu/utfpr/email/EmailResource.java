@@ -28,7 +28,7 @@ public class EmailResource extends GenericResource<Email, Email, Long, EmailServ
     public List<Email> buscarPorGrupo(
             @QueryParam("groupId") Long groupId
     ) {
-        return getService().findByGroupId(groupId);
+        return getService().findEmailsByGroup(groupId);
     }
 
 }
