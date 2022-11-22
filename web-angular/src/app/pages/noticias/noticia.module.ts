@@ -24,8 +24,8 @@ import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.
 import { EditorModule } from '@tinymce/tinymce-angular';
 
 const routes: Routes = [
-  { path: '', component: NoticiaComponent },
-  { path: 'manutencao', component: NoticiaComponent, data: {pesquisaNoticiasModelos: false} },
+  { path: '', redirectTo: 'manutencao', pathMatch: 'full' },
+  { path: 'manutencao', component: NoticiaComponent, data: { pesquisaNoticiasModelos: false } },
   { path: 'manutencao/:id', component: NoticiaComponent },
   { path: 'pesquisa', component: PesquisaNoticiaComponent },
 ];
