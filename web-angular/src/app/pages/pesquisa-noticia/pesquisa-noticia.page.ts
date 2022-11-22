@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -45,6 +45,8 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
      */
     private subscription?: Subscription;
 
+    @Input() public pesquisaNoticiasModelos: Boolean = false;
+
     constructor(
         private noticiaService: NoticiaService,
         private formBuilder: FormBuilder,
@@ -64,7 +66,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
     }
 
     private criarForm(): FormGroup {
-        return this.formBuilder.group({ 
+        return this.formBuilder.group({
             filtro: [null],
             naoEnviadas: [false]
         })

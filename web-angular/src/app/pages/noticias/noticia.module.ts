@@ -1,3 +1,7 @@
+import { PesquisaNoticiaComponent } from './../pesquisa-noticia/pesquisa-noticia.page';
+import { PesquisaNoticiaModule } from './../pesquisa-noticia/pesquisa-noticia.module';
+import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
@@ -20,40 +24,47 @@ import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.
 import { EditorModule } from '@tinymce/tinymce-angular';
 
 const routes: Routes = [
-    { path: '', component: NoticiaComponent },
-    { path: ':id', component: NoticiaComponent },
+  { path: '', component: NoticiaComponent },
+  { path: 'manutencao', component: NoticiaComponent, data: {pesquisaNoticiasModelos: false} },
+  { path: 'manutencao/:id', component: NoticiaComponent },
+  { path: 'pesquisa', component: PesquisaNoticiaComponent },
 ];
 
 @NgModule({
-    declarations: [
-        NoticiaComponent,
+  declarations: [
+    NoticiaComponent,
 
-        // cards
-        CardNoticiaCabecalhoComponent,
-        CardNoticiaTextoComponent,
-    ],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        FormsModule,
-        HttpClientModule,
-        ReactiveFormsModule,
+    // cards
+    CardNoticiaCabecalhoComponent,
+    CardNoticiaTextoComponent,
+    CardSelecionarNoticiaModeloComponent,
+  ],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
 
-        // material
-        MaterialModule,
+    // material
+    MaterialModule,
 
-        // shared
-        SysPipesModule,
+    // shared
+    SysPipesModule,
 
-        EditorModule,
-        MatCheckboxModule
-    ],
-    exports: [],
-    providers: [
-        TokenInterceptor,
+    EditorModule,
+    MatCheckboxModule,
 
-        // interceptors
-        { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
-    ],
+    MatDialogModule,
+
+    PesquisaNoticiaModule
+  ],
+  exports: [],
+  providers: [
+    TokenInterceptor,
+
+    // interceptors
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
+  ],
 })
 export class NoticiaModule { }

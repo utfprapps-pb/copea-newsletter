@@ -1,3 +1,5 @@
+import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -29,6 +31,7 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
     public override service: NoticiaService,
     public override snackBar: MatSnackBar,
     public override route: ActivatedRoute,
+    public dialog: MatDialog,
   ) {
     super(crudController, service, snackBar, route);
   }
@@ -68,6 +71,16 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
     if (this.registro.id && confirm('Você tem certeza que deseja remover o noticia? Essa ação não poderá ser desfeita.')) {
       super.remover(this.registro.id);
     }
+  }
+
+  public abrirCardSelecionarNoticiaModelo() {
+    this.criarEventAoFecharDialogSelecaoNoticiaModelo(this.dialog.open(CardSelecionarNoticiaModeloComponent));
+  }
+
+  public criarEventAoFecharDialogSelecaoNoticiaModelo(dialogRef: MatDialogRef<CardSelecionarNoticiaModeloComponent>) {
+    dialogRef.afterClosed().subscribe({
+      next: (value) => this.resetFormNovoECarregarRegistro({newsletter: value.newsletter})
+    })
   }
 
 }

@@ -19,7 +19,7 @@ import { PesquisaNoticiaComponent } from './pesquisa-noticia.page';
 import { NoticiaService } from '../noticias/noticia.service';
 
 const routes: Routes = [
-    { path: '', component: PesquisaNoticiaComponent }
+    { path: 'pesquisa', component: PesquisaNoticiaComponent }
 ];
 
 @NgModule({
@@ -44,6 +44,9 @@ const routes: Routes = [
 
         // componentes
         PesquisaNoticiaResultadoComponent,
+    ],
+    exports: [
+        PesquisaNoticiaComponent,
     ],
     providers: [
         NoticiaService,

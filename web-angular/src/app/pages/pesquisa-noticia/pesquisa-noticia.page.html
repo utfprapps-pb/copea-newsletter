@@ -73,7 +73,7 @@
                 <ng-template #resultados>
                     <div class="d-flex column">
                         <app-pesquisa-noticia-resultado class="full-width border-bottom"
-                            *ngFor="let dto of listaResultado" [dto]="dto">
+                            *ngFor="let dto of listaResultado" [dto]="dto" [pesquisaNoticiasModelos] = "pesquisaNoticiasModelos">
                         </app-pesquisa-noticia-resultado>
                     </div>
                 </ng-template>

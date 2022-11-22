@@ -11,12 +11,12 @@ import { ConfiguracaoModule } from '../configuracao/configuracao.module';
 
 const routes: Routes = [
     {
-        path: '', 
+        path: '',
         component: AdminComponent,
         children: [
             { path: 'destinatario', loadChildren: () => import('../destinatarios/destinatario.module').then(mod => mod.DestinatarioModule) },
             { path: 'noticia', loadChildren: () => import('../noticias/noticia.module').then(mod => mod.NoticiaModule) },
-            { path: 'noticia-pesquisa', loadChildren: () => import('../pesquisa-noticia/pesquisa-noticia.module').then(mod => mod.PesquisaNoticiaModule) },
+            // { path: 'noticia-pesquisa', loadChildren: () => import('../pesquisa-noticia/pesquisa-noticia.module').then(mod => mod.PesquisaNoticiaModule) },
         ]
     },
 ];
