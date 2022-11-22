@@ -1,16 +1,16 @@
-<div class="d-flex column d-pad">
+<div class="d-flex column ">
 
     <!-- Filtro -->
-    <form [formGroup]="form" class="column d-pad-card-container">
+    <form [formGroup]="form" class="column" [ngClass]="getStylePadding()">
 
         <!-- Título -->
-        <h2 class="d-flex align-center align-self-start">
+        <h2 *ngIf="!pesquisaNoticiasModelos" class="d-flex align-center align-self-start">
             <b class="d-m-right">Pesquisa na base de dados</b>
             <mat-icon class="icon-offset-top">search</mat-icon>
         </h2>
 
         <!-- Slide toggle -->
-        <div class="full-width row d-m justify-end">
+        <div *ngIf="!pesquisaNoticiasModelos" class="full-width row d-m justify-end">
             <mat-slide-toggle class="d-pad-right" [checked]="autoBusca" color="primary"
                 (toggleChange)="onAutoBuscaChange()">
                 Busca automática
@@ -55,7 +55,7 @@
     </form>
 
     <!-- Resultados -->
-    <div class="d-pad-card-container">
+    <div class="d-m-bottom-1" [ngClass]="getStylePadding()">
         <mat-card>
 
             <!-- Título -->
@@ -73,7 +73,7 @@
                 <ng-template #resultados>
                     <div class="d-flex column">
                         <app-pesquisa-noticia-resultado class="full-width border-bottom"
-                            *ngFor="let dto of listaResultado" [dto]="dto" [pesquisaNoticiasModelos] = "pesquisaNoticiasModelos">
+                            *ngFor="let dto of listaResultado" [dto]="dto" [pesquisaNoticiasModelos] = "this.pesquisaNoticiasModelos">
                         </app-pesquisa-noticia-resultado>
                     </div>
                 </ng-template>

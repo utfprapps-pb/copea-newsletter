@@ -141,6 +141,10 @@ body {
   margin-bottom: 8px !important;
 }
 
+.d-m-bottom-1 {
+  margin-bottom: 1px !important;
+}
+
 .d-m-vertical {
   margin: 8px 0px !important;
 }
@@ -174,8 +178,6 @@ body {
 }
 
 .d-m-bottom-lg { margin-bottom: 16px !important; }
-
-.d-pad-card-container { padding: 8px 5vw !important; }
 
 .text-m-right {
   margin-right: 4px !important;

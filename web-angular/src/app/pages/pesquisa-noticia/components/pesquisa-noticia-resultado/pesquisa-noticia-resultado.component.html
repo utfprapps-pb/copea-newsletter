@@ -1,4 +1,4 @@
-<a [routerLink]="['/admin/noticia/manutencao', dto.id]" class="d-m d-pad hover-div row align-center mouse-pointer" (click)="closeDialogIfOpened()">
+<a [routerLink]="pesquisaNoticiasModelos ? '/admin/noticia/manutencao' : ['/admin/noticia/manutencao', dto.id]" class="d-m d-pad hover-div row align-center mouse-pointer" (click)="closeDialogIfOpened()">
     <span class="d-flex grow"><b>{{dto.description}}</b></span>
     <button class="button-outline" mat-icon-button aria-label="Acessar">
         <mat-icon>open_in_browser</mat-icon>
