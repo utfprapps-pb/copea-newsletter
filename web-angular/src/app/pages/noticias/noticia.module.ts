@@ -25,7 +25,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 
 const routes: Routes = [
   { path: '', redirectTo: 'manutencao', pathMatch: 'full' },
-  { path: 'manutencao', component: NoticiaComponent, data: { pesquisaNoticiasModelos: false } },
+  { path: 'manutencao', component: NoticiaComponent },
   { path: 'manutencao/:id', component: NoticiaComponent },
   { path: 'pesquisa', component: PesquisaNoticiaComponent },
 ];

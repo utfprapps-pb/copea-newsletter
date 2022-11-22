@@ -1,3 +1,4 @@
+import { AdvancedCrudCard } from 'src/app/shared/crud/advanced-crud-card';
 import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
@@ -80,8 +81,11 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
   public criarEventAoFecharDialogSelecaoNoticiaModelo(dialogRef: MatDialogRef<CardSelecionarNoticiaModeloComponent>) {
     dialogRef.afterClosed().subscribe({
       next: (value) => {
-        if (value)
-          this.resetFormNovoECarregarRegistro({ newsletter: value.newsletter })
+        if (!value)
+          return;
+
+        this.registro.newsletter = value.newsletter;
+        this.updateValueForm('newsletter', this.registro.newsletter!);
       }
     })
   }

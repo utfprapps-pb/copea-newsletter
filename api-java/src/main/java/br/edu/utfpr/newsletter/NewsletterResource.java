@@ -48,13 +48,4 @@ public class NewsletterResource extends GenericResource<Newsletter, Newsletter, 
         }
     }
 
-    @GET
-    @Path("pesquisar-noticias")
-    public Response pesquisarNoticias(
-            @QueryParam("filtro") String filtro,
-            @QueryParam("somenteNaoEnviadas") boolean somenteNaoEnviadas
-    ) {
-        return super.get();
-    }
-
 }

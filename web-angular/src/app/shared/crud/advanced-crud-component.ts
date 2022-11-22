@@ -219,4 +219,12 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
       this.snackBar.open(errorTransform(error), 'OK');
     });
   }
+
+  public updateValueForm(formControlName: string, value: string) {
+    this.crudController.cardList.forEach((card) => {
+      if (card.form.contains(formControlName))
+        card.form.get(formControlName)?.setValue(value);
+    });
+  }
+
 }

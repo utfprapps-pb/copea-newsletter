@@ -10,12 +10,12 @@
         <input matInput formControlName="username" required placeholder="Informe seu usuário" type="text">
       </mat-form-field>
 
+      <span><a class="link-esqueceu-senha" routerLink="">Esqueci minha senha</a></span>
+
       <mat-form-field [appearance]="'outline'" class="full-width no-margin d-no-pad-bottom">
         <mat-label>Senha</mat-label>
         <input matInput type="password" formControlName="password" placeholder="Informe sua senha" required>
       </mat-form-field>
-      
-      <span><a class="link-esqueceu-senha" routerLink="">Esqueci minha senha</a></span>
 
     </mat-card-content>
 
@@ -30,7 +30,7 @@
       <mat-error>{{mensagemErro}}</mat-error>
     </div>
 
-    <div class="text-center column"> 
+    <div class="text-center column">
       <span>Não possui conta? <a routerLink="/cadastro">Cadastre-se aqui</a></span>
     </div>
 
