@@ -16,13 +16,13 @@ import { Noticia } from './models/noticia';
 import { NoticiaService } from './noticia.service';
 
 @Component({
-  selector: 'app-noticia',
-  templateUrl: 'noticia.page.html',
-  styleUrls: ['./noticia.page.scss'],
-  providers: [
-    AdvancedCrudController,
-    NoticiaService,
-  ]
+    selector: 'app-noticia',
+    templateUrl: 'noticia.page.html',
+    styleUrls: ['./noticia.page.scss'],
+    providers: [
+        AdvancedCrudController,
+        NoticiaService,
+    ]
 })
 export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements OnInit {
 
@@ -36,33 +36,33 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
     super(crudController, service, snackBar, route);
   }
 
-  override ngOnInit() {
-    super.ngOnInit();
-  }
+    override ngOnInit() {
+        super.ngOnInit();
+    }
 
-  /**
-   * @description Executa no click do botão "enviar"
-   */
-  public onClickEnviar() {
-    // Comentado pois o TinyMCE editor está ficando sempre como dirty
-    // if (super.possuiAlteracoesPendentes()) {
-    //     this.snackBar.open('Existem alterações pendentes! Por favor, salve o registro antes de enviá-lo.', 'OK');
-    //     return;
-    // }
+    /**
+     * @description Executa no click do botão "enviar"
+     */
+    public onClickEnviar() {
+        // Comentado pois o TinyMCE editor está ficando sempre como dirty
+        // if (super.possuiAlteracoesPendentes()) {
+        //     this.snackBar.open('Existem alterações pendentes! Por favor, salve o registro antes de enviá-lo.', 'OK');
+        //     return;
+        // }
 
-    this.service.enviarNoticia(this.registro.id!).subscribe(res => {
-      this.snackBar.open('A notícia foi enviada com sucesso!', 'OK');
-    }, error => {
-      this.snackBar.open(errorTransform(error) + '', 'OK');
-    })
-  }
+        this.service.enviarNoticia(this.registro.id!).subscribe(res => {
+            this.snackBar.open('A notícia foi enviada com sucesso!', 'OK');
+        }, error => {
+            this.snackBar.open(errorTransform(error) + '', 'OK');
+        })
+    }
 
-  /**
-   * @description Executa no click do botão salvar
-   */
-  public onClickSalvar() {
-    super.persistirAlteracoes(this.registro.id != null);
-  }
+    /**
+     * @description Executa no click do botão salvar
+     */
+    public onClickSalvar() {
+        super.persistirAlteracoes(this.registro.id != null);
+    }
 
   /**
    * @description Executa no click do botão excluir

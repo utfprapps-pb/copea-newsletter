@@ -1,15 +1,26 @@
 <mat-dialog-content class="grupo-destinatario-pesquisa-dialog">
 
-        <!-- Grupo -->
+    <!-- Spinner -->
+    <div *ngIf="loading; else grupo" class="d-flex justify-center full-width">
+        <mat-progress-spinner mode="indeterminate">
+        </mat-progress-spinner>
+    </div>
+
+    <!-- Grupo -->
+    <ng-template #grupo>
         <mat-form-field class="full-width" appearance="fill">
             <mat-label>Grupo</mat-label>
-            <input matInput placeholder="Pesquise..." type="text" required
-                cdkFocusInitial>
+            <select matNativeControl [(ngModel)]="selecao" name="grupoDestinatario" required cdkFocusInitial>
+                <option *ngFor="let grupo of options" [value]="grupo.id">
+                    {{grupo.name}}
+                </option>
+            </select>
         </mat-form-field>
+    </ng-template>
 
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-    <button mat-button (click)="importarGrupo()" color="accent">Importar grupo</button>
+    <button [disabled]="loading" mat-button (click)="importarGrupo()" color="accent">Importar grupo</button>
     <button mat-stroked-button mat-dialog-close>Fechar</button>
 </mat-dialog-actions>

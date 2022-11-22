@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -18,5 +18,14 @@ export class DestinatarioService extends CrudService<Destinatario> {
     public get novoRegistro(): Observable<Destinatario> {
         return of({ email: '', groups: [] });
     }
+
+    /**
+     * @description Retorna os destinatários do grupo
+     */
+    public buscarPorGrupo(grupoId: number): Observable<Destinatario[]> {
+        const params = new HttpParams().append('groupId', grupoId + '');
+        return this.http.get<Destinatario[]>(this.baseUrl + this.url + '/find-by-group', { params: params });
+    }
+
 
 }

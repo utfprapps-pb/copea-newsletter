@@ -117,7 +117,12 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
      * @description Abre a modal de importação do grupo
      */
     public importarGrupo() {
-        this.dialog.open(GrupoDestinatarioPesquisaDialogComponent)
+        const dialogRef = this.dialog.open(GrupoDestinatarioPesquisaDialogComponent);
+        dialogRef.afterClosed().subscribe((res: Destinatario[]) => {
+            if (res) {
+                res.forEach(d => this.destinatarios.push({ id: d['0'], email: d['1'] }));
+            }
+        })
     }
 
 }
