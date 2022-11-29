@@ -23,25 +23,30 @@ public class UserUniqueValidator implements ConstraintValidator<UserUniqueConstr
         constraintValidatorContext.disableDefaultConstraintViolation();
 
         Boolean usernameValid = userValid(userDTO,
-                                    Optional.ofNullable(userService.findByUsername(userDTO.getUsername())),
-                                    constraintValidatorContext,
-                                    String.format(messageConstraint, "username")
-                                );
+                Optional.ofNullable(userService.findByUsername(userDTO.getUsername())),
+                constraintValidatorContext,
+                String.format(messageConstraint, "username"),
+                "username"
+
+        );
 
         Boolean emailValid = userValid(userDTO,
-                                 Optional.ofNullable(userService.findByEmail(userDTO.getEmail())),
-                                 constraintValidatorContext,
-                                 String.format(messageConstraint, "email")
-                             );
+                Optional.ofNullable(userService.findByEmail(userDTO.getEmail())),
+                constraintValidatorContext,
+                String.format(messageConstraint, "email"),
+                "email"
+        );
 
 
         return (usernameValid && emailValid);
 
     }
 
-    private Boolean userValid(UserDTO userDTO, Optional<User> user, ConstraintValidatorContext constraintValidatorContext, String messageConstraint) {
+    private Boolean userValid(UserDTO userDTO, Optional<User> user, ConstraintValidatorContext constraintValidatorContext, String messageConstraint, String fieldName) {
         if ((user.isPresent()) && (user.get().getId() != userDTO.getId())) {
-            constraintValidatorContext.buildConstraintViolationWithTemplate(messageConstraint).addConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate(messageConstraint)
+                    .addPropertyNode(fieldName)
+                    .addConstraintViolation();
             return false;
         }
 
