@@ -48,4 +48,15 @@ public class NewsletterResource extends GenericResource<Newsletter, Newsletter, 
         }
     }
 
+    @GET
+    @Path("search")
+    public Response getByFilters(@QueryParam("newslettersSent") Boolean newslettersSent,
+                                 @QueryParam("newslettersNotSent") Boolean newslettersNotSent,
+                                 @QueryParam("newsletterTemplate") Boolean newslettersTemplate,
+                                 @QueryParam("description") String description) {
+        return Response.ok(
+                getService().getByFilters(newslettersSent, newslettersNotSent, newslettersTemplate, description)
+        ).build();
+    }
+
 }

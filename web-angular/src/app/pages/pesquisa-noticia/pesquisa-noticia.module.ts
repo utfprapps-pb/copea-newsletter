@@ -17,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { PesquisaNoticiaResultadoComponent } from './components/pesquisa-noticia-resultado/pesquisa-noticia-resultado.component';
 import { PesquisaNoticiaComponent } from './pesquisa-noticia.page';
 import { NoticiaService } from '../noticias/noticia.service';
+import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [
     { path: 'pesquisa', component: PesquisaNoticiaComponent }
@@ -38,6 +39,7 @@ const routes: Routes = [
         MatInputModule,
         MatCardModule,
         MatIconModule,
+        MatSelectModule
     ],
     declarations: [
         PesquisaNoticiaComponent,

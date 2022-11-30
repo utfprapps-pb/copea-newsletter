@@ -1,86 +1,101 @@
 <div class="d-flex column ">
 
+  <!-- Filtro -->
+  <form [formGroup]="form" class="column" [ngClass]="getStylePadding()">
+
+    <!-- Título -->
+    <h2 *ngIf="!pesquisaNoticiasModelos" class="d-flex align-center align-self-start">
+      <b class="d-m-right">Pesquisa na base de dados</b>
+      <mat-icon class="icon-offset-top">search</mat-icon>
+    </h2>
+
+    <!-- Slide toggle -->
+    <div *ngIf="!pesquisaNoticiasModelos" class="full-width row d-m justify-end">
+      <mat-slide-toggle class="d-pad-right" [checked]="autoBusca" color="primary" (toggleChange)="onAutoBuscaChange()">
+        Busca automática
+      </mat-slide-toggle>
+    </div>
+
     <!-- Filtro -->
-    <form [formGroup]="form" class="column" [ngClass]="getStylePadding()">
+    <mat-card>
 
-        <!-- Título -->
-        <h2 *ngIf="!pesquisaNoticiasModelos" class="d-flex align-center align-self-start">
-            <b class="d-m-right">Pesquisa na base de dados</b>
-            <mat-icon class="icon-offset-top">search</mat-icon>
-        </h2>
+      <!-- Título -->
+      <mat-card-title>Filtros</mat-card-title>
 
-        <!-- Slide toggle -->
-        <div *ngIf="!pesquisaNoticiasModelos" class="full-width row d-m justify-end">
-            <mat-slide-toggle class="d-pad-right" [checked]="autoBusca" color="primary"
-                (toggleChange)="onAutoBuscaChange()">
-                Busca automática
-            </mat-slide-toggle>
+      <!-- Conteúdo -->
+      <mat-card-content>
+
+        <div class="full-width row">
+          <!-- Check "não enviadas"
+                <mat-checkbox formControlName="naoEnviadas" color="primary">
+                    Apenas notícias não enviadas
+                </mat-checkbox> -->
+
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Notícias</mat-label>
+            <mat-select multiple formControlName="filtros">
+              <mat-option value="ENVIADAS">
+                Enviadas
+              </mat-option>
+              <mat-option value="NAO_ENVIADAS">
+                Não enviadas
+              </mat-option>
+              <mat-option value="MODELO">
+                Modelo
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
-        <!-- Filtro -->
-        <mat-card>
+        <div class="row align-center">
 
-            <!-- Título -->
-            <mat-card-title>Filtro</mat-card-title>
+          <!-- Campo -->
+          <mat-form-field class="d-flex grow d-pad-top d-m-right" appearance="fill">
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="descricao" placeholder="Pesquise pela descrição...">
+          </mat-form-field>
 
-            <!-- Conteúdo -->
-            <mat-card-content>
-                <div class="row align-center">
+          <!-- Botão pesquisa -->
+          <button class="d-flex button-outline d-m-bottom" mat-icon-button aria-label="pesquisar"
+            (click)="filtrarNoticias()">
+            <mat-icon>search</mat-icon>
+          </button>
 
-                    <!-- Campo -->
-                    <mat-form-field class="d-flex grow d-pad-top d-m-right" appearance="fill">
-                        <mat-label>Filtro</mat-label>
-                        <input matInput formControlName="filtro" placeholder="Pesquise por título ou palavra-chave...">
-                    </mat-form-field>
+        </div>
 
-                    <!-- Botão pesquisa -->
-                    <button class="d-flex button-outline d-m-bottom" mat-icon-button aria-label="pesquisar"
-                        (click)="filtrarNoticias()">
-                        <mat-icon>search</mat-icon>
-                    </button>
+      </mat-card-content>
 
-                </div>
+    </mat-card>
 
-                <!-- Check "não enviadas" -->
-                <div class="full-width row">
-                    <mat-checkbox formControlName="naoEnviadas" color="primary">
-                        Apenas notícias não enviadas
-                    </mat-checkbox>
-                </div>
+  </form>
 
-            </mat-card-content>
+  <!-- Resultados -->
+  <div class="d-m-bottom-1" [ngClass]="getStylePadding()">
+    <mat-card>
 
-        </mat-card>
+      <!-- Título -->
+      <mat-card-title>Resultados</mat-card-title>
 
-    </form>
+      <mat-card-subtitle>
 
-    <!-- Resultados -->
-    <div class="d-m-bottom-1" [ngClass]="getStylePadding()">
-        <mat-card>
+        <!-- Spinner -->
+        <div *ngIf="loading; else resultados" class="d-flex justify-center full-width">
+          <mat-progress-spinner mode="indeterminate">
+          </mat-progress-spinner>
+        </div>
 
-            <!-- Título -->
-            <mat-card-title>Resultados</mat-card-title>
+        <!-- Lista de resultados -->
+        <ng-template #resultados>
+          <div class="d-flex column">
+            <app-pesquisa-noticia-resultado class="full-width border-bottom" *ngFor="let dto of listaResultado"
+              [dto]="dto" [pesquisaNoticiasModelos]="this.pesquisaNoticiasModelos">
+            </app-pesquisa-noticia-resultado>
+          </div>
+        </ng-template>
 
-            <mat-card-subtitle>
+      </mat-card-subtitle>
 
-                <!-- Spinner -->
-                <div *ngIf="loading; else resultados" class="d-flex justify-center full-width">
-                    <mat-progress-spinner mode="indeterminate">
-                    </mat-progress-spinner>
-                </div>
-
-                <!-- Lista de resultados -->
-                <ng-template #resultados>
-                    <div class="d-flex column">
-                        <app-pesquisa-noticia-resultado class="full-width border-bottom"
-                            *ngFor="let dto of listaResultado" [dto]="dto" [pesquisaNoticiasModelos] = "this.pesquisaNoticiasModelos">
-                        </app-pesquisa-noticia-resultado>
-                    </div>
-                </ng-template>
-
-            </mat-card-subtitle>
-
-        </mat-card>
-    </div>
+    </mat-card>
+  </div>
 
 </div>

@@ -100,4 +100,14 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         return newsletterOptional.get();
     }
 
+    public List<Newsletter> getByFilters(Boolean newslettersSent, Boolean newslettersNotSent, Boolean newslettersTemplate, String description) {
+        if (newslettersSent && newslettersNotSent)
+            return getRepository().findByNewsletterTemplateAndDescriptionContains(newslettersTemplate, description);
+
+        if (newslettersSent)
+            return getRepository().findBySentStatusAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description);
+
+        return getRepository().findBySentStatusIsNotAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description);
+    }
+
 }

@@ -1,10 +1,10 @@
 package br.edu.utfpr.newsletter;
 
-import br.edu.utfpr.generic.crud.GenericRepository;
 import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
+import br.edu.utfpr.generic.crud.GenericRepository;
 import br.edu.utfpr.user.User;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,5 +18,23 @@ public interface NewsletterRepository extends GenericRepository<Newsletter, Long
     Optional<Newsletter> findByIdAndUser(Long id, User user);
 
     List<Newsletter> findByUser(User user);
+
+    @Query("select distinct n from Newsletter n left join n.sendEmailLogs ns where (ns.sentStatus = :sentStatus) and (n.newsletterTemplate = :newsletterTemplate) and (n.description like '%' || :description || '%')")
+    List<Newsletter> findBySentStatusAndNewsletterTemplateAndDescription(
+            @Param("sentStatus") SendEmailLogStatusEnum sentStatus,
+            @Param("newsletterTemplate") Boolean newsletterTemplate,
+            @Param("description") String description
+    );
+
+    @Query("select distinct n from Newsletter n left join n.sendEmailLogs ns where ((ns.sentStatus is null) or (ns.sentStatus <> :sentStatus)) and (n.newsletterTemplate = :newsletterTemplate) and (n.description like '%' || :description || '%')")
+    List<Newsletter> findBySentStatusIsNotAndNewsletterTemplateAndDescription(
+            @Param("sentStatus") SendEmailLogStatusEnum sentStatus,
+            @Param("newsletterTemplate") Boolean newsletterTemplate,
+            @Param("description") String description
+    );
+
+    List<Newsletter> findByNewsletterTemplateAndDescriptionContains(Boolean newsletterTemplate, String description);
+
+
 
 }

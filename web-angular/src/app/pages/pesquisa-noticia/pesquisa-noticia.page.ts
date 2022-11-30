@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
@@ -23,7 +23,10 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
   /**
    * @description FormGroup do filtro de busca
    */
-  public form: FormGroup;
+  public form = this.formBuilder.group({
+    descricao: [''],
+    filtros: [ ['ENVIADAS', 'NAO_ENVIADAS'] ]
+  });
 
   /**
    * @description Armazena os resultados da busca pelos noticias
@@ -52,7 +55,6 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
   ) {
-    this.form = this.criarForm();
     this.listaResultado = [];
     this.loading = false;
   }
@@ -63,18 +65,23 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
     if (this.autoBusca) {
       this.implementChanges();
     }
+
+    this.configurarTelaQuandoSelecaoNoticiaModelo();
   }
 
-  private criarForm(): FormGroup {
-    return this.formBuilder.group({
-      filtro: [null],
-      naoEnviadas: [false]
-    })
+  private configurarTelaQuandoSelecaoNoticiaModelo() {
+    if (!this.pesquisaNoticiasModelos)
+      return;
+
+    this.form.patchValue({
+      filtros: ['ENVIADAS', 'NAO_ENVIADAS', 'MODELO']
+    });
+    this.filtrarNoticias();
   }
 
   private implementChanges() {
     this.subscription = new Subscription();
-    this.subscription.add(this.form.get('filtro')!.valueChanges.pipe(debounceTime(300)).subscribe(() => this.filtrarNoticias()));
+    this.subscription.add(this.form.get('descricao')!.valueChanges.pipe(debounceTime(300)).subscribe(() => this.filtrarNoticias()));
   }
 
   private removeChanges() {
@@ -85,11 +92,11 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
 
   /**
    * @description Busca as noticias de acordo com o filtro informado
-   * @param filtro Filtro da pesquisa
    */
-  public filtrarNoticias(filtro = this.form.get('filtro')!.value) {
+  public filtrarNoticias() {
+    console.log(this.form.value);
     this.loading = true;
-    this.noticiaService.pesquisarTodos().subscribe(res => {
+    this.noticiaService.search(this.form.value).subscribe(res => {
       this.loading = false;
       this.listaResultado = res;
 

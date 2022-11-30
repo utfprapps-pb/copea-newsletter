@@ -47,8 +47,8 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
     return {
       language: 'pt_BR',
       selector: 'textarea',
-      plugins: 'code anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tableofcontents footnotes autoresize fullscreen preview',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | addcomment showcomments | spellcheckdialog a11ycheck | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+      plugins: 'code anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount autoresize fullscreen preview',
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | addcomment showcomments | spellcheckdialog | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
       paste_data_images: true,
       images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
         resolve('data:' + blobInfo.blob().type + ';base64,' + blobInfo.base64());
