@@ -5,10 +5,7 @@ import br.edu.utfpr.reponses.DefaultResponse;
 import org.jboss.resteasy.reactive.RestResponse;
 
 import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("v1/newsletter")
@@ -50,10 +47,10 @@ public class NewsletterResource extends GenericResource<Newsletter, Newsletter, 
 
     @GET
     @Path("search")
-    public Response getByFilters(@QueryParam("newslettersSent") Boolean newslettersSent,
-                                 @QueryParam("newslettersNotSent") Boolean newslettersNotSent,
-                                 @QueryParam("newsletterTemplate") Boolean newslettersTemplate,
-                                 @QueryParam("description") String description) {
+    public Response getByFilters(@DefaultValue("true") @QueryParam("newslettersSent") Boolean newslettersSent,
+                                 @DefaultValue("true") @QueryParam("newslettersNotSent") Boolean newslettersNotSent,
+                                 @DefaultValue("false") @QueryParam("newsletterTemplate") Boolean newslettersTemplate,
+                                 @DefaultValue("") @QueryParam("description") String description) {
         return Response.ok(
                 getService().getByFilters(newslettersSent, newslettersNotSent, newslettersTemplate, description)
         ).build();

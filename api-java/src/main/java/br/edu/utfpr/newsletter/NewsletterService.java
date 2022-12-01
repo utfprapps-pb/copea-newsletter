@@ -47,6 +47,8 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         setDatesByNewOrUpdate(entity);
         if (Objects.isNull(entity.getUser()))
             entity.setUser(getAuthSecurityFilter().getAuthUserContext().findByToken());
+        if (Objects.isNull(entity.getNewsletterTemplate()))
+            entity.setNewsletterTemplate(false);
     }
 
     public DefaultResponse sendNewsletterByEmail(Long newsletterId) throws Exception {

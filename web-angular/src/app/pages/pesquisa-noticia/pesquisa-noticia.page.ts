@@ -60,7 +60,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.autoBusca = localStorage.getItem('autoBusca') ? localStorage.getItem('autoBusca') !== 'false' : false;
+    this.autoBusca = localStorage.getItem('autoBusca') ? localStorage.getItem('autoBusca') !== 'false' : true;
 
     if (this.autoBusca) {
       this.implementChanges();
@@ -81,7 +81,12 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
 
   private implementChanges() {
     this.subscription = new Subscription();
-    this.subscription.add(this.form.get('descricao')!.valueChanges.pipe(debounceTime(300)).subscribe(() => this.filtrarNoticias()));
+    this.setBuscaAutomaticaChangeFieldForm('descricao');
+    this.setBuscaAutomaticaChangeFieldForm('filtros');
+  }
+
+  private setBuscaAutomaticaChangeFieldForm(fieldName: string) {
+    this.subscription!.add(this.form.get(fieldName)!.valueChanges.pipe(debounceTime(300)).subscribe(() => this.filtrarNoticias()));
   }
 
   private removeChanges() {
@@ -101,7 +106,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
       this.listaResultado = res;
 
       if (!res || res.length === 0) {
-        this.snackBar.open('Não foi possível encontrar nenhum registro correspondente ao filtro informado!', 'Ok');
+        this.snackBar.open('Não foi possível encontrar nenhum registro correspondente aos filtros informados!', 'Ok');
       }
     }, error => {
       this.loading = false;

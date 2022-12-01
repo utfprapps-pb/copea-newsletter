@@ -10,11 +10,11 @@
     <ng-template #grupo>
         <mat-form-field class="full-width" appearance="fill">
             <mat-label>Grupo</mat-label>
-            <select matNativeControl [(ngModel)]="selecao" name="grupoDestinatario" required cdkFocusInitial>
-                <option *ngFor="let grupo of options" [value]="grupo.id">
+            <mat-select [(ngModel)]="selecao" name="grupoDestinatario" required cdkFocusInitial>
+                <mat-option *ngFor="let grupo of options" [value]="grupo.id">
                     {{grupo.name}}
-                </option>
-            </select>
+                </mat-option>
+            </mat-select>
         </mat-form-field>
     </ng-template>
 
