@@ -28,8 +28,8 @@ export abstract class CrudService<T> {
      * @returns Void
      * @param novo Registro da inclusão
      */
-    public incluir(novo: T): Observable<void> {
-        return this.http.post<void>(this.baseUrl + this.url, novo);
+    public incluir(novo: T): Observable<any> {
+        return this.http.post<any>(this.baseUrl + this.url, novo);
     }
 
     /**

@@ -17,77 +17,101 @@ import { Noticia } from './models/noticia';
 import { NoticiaService } from './noticia.service';
 
 @Component({
-  selector: 'app-noticia',
-  templateUrl: 'noticia.page.html',
-  styleUrls: ['./noticia.page.scss'],
-  providers: [
-    AdvancedCrudController,
-    NoticiaService,
-  ]
+	selector: 'app-noticia',
+	templateUrl: 'noticia.page.html',
+	styleUrls: ['./noticia.page.scss'],
+	providers: [
+		AdvancedCrudController,
+		NoticiaService,
+	]
 })
 export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements OnInit {
 
-  constructor(
-    public override crudController: AdvancedCrudController<Noticia>,
-    public override service: NoticiaService,
-    public override snackBar: MatSnackBar,
-    public override route: ActivatedRoute,
-    public dialog: MatDialog,
-  ) {
-    super(crudController, service, snackBar, route);
-  }
+	constructor(
+		public override crudController: AdvancedCrudController<Noticia>,
+		public override service: NoticiaService,
+		public override snackBar: MatSnackBar,
+		public override route: ActivatedRoute,
+		public dialog: MatDialog,
+	) {
+		super(crudController, service, snackBar, route);
+	}
 
-  override ngOnInit() {
-    super.ngOnInit();
-  }
+	override ngOnInit() {
+		super.ngOnInit();
+	}
 
-  /**
-   * @description Executa no click do botão "enviar"
-   */
-  public onClickEnviar() {
-    // Comentado pois o TinyMCE editor está ficando sempre como dirty
-    // if (super.possuiAlteracoesPendentes()) {
-    //     this.snackBar.open('Existem alterações pendentes! Por favor, salve o registro antes de enviá-lo.', 'OK');
-    //     return;
-    // }
+	/**
+	 * @description Executa no click do botão "enviar"
+	 */
+	public onClickEnviar() {
+		// Comentado pois o TinyMCE editor está ficando sempre como dirty
+		// if (super.possuiAlteracoesPendentes()) {
+		//     this.snackBar.open('Existem alterações pendentes! Por favor, salve o registro antes de enviá-lo.', 'OK');
+		//     return;
+		// }
 
-    this.service.enviarNoticia(this.registro.id!).subscribe(res => {
-      this.snackBar.open('A notícia foi enviada com sucesso!', 'OK');
-    }, error => {
-      this.snackBar.open(errorTransform(error) + '', 'OK');
-    })
-  }
+		this.service.enviarNoticia(this.registro.id!).subscribe(res => {
+			this.snackBar.open('A notícia foi enviada com sucesso!', 'OK');
+		}, error => {
+			this.snackBar.open(errorTransform(error) + '', 'OK');
+		})
+	}
 
-  /**
-   * @description Executa no click do botão salvar
-   */
-  public onClickSalvar() {
-    super.persistirAlteracoes(this.registro.id != null);
-  }
+	/**
+	 * @description Executa no click do botão salvar
+	 */
+	public onClickSalvar() {
+		super.persistirAlteracoes(this.registro.id != null);
+	}
 
-  /**
-   * @description Executa no click do botão excluir
-   */
-  public onClickRemover() {
-    if (this.registro.id && confirm('Você tem certeza que deseja remover o noticia? Essa ação não poderá ser desfeita.')) {
-      super.remover(this.registro.id);
-    }
-  }
+	/**
+	 * @description Executa a validação do form e persiste o registro no banco
+	 * @param registro Registro que será persistido
+	 */
+	public override salvar(registro: Noticia): void {
+		if (this.validarForm()) {
+			this.loading = true;
+			this.service.incluir(registro).subscribe((res: { message: string }) => {
+				this.loading = false;
+				this.snackBar.open('O registro foi incluído com sucesso!', 'OK');
 
-  public abrirCardSelecionarNoticiaModelo() {
-    this.criarEventAoFecharDialogSelecaoNoticiaModelo(this.dialog.open(CardSelecionarNoticiaModeloComponent, { width: '900px', maxHeight: '500px' }));
-  }
+				if (res && res.message && +res.message >= 1) {
+					this.carregar(+res.message);
+				} else {
+					this.resetFormNovo();
+				}
+			}, error => {
+				console.log(error);
+				this.loading = false;
+				this.snackBar.open(errorTransform(error) + '', 'OK');
+			});
+		}
+	}
 
-  public criarEventAoFecharDialogSelecaoNoticiaModelo(dialogRef: MatDialogRef<CardSelecionarNoticiaModeloComponent>) {
-    dialogRef.afterClosed().subscribe({
-      next: (value) => {
-        if (!value)
-          return;
+	/**
+	 * @description Executa no click do botão excluir
+	 */
+	public onClickRemover() {
+		if (this.registro.id && confirm('Você tem certeza que deseja remover o noticia? Essa ação não poderá ser desfeita.')) {
+			super.remover(this.registro.id);
+		}
+	}
 
-        this.registro.newsletter = value.newsletter;
-        this.updateValueForm('newsletter', this.registro.newsletter!);
-      }
-    })
-  }
+	public abrirCardSelecionarNoticiaModelo() {
+		this.criarEventAoFecharDialogSelecaoNoticiaModelo(this.dialog.open(CardSelecionarNoticiaModeloComponent, { width: '900px', maxHeight: '500px' }));
+	}
+
+	public criarEventAoFecharDialogSelecaoNoticiaModelo(dialogRef: MatDialogRef<CardSelecionarNoticiaModeloComponent>) {
+		dialogRef.afterClosed().subscribe({
+			next: (value) => {
+				if (!value)
+					return;
+
+				this.registro.newsletter = value.newsletter;
+				this.updateValueForm('newsletter', this.registro.newsletter!);
+			}
+		})
+	}
 
 }

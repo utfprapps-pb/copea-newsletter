@@ -33,7 +33,9 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
     private GenericResponse saveOrUpdate(Newsletter entity) {
         setDefaultValues(entity);
-        return super.save(entity);
+        GenericResponse response = super.save(entity);
+        response.setMessage(entity.getId().toString());
+        return response;
     }
 
     private void setDatesByNewOrUpdate(Newsletter entity) {
