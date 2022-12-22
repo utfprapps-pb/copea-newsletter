@@ -1,0 +1,56 @@
+<form [formGroup]="form" class="auth-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Recuperação de senha</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <!-- Nome de usuário -->
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Usuário</mat-label>
+        <input matInput formControlName="username" type="text">
+        <mat-error>{{username.errors | erro}}</mat-error>
+      </mat-form-field>
+
+      <span><button class="button-link link-receber-codigo-email" (click)="enviarCodigoPorEmail()">Receber código por e-mail</button></span>
+      <!-- Código enviado pelo email -->
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Código enviado por e-mail</mat-label>
+        <input matInput formControlName="codigo" type="text">
+        <mat-error>{{codigo.errors | erro}}</mat-error>
+      </mat-form-field>
+
+      <!-- Nova senha -->
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Nova senha</mat-label>
+        <input matInput formControlName="password" required placeholder="Digite sua nova senha" type="password">
+        <mat-error>{{senha.errors | erro}}</mat-error>
+      </mat-form-field>
+
+      <!-- Confirmar nova senha -->
+      <mat-form-field [appearance]="'outline'">
+        <mat-label>Confirmar nova senha</mat-label>
+        <input matInput formControlName="confirmarSenha" required placeholder="Digite novamente sua senha"
+          type="password">
+        <mat-error>{{confirmarSenha.errors | erro}}</mat-error>
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions class="full-width align-center no-margin">
+      <button class="full-width btn-entrar" color="primary" [disabled]="form.invalid" (click)="trocarSenha()"
+        mat-raised-button>
+        Recuperar senha
+      </button>
+    </mat-card-actions>
+
+    <div *ngIf="mensagemErro" class="text-center d-pad-bottom">
+      <mat-error>{{mensagemErro}}</mat-error>
+    </div>
+
+    <div class="text-center column">
+      <a routerLink="/login">Voltar para o login</a>
+    </div>
+
+  </mat-card>
+</form>

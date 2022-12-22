@@ -1,27 +1,25 @@
 package br.edu.utfpr.email.send;
 
+import br.edu.utfpr.email.Email;
 import br.edu.utfpr.email.config.ConfigEmail;
 import br.edu.utfpr.email.config.ConfigEmailService;
-import br.edu.utfpr.email.Email;
 import br.edu.utfpr.email.send.log.SendEmailLog;
 import br.edu.utfpr.email.send.log.SendEmailLogService;
+import br.edu.utfpr.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFileModel;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
-import br.edu.utfpr.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
-import br.edu.utfpr.newsletter.Newsletter;
-import br.edu.utfpr.newsletter.NewsletterRepository;
-import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
-import br.edu.utfpr.reponses.DefaultResponse;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-import org.jboss.resteasy.reactive.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mail.internet.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class SendEmailService {

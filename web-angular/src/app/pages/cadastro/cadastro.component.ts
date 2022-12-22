@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
 // shared
 import { ConfirmarSenhaValidator } from 'src/app/shared/validators/confirmar-senha-validator';
 import { SenhaValidator } from 'src/app/shared/validators/senha-validator';
-import { endWith } from 'rxjs';
 
 @Component({
   selector: 'app-cadastro',
@@ -47,7 +46,6 @@ export class CadastroComponent implements OnInit {
 
   ngOnInit() {
   }
-
 
   public get senha() {
     return this.form.get('password') as AbstractControl<any, any>;

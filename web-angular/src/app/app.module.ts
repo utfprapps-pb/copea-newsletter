@@ -20,7 +20,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DrawerService } from './pages/admin/drawer.service';
 
-
 @NgModule({
   declarations: [
     AppComponent,

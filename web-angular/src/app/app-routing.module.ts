@@ -7,6 +7,7 @@ import { RoleGuard } from './shared/guards/role.guard';
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', loadChildren: () => import('./pages/login/login.module').then(mod => mod.LoginModule) },
+    { path: 'recuperacao-senha', loadChildren: () => import('./pages/recuperacao-senha/recuperacao-senha.module').then(mod => mod.RecuperacaoSenhaModule) },
     { path: 'cadastro', loadChildren: () => import('./pages/cadastro/cadastro.module').then(mod => mod.CadastroModule) },
     { path: 'admin', loadChildren: () => import('./pages/admin/admin.module').then(mod => mod.AdminModule), canActivate: [RoleGuard] },
 ];
