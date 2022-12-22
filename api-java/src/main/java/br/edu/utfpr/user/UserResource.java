@@ -6,10 +6,7 @@ import br.edu.utfpr.user.responses.UserExists;
 
 import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
 
@@ -30,6 +27,12 @@ public class UserResource extends GenericResource<User, UserDTO, Long, UserServi
                         !Objects.isNull(getService().findByUsernameOrEmail(username, email))
                 )
         ).build();
+    }
+
+    @POST
+    @Path("/send-code-recover-password/username/{username}")
+    public Response sendEmailCodeRecoverPassword(@PathParam("username") String username) throws Exception {
+        return Response.ok(getService().sendEmailCodeRecoverPassword(username)).build();
     }
 
 }
