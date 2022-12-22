@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpEvent, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpResponse } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 
 // aplicação
 import { LoginService } from '../services/login.service';
@@ -14,7 +14,13 @@ export class TokenInterceptor implements HttpInterceptor {
         if (this._loginService.isAuthenticated) {
             req = req.clone({ setHeaders: { Authorization: 'Bearer ' + this._loginService.authInfo ?? '' } });
         }
-        return next.handle(req);
+        return next.handle(req).pipe(catchError(error => this.handleError(error)));
     }
 
+    private handleError(error: HttpResponse<any>) {
+        if (error.status === 401) {
+            this._loginService.logout();
+        }
+        return throwError(error);
+    }
 }
