@@ -49,7 +49,7 @@ public class SendEmailService {
         if (configEmails.size() > 0)
             configEmail = configEmails.get(0);
         else
-            throw new NotFoundException("Nenhuma configuração de email encontrada.");
+            throw new NotFoundException("Nenhuma configuração para envio de e-mail encontrada.");
         return configEmail;
     }
 
