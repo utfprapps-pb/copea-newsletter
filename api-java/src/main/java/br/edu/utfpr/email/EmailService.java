@@ -1,6 +1,7 @@
 package br.edu.utfpr.email;
 
 import br.edu.utfpr.generic.crud.GenericService;
+import br.edu.utfpr.reponses.GenericResponse;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -38,4 +39,21 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
         return query.getResultList();
     }
 
+    @Override
+    public GenericResponse deleteById(Long aLong) {
+        // remove instâncias do groupo de destinatários
+        Query queryGroup = em.createNativeQuery("DELETE FROM email_group_email ege " +
+                "WHERE ege.email_id = :emailId");
+        queryGroup.setParameter("emailId", aLong);
+        queryGroup.executeUpdate();
+
+        // remove instâncias do groupo das newsletters
+        Query queryNewsletter = em.createNativeQuery("DELETE FROM newsletter_email ne " +
+                "WHERE ne.email_id = :emailId");
+        queryNewsletter.setParameter("emailId", aLong);
+        queryNewsletter.executeUpdate();
+
+        // remove entidade
+        return super.deleteById(aLong);
+    }
 }
