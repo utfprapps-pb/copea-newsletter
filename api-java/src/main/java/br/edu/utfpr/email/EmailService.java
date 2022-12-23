@@ -41,13 +41,13 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
 
     @Override
     public GenericResponse deleteById(Long aLong) {
-        // remove instâncias do groupo de destinatários
+        // remove instâncias do grupo de destinatários
         Query queryGroup = em.createNativeQuery("DELETE FROM email_group_email ege " +
                 "WHERE ege.email_id = :emailId");
         queryGroup.setParameter("emailId", aLong);
         queryGroup.executeUpdate();
 
-        // remove instâncias do groupo das newsletters
+        // remove instâncias do grupo das newsletters
         Query queryNewsletter = em.createNativeQuery("DELETE FROM newsletter_email ne " +
                 "WHERE ne.email_id = :emailId");
         queryNewsletter.setParameter("emailId", aLong);
