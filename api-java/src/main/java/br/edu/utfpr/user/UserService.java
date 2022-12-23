@@ -78,7 +78,7 @@ public class UserService extends GenericService<User, Long, UserRepository> {
         RecoverPassword recoverPassword = recoverPasswordService.getCodeSentByEmail().getOrDefault(recoverPasswordDTO.getUsername(), new RecoverPassword());
         Boolean codesMatch = Objects.equals(recoverPasswordDTO.getCode(), recoverPassword.getCode());
         if (!codesMatch)
-            return new DefaultResponse(RestResponse.StatusCode.UNAUTHORIZED, "Código inválido.");
+            return new DefaultResponse(RestResponse.StatusCode.BAD_REQUEST, "Código inválido.");
 
         updateUserNewPasswordByUsername(user, recoverPasswordDTO.getNewPassword());
         recoverPasswordService.getCodeSentByEmail().remove(recoverPasswordDTO.getUsername());
