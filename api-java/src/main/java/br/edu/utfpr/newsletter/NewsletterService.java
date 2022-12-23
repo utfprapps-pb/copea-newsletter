@@ -6,6 +6,7 @@ import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.user.User;
 import org.jboss.resteasy.reactive.RestResponse;
 
 import javax.enterprise.context.RequestScoped;
@@ -105,13 +106,15 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     }
 
     public List<Newsletter> getByFilters(Boolean newslettersSent, Boolean newslettersNotSent, Boolean newslettersTemplate, String description) {
+        User loggedUser = getAuthSecurityFilter().getAuthUserContext().findByToken();
+
         if (newslettersSent && newslettersNotSent)
-            return getRepository().findByNewsletterTemplateAndDescriptionContains(newslettersTemplate, description);
+            return getRepository().findByNewsletterTemplateAndDescriptionContainsAndUser(newslettersTemplate, description, loggedUser);
 
         if (newslettersSent)
-            return getRepository().findBySentStatusAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description);
+            return getRepository().findBySentStatusAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description, loggedUser.getId());
 
-        return getRepository().findBySentStatusIsNotAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description);
+        return getRepository().findBySentStatusIsNotAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description, loggedUser.getId());
     }
 
 }

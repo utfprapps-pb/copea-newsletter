@@ -19,21 +19,23 @@ public interface NewsletterRepository extends GenericRepository<Newsletter, Long
 
     List<Newsletter> findByUser(User user);
 
-    @Query("select distinct n from Newsletter n left join n.sendEmailLogs ns where (ns.sentStatus = :sentStatus) and (n.newsletterTemplate = :newsletterTemplate) and (n.description like '%' || :description || '%')")
+    @Query("select distinct n from Newsletter n left join n.sendEmailLogs ns where (n.user.id = :userId) and (ns.sentStatus = :sentStatus) and (n.newsletterTemplate = :newsletterTemplate) and (n.description like '%' || :description || '%')")
     List<Newsletter> findBySentStatusAndNewsletterTemplateAndDescription(
             @Param("sentStatus") SendEmailLogStatusEnum sentStatus,
             @Param("newsletterTemplate") Boolean newsletterTemplate,
-            @Param("description") String description
+            @Param("description") String description,
+            @Param("userId") Long userId
     );
 
-    @Query("select distinct n from Newsletter n left join n.sendEmailLogs ns where ((ns.sentStatus is null) or (ns.sentStatus <> :sentStatus)) and (n.newsletterTemplate = :newsletterTemplate) and (n.description like '%' || :description || '%')")
+    @Query("select distinct n from Newsletter n left join n.sendEmailLogs ns where (n.user.id = :userId) and ((ns.sentStatus is null) or (ns.sentStatus <> :sentStatus)) and (n.newsletterTemplate = :newsletterTemplate) and (n.description like '%' || :description || '%')")
     List<Newsletter> findBySentStatusIsNotAndNewsletterTemplateAndDescription(
             @Param("sentStatus") SendEmailLogStatusEnum sentStatus,
             @Param("newsletterTemplate") Boolean newsletterTemplate,
-            @Param("description") String description
+            @Param("description") String description,
+            @Param("userId") Long userId
     );
 
-    List<Newsletter> findByNewsletterTemplateAndDescriptionContains(Boolean newsletterTemplate, String description);
+    List<Newsletter> findByNewsletterTemplateAndDescriptionContainsAndUser(Boolean newsletterTemplate, String description, User user);
 
 
 
