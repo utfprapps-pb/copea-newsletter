@@ -86,7 +86,11 @@ export abstract class LoginService {
                 observer.next(this.isAuthenticated);
                 observer.complete();
             }, error => {
-                observer.error(errorTransform(error));
+                if (error.error && error.error.status == 401)
+                  observer.error(error.error.message);
+                else
+                  observer.error(errorTransform(error));
+
                 observer.complete();
             })
         });
