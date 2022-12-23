@@ -1,5 +1,5 @@
+import { MensagemService } from './../services/mensagem.service';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ export class RoleGuard implements CanActivate {
 
     constructor(
         public loginService: LoginService,
-        public snackBar: MatSnackBar,
+        private mensagemService: MensagemService,
         public router: Router,
     ) { }
 
@@ -33,7 +33,7 @@ export class RoleGuard implements CanActivate {
     }
 
     private alertNoPermission(): void {
-        this.snackBar.open('Você não tem permissão para acessar esse recurso!', 'Ok');
+      this.mensagemService.mostrarMensagem('Você não tem permissão para acessar esse recurso!');
         this.router.navigateByUrl('');
     }
 

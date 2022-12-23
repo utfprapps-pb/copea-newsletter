@@ -1,11 +1,8 @@
-import { AdvancedCrudCard } from 'src/app/shared/crud/advanced-crud-card';
+import { MensagemService } from './../../shared/services/mensagem.service';
 import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-// material
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 // shared
 import { AdvancedCrudComponent } from 'src/app/shared/crud/advanced-crud-component';
@@ -30,11 +27,11 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
 	constructor(
 		public override crudController: AdvancedCrudController<Noticia>,
 		public override service: NoticiaService,
-		public override snackBar: MatSnackBar,
+    public override mensagemService: MensagemService,
 		public override route: ActivatedRoute,
 		public dialog: MatDialog,
 	) {
-		super(crudController, service, snackBar, route);
+		super(crudController, service, mensagemService, route);
 	}
 
 	override ngOnInit() {
@@ -52,9 +49,9 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
 		// }
 
 		this.service.enviarNoticia(this.registro.id!).subscribe(res => {
-			this.snackBar.open('A notícia foi enviada com sucesso!', 'OK');
+      this.mensagemService.mostrarMensagem('A notícia foi enviada com sucesso!');
 		}, error => {
-			this.snackBar.open(errorTransform(error) + '', 'OK');
+      this.mensagemService.mostrarMensagem(errorTransform(error) + '');
 		})
 	}
 
@@ -74,7 +71,7 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
 			this.loading = true;
 			this.service.incluir(registro).subscribe((res: { message: string }) => {
 				this.loading = false;
-				this.snackBar.open('O registro foi incluído com sucesso!', 'OK');
+        this.mensagemService.mostrarMensagem('O registro foi incluído com sucesso!');
 
 				if (res && res.message && +res.message >= 1) {
 					this.carregar(+res.message);
@@ -84,7 +81,7 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
 			}, error => {
 				console.log(error);
 				this.loading = false;
-				this.snackBar.open(errorTransform(error) + '', 'OK');
+        this.mensagemService.mostrarMensagem(errorTransform(error) + '');
 			});
 		}
 	}

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -14,20 +14,34 @@ import { LoginService } from 'src/app/shared/services/login.service';
 export class LoginComponent implements OnInit {
 
   public mensagemErro: String = '';
+  public form: FormGroup;
 
   constructor(
     private auth: AuthService,
     private _loginService: LoginService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private formBuilder: FormBuilder,
+  ) {
+    this.buildForm();
+  }
 
-  public form: FormGroup = new FormGroup({
-    username: new FormControl(),
-    password: new FormControl(),
-  });
+  private buildForm() {
+    this.form = this.formBuilder.group({
+      username: [null, Validators.required],
+      password: [null, Validators.required],
+    });
+  }
 
   ngOnInit() {
     this._loginService.logout();
+  }
+
+  public get username() {
+    return this.form.get('username') as AbstractControl<any, any>;
+  }
+
+  public get password() {
+    return this.form.get('password') as AbstractControl<any, any>;
   }
 
   public login() {

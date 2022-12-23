@@ -18,7 +18,7 @@ public class ConfigEmailResource extends GenericResource<ConfigEmail, ConfigEmai
 
     @Override
     public Response get() {
-        return Response.ok(getService().findByUser()).build();
+        return Response.ok(getService().findByLoggedUser()).build();
     }
 
     @Override

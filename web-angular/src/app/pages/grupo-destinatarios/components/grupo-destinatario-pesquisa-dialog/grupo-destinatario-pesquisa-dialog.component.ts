@@ -1,7 +1,7 @@
+import { MensagemService } from './../../../../shared/services/mensagem.service';
 import { Component, OnInit } from '@angular/core';
 
 // material
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 // shared
@@ -24,7 +24,7 @@ import { DestinatarioService } from 'src/app/pages/destinatarios/destinatario.se
 export class GrupoDestinatarioPesquisaDialogComponent implements OnInit {
 
     /**
-     * @description Código do grupo selecionado no mat-select 
+     * @description Código do grupo selecionado no mat-select
      */
     public selecao: number;
 
@@ -40,7 +40,7 @@ export class GrupoDestinatarioPesquisaDialogComponent implements OnInit {
         private destinatarioService: DestinatarioService,
         public matDialogRef: MatDialogRef<GrupoDestinatarioPesquisaDialogComponent>,
         public service: GrupoDestinatarioService,
-        public snackBar: MatSnackBar,
+        private mensagemService: MensagemService,
         public dialog: MatDialog,
     ) { }
 
@@ -51,7 +51,7 @@ export class GrupoDestinatarioPesquisaDialogComponent implements OnInit {
             this.options = res;
         }, error => {
             this.loading = false;
-            this.snackBar.open(errorTransform(error), 'Ok');
+            this.mensagemService.mostrarMensagem(errorTransform(error));
         });
     }
 
@@ -66,7 +66,7 @@ export class GrupoDestinatarioPesquisaDialogComponent implements OnInit {
             this.matDialogRef.close(res);
         }, error => {
             this.loading = false;
-            this.snackBar.open(errorTransform(error), 'Ok');
+            this.mensagemService.mostrarMensagem(errorTransform(error));
         });
     }
 

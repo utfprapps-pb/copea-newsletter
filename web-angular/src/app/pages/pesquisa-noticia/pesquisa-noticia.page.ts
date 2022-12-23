@@ -1,10 +1,8 @@
+import { MensagemService } from './../../shared/services/mensagem.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-
-// material
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 // shared
 import { errorTransform } from 'src/app/shared/pipes/error-transform';
@@ -53,14 +51,17 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
   constructor(
     private noticiaService: NoticiaService,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
+    private mensagemService: MensagemService,
   ) {
     this.listaResultado = [];
     this.loading = false;
   }
 
   ngOnInit() {
-    this.autoBusca = localStorage.getItem('autoBusca') ? localStorage.getItem('autoBusca') !== 'false' : true;
+    if (this.pesquisaNoticiasModelos)
+      this.autoBusca = true;
+    else
+      this.autoBusca = localStorage.getItem('autoBusca') ? localStorage.getItem('autoBusca') !== 'false' : true;
 
     if (this.autoBusca) {
       this.implementChanges();
@@ -106,11 +107,11 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
       this.listaResultado = res;
 
       if (!res || res.length === 0) {
-        this.snackBar.open('Não foi possível encontrar nenhum registro correspondente aos filtros informados!', 'Ok');
+        this.mensagemService.mostrarMensagem('Não foi possível encontrar nenhum registro correspondente aos filtros informados!');
       }
     }, error => {
       this.loading = false;
-      this.snackBar.open(errorTransform(error), 'Ok');
+      this.mensagemService.mostrarMensagem(errorTransform(error));
     });
   }
 

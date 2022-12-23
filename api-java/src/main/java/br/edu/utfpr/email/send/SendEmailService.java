@@ -8,20 +8,23 @@ import br.edu.utfpr.email.send.log.SendEmailLogService;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFileModel;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
+import lombok.Setter;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mail.internet.*;
+import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-@ApplicationScoped
+@RequestScoped
 public class SendEmailService {
 
     @Inject
@@ -35,12 +38,18 @@ public class SendEmailService {
 
     private ConfigEmail configEmail;
 
-    private ConfigEmail setFirstConfigEmail() throws Exception {
-        List<ConfigEmail> configEmails = configEmailService.findByUser();
+    @Setter
+    public Boolean findConfigEmailByUsernameUser = false;
+    @Setter
+    public String usernameUser = "";
+
+    private ConfigEmail setFirstConfigEmail() {
+        List<ConfigEmail> configEmails =
+                ((findConfigEmailByUsernameUser) ? configEmailService.findByUsernameUser(usernameUser) : configEmailService.findByLoggedUser());
         if (configEmails.size() > 0)
             configEmail = configEmails.get(0);
         else
-            throw new Exception("Nenhuma configuração de email encontrada.");
+            throw new NotFoundException("Nenhuma configuração de email encontrada.");
         return configEmail;
     }
 
@@ -83,10 +92,14 @@ public class SendEmailService {
 
             return sendEmailLogService.saveLog(htmlEmail, body, null);
 
-        } catch (Exception e) {
+        } catch (Exception exception) {
 
-            return sendEmailLogService.saveLog(htmlEmail, body, e.getMessage());
+            sendEmailLogService.saveLog(htmlEmail, body, exception.getMessage());
 
+            if (exception instanceof NotFoundException)
+                throw new NotFoundException(exception.getMessage());
+
+            throw new Exception(exception.getMessage());
         }
     }
 

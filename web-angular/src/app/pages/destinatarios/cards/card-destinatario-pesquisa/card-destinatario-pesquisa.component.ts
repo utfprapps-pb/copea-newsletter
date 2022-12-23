@@ -1,9 +1,7 @@
+import { MensagemService } from './../../../../shared/services/mensagem.service';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
-
-// material
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 // shared
 import { CrudController } from 'src/app/shared/crud/crud.controller';
@@ -24,7 +22,7 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
      * @description Armazena a lista de registros retornada pela api
      */
     public listaRegistros: Destinatario[];
-    
+
     /**
      * @description Armazena a lista de registros filtrados
      */
@@ -63,7 +61,7 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
     constructor(
         private service: DestinatarioService,
         private controller: CrudController,
-        private snackBar: MatSnackBar,
+        private mensagemService: MensagemService,
     ) {
         this.subscription = new Subscription();
         this.listaRegistros = [];
@@ -91,7 +89,7 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
             this.filtrarTabela();
         }, error => {
             this.loading = false;
-            this.snackBar.open(errorTransform(error), 'OK');
+            this.mensagemService.mostrarMensagem(errorTransform(error));
         })
     }
 

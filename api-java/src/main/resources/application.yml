@@ -31,7 +31,11 @@ quarkus:
           paths: ${quarkus.http.root-path}/*
         #remove autenticação dos métodos contidos no paths
         public:
-          paths: ${quarkus.http.root-path}/login,${quarkus.http.root-path}/user,${quarkus.http.root-path}/user/exists
+          paths: ${quarkus.http.root-path}/login,
+                 ${quarkus.http.root-path}/user,
+                 ${quarkus.http.root-path}/user/exists,
+                 ${quarkus.http.root-path}/user/send-code-recover-password/username/*,
+                 ${quarkus.http.root-path}/user/recover-password,
           policy: permit
     resteasy:
       gzip:

@@ -1,3 +1,4 @@
+import { MensagemService } from './../../../../shared/services/mensagem.service';
 
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
@@ -5,7 +6,6 @@ import { Observable, Subject } from 'rxjs';
 
 // material
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
 // shared
@@ -47,7 +47,7 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
     constructor(
         private _grupoService: GrupoDestinatarioService,
         private _dialog: MatDialog,
-        public snackBar: MatSnackBar,
+        public mensagemService: MensagemService,
     ) { }
 
     ngOnInit(): void {
@@ -93,7 +93,7 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
     private registerControls() {
         this.grupoAutocomplete = new SysAutocompleteControl(
             this._grupoService.pesquisarTodos.bind(this._grupoService),
-            this.snackBar,
+            this.mensagemService,
             'name'
         );
     }
@@ -125,7 +125,7 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
     /**
      * @description Abre o cadastro do grupo
      */
-    public abrirModalCadastroGrupo(registro?: GrupoDestinatario): void { 
+    public abrirModalCadastroGrupo(registro?: GrupoDestinatario): void {
         this._dialog.open(GrupoDestinatarioDialogComponent, { data: { registro: registro } })
     }
 

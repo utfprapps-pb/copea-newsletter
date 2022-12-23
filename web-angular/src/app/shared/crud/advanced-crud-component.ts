@@ -1,8 +1,6 @@
+import { MensagemService } from './../services/mensagem.service';
 import { Injectable, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-
-// material
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 // shared
 import { errorTransform } from "../pipes/error-transform";
@@ -28,7 +26,7 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 	constructor(
 		public crudController: AdvancedCrudController<T>,
 		public service: CrudService<T>,
-		public snackBar: MatSnackBar,
+		public mensagemService: MensagemService,
 		public route: ActivatedRoute,
 	) {
 		this.loading = false;
@@ -106,12 +104,12 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 			this.loading = true;
 			this.service.incluir(registro).subscribe(() => {
 				this.loading = false;
-				this.snackBar.open('O registro foi incluído com sucesso!', 'OK');
+        this.mensagemService.mostrarMensagem('O registro foi incluído com sucesso!');
 				this.resetFormNovo();
 			}, error => {
 				console.log(error);
 				this.loading = false;
-				this.snackBar.open(errorTransform(error) + '', 'OK');
+        this.mensagemService.mostrarMensagem(errorTransform(error) + '');
 			});
 		}
 	}
@@ -126,10 +124,10 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 			this.service.atualizar(registro).subscribe(() => {
 				this.loading = false;
 				this.carregar(registro['id']);
-				this.snackBar.open('As alterações foram salvas com sucesso!', 'OK');
+        this.mensagemService.mostrarMensagem('As alterações foram salvas com sucesso!');
 			}, error => {
 				this.loading = false;
-				this.snackBar.open(errorTransform(error), 'OK');
+        this.mensagemService.mostrarMensagem(errorTransform(error));
 			});
 		}
 	}
@@ -144,7 +142,7 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 			this.carregarRegistro(res);
 		}, error => {
 			this.loading = false;
-			this.snackBar.open(errorTransform(error), 'OK');
+      this.mensagemService.mostrarMensagem(errorTransform(error));
 		});
 	}
 
@@ -169,11 +167,11 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 		this.loading = true;
 		this.service.remover(registroId).subscribe(() => {
 			this.loading = false;
-			this.snackBar.open('O registro foi excluído com sucesso!', 'OK');
+      this.mensagemService.mostrarMensagem('O registro foi excluído com sucesso!');
 			this.resetFormNovo();
 		}, error => {
 			this.loading = false;
-			this.snackBar.open(errorTransform(error), 'OK');
+      this.mensagemService.mostrarMensagem(errorTransform(error));
 		});
 	}
 
@@ -216,7 +214,7 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 			this.atualizarCards();
 		}, error => {
 			this.loading = false;
-			this.snackBar.open(errorTransform(error), 'OK');
+      this.mensagemService.mostrarMensagem(errorTransform(error));
 		});
 	}
 

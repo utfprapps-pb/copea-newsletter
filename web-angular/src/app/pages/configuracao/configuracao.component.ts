@@ -1,9 +1,9 @@
+import { MensagemService } from './../../shared/services/mensagem.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // material
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 
 // shared
@@ -25,18 +25,18 @@ export class ConfiguracaoComponent extends BasicCrudComponent<ConfigEmail> imple
         public crudController: CrudController,
         public override formBuilder: FormBuilder,
         public override service: ConfiguracaoService,
-        public override snackBar: MatSnackBar,
+        public override mensagemService: MensagemService,
         public override route: ActivatedRoute,
         public dialog: MatDialog,
     ) {
-        super(crudController, formBuilder, service, snackBar, route);
+        super(crudController, formBuilder, service, mensagemService, route);
     }
 
     override ngOnInit() {
         super.ngOnInit();
     }
-    
-    public criarForm(): FormGroup<any> { 
+
+    public criarForm(): FormGroup<any> {
         return this.formBuilder.group({
             id: [null],
             emailFrom: [null, Validators.required],

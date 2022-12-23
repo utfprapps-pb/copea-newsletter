@@ -1,9 +1,7 @@
+import { MensagemService } from './../services/mensagem.service';
 import { Injectable, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-
-// material
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 // shared
 import { errorTransform } from "../pipes/error-transform";
@@ -30,7 +28,7 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
         public controller: CrudController,
         public formBuilder: FormBuilder,
         public service: CrudService<T>,
-        public snackBar: MatSnackBar,
+        public mensagemService: MensagemService,
         public route: ActivatedRoute,
     ) {
         this.form = this.criarForm();
@@ -83,12 +81,12 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
             this.loading = true;
             this.service.incluir(registro).subscribe(() => {
                 this.loading = false;
-                this.snackBar.open('O registro foi incluído com sucesso!', 'OK');
+                this.mensagemService.mostrarMensagem('O registro foi incluído com sucesso!');
                 this.controller.notificarOperacaoConcluida();
                 this.resetFormNovo();
             }, error => {
                 this.loading = false;
-                this.snackBar.open(errorTransform(error), 'OK');
+                this.mensagemService.mostrarMensagem(errorTransform(error));
             });
         }
     }
@@ -102,12 +100,12 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
             this.loading = true;
             this.service.atualizar(registro).subscribe(() => {
                 this.loading = false;
-                this.snackBar.open('As alterações foram salvas com sucesso!', 'OK');
+                this.mensagemService.mostrarMensagem('As alterações foram salvas com sucesso!');
                 this.controller.notificarOperacaoConcluida();
                 this.resetFormNovo();
             }, error => {
                 this.loading = false;
-                this.snackBar.open(errorTransform(error), 'OK');
+                this.mensagemService.mostrarMensagem(errorTransform(error));
             });
         }
     }
@@ -123,7 +121,7 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
             this.form.reset(res);
         }, error => {
             this.loading = false;
-            this.snackBar.open(errorTransform(error), 'OK');
+            this.mensagemService.mostrarMensagem(errorTransform(error));
         });
     }
 
@@ -135,18 +133,18 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
         this.loading = true;
         this.service.remover(registroId).subscribe(() => {
             this.loading = false;
-            this.snackBar.open('O registro foi excluído com sucesso!', 'OK');
+            this.mensagemService.mostrarMensagem('O registro foi excluído com sucesso!');
             this.controller.notificarOperacaoConcluida();
         }, error => {
             this.loading = false;
-            this.snackBar.open(errorTransform(error), 'OK');
+            this.mensagemService.mostrarMensagem(errorTransform(error));
         });
     }
 
     /**
      * @description Valida o preenchimento do form
      * @returns True se o form for válido
-     * @param markAsDirty Marca o form como dirty antes de validar 
+     * @param markAsDirty Marca o form como dirty antes de validar
      */
     public validarForm(): boolean {
         this.form.markAllAsTouched();
@@ -155,7 +153,7 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
     }
 
     /**
-     * @description Reseta o form com o valor de um novo registro 
+     * @description Reseta o form com o valor de um novo registro
      */
     public resetFormNovo() {
         this.loading = true;
@@ -164,7 +162,7 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
             this.form.reset(res);
         }, error => {
             this.loading = false;
-            this.snackBar.open(errorTransform(error), 'OK');
+            this.mensagemService.mostrarMensagem(errorTransform(error));
         });
     }
 

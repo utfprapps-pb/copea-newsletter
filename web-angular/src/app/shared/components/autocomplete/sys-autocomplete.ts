@@ -1,8 +1,6 @@
+import { MensagemService } from './../../services/mensagem.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-
-// material
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 // shared
 import { errorTransform } from '../../pipes/error-transform';
@@ -21,7 +19,7 @@ export class SysAutocompleteControl {
 
     constructor(
         private buscaFn: Function,
-        private snackBar: MatSnackBar,
+        private mensagemService: MensagemService,
         private filterKey?: string
     ) {
         if (!this.filterKey) {
@@ -44,7 +42,7 @@ export class SysAutocompleteControl {
             this.options = res;
             this.optionsFiltradas = of(this.options);
         }, (error: HttpErrorResponse) => {
-            this.snackBar.open(errorTransform(error), 'Ok');
+            this.mensagemService.mostrarMensagem(errorTransform(error));
         });
     }
 

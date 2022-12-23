@@ -1,9 +1,9 @@
+import { MensagemService } from './../../../../shared/services/mensagem.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // material
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 // shared
@@ -39,7 +39,7 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
         public override crudController: AdvancedCrudController<Noticia>,
         public override formBuilder: FormBuilder,
         public destinatarioService: DestinatarioService,
-        public snackBar: MatSnackBar,
+        public mensagemService: MensagemService,
         public dialog: MatDialog,
     ) {
         super(crudController, formBuilder);
@@ -76,7 +76,7 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
     private registerControls() {
         this.destinatarioAutocomplete = new SysAutocompleteControl(
             this.destinatarioService.pesquisarTodos.bind(this.destinatarioService),
-            this.snackBar,
+            this.mensagemService,
             'email'
         );
     }

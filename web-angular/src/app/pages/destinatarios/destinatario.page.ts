@@ -1,10 +1,8 @@
+import { MensagemService } from './../../shared/services/mensagem.service';
 import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-
-// material
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 // shared
 import { BasicCrudComponent } from 'src/app/shared/crud/basic-crud-component';
@@ -43,10 +41,10 @@ export class DestinatarioComponent extends BasicCrudComponent<Destinatario> impl
         public override controller: CrudController,
         public override service: DestinatarioService,
         public override formBuilder: FormBuilder,
-        public override snackBar: MatSnackBar, 
+        public override mensagemService: MensagemService,
         public override route: ActivatedRoute,
-    ) { 
-        super(controller, formBuilder, service, snackBar, route);
+    ) {
+        super(controller, formBuilder, service, mensagemService, route);
         this.subscription = new Subscription();
     }
 

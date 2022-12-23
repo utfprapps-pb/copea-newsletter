@@ -1,6 +1,10 @@
+import { MensagemService } from './../../shared/services/mensagem.service';
+import { Router } from '@angular/router';
+import { RecuperacaoSenhaDTO } from './../../models/recuperacao-senha-dto';
+import { RecuperacaoSenhaService } from './recuperacao-senha.service';
 import { ConfirmarSenhaValidator } from 'src/app/shared/validators/confirmar-senha-validator';
 import { SenhaValidator } from 'src/app/shared/validators/senha-validator';
-import { FormGroup, FormControl, Validators, FormBuilder, AbstractControl } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -13,7 +17,12 @@ export class RecuperacaoSenhaComponent implements OnInit {
   public form: FormGroup;
   public mensagemErro: String = '';
 
-  constructor(private formBuilder: FormBuilder,) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private recuperacaoSenhaService: RecuperacaoSenhaService,
+    private router: Router,
+    private mensagemService: MensagemService,
+    ) {
     this.buildForm();
   }
 
@@ -49,10 +58,41 @@ export class RecuperacaoSenhaComponent implements OnInit {
   }
 
   public trocarSenha() {
-
+    let recuperacaoSenhaDTO: RecuperacaoSenhaDTO;
+    recuperacaoSenhaDTO = {
+      username: this.username.value,
+      code: this.codigo.value,
+      newPassword: this.confirmarSenha.value,
+    };
+    this.recuperacaoSenhaService.trocarSenha(recuperacaoSenhaDTO).subscribe(
+      {
+        next: (value: any) => {
+          this.mensagemService.mostrarMensagem(value.message);
+          this.router.navigateByUrl('login')
+        },
+        error: (err) => {
+          console.log(err);
+          this.mensagemService.mostrarMensagem(err.error.message);
+        },
+      })
   }
 
   public enviarCodigoPorEmail() {
+    if (!this.username.value) {
+      this.username.setErrors({ invalido: 'Informe o usuário para receber o código por e-mail.' })
+      return;
+    }
+
+    this.recuperacaoSenhaService.enviarCodigoPorEmail(this.username.value).subscribe(
+      {
+        next: (value: any) => {
+          this.mensagemService.mostrarMensagem(value.message);
+        },
+        error: (err) => {
+          console.log(err);
+          this.mensagemService.mostrarMensagem(err.error.message);
+        },
+      })
   }
 
 }

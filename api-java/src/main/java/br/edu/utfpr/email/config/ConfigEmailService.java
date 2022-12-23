@@ -3,8 +3,11 @@ package br.edu.utfpr.email.config;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.newsletter.Newsletter;
 import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.user.User;
+import br.edu.utfpr.user.UserService;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +15,9 @@ import java.util.Optional;
 
 @RequestScoped
 public class ConfigEmailService extends GenericService<ConfigEmail, Long, ConfigEmailRepository> {
+
+    @Inject
+    UserService userService;
 
     @Override
     public GenericResponse save(ConfigEmail entity) {
@@ -33,9 +39,17 @@ public class ConfigEmailService extends GenericService<ConfigEmail, Long, Config
             entity.setUser(getAuthSecurityFilter().getAuthUserContext().findByToken());
     }
 
-    public List<ConfigEmail> findByUser() {
+    public List<ConfigEmail> findByLoggedUser() {
+        return findByUser(getAuthSecurityFilter().getAuthUserContext().findByToken());
+    }
+
+    public List<ConfigEmail> findByUsernameUser(String username) {
+        return findByUser(userService.findByUsername(username));
+    }
+
+    private List<ConfigEmail> findByUser(User user) {
         List<ConfigEmail> configEmailList =
-                getRepository().findByUser(getAuthSecurityFilter().getAuthUserContext().findByToken());
+                getRepository().findByUser(user);
 
         if (configEmailList.isEmpty())
             return new ArrayList<>();

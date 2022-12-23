@@ -1,9 +1,9 @@
+import { MensagemService } from './../../../../shared/services/mensagem.service';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // material
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 // shared
@@ -30,16 +30,16 @@ export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDe
         public crudController: CrudController,
         public override formBuilder: FormBuilder,
         public override service: GrupoDestinatarioService,
-        public override snackBar: MatSnackBar,
+        public override mensagemService: MensagemService,
         public override route: ActivatedRoute,
         public dialog: MatDialog,
     ) {
-        super(crudController, formBuilder, service, snackBar, route);
+        super(crudController, formBuilder, service, mensagemService, route);
     }
 
     override ngOnInit() {
         super.ngOnInit();
-        
+
         if (this.data && this.data.registro) {
             this.form.reset(this.data.registro);
         }
@@ -48,8 +48,8 @@ export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDe
     public get id(): number {
         return this.form.get('id')!.value;
     }
-    
-    public criarForm(): FormGroup<any> { 
+
+    public criarForm(): FormGroup<any> {
         return this.formBuilder.group({
             id: [null],
             name: [null, Validators.required],
@@ -60,7 +60,7 @@ export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDe
         super.persistirAlteracoes(this.id != null)
         this.dialog.closeAll();
     }
-    
+
     /**
      * @description Executa no click do botão excluir
      */

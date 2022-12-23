@@ -1,3 +1,4 @@
+import { SysPipesModule } from './../../shared/pipes/sys-pipes.module';
 import { CadastroModule } from './../cadastro/cadastro.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -24,7 +25,8 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         MaterialModule,
-        MatTabsModule
+        MatTabsModule,
+        SysPipesModule,
     ],
     exports: [],
     providers: [],

@@ -1,7 +1,4 @@
-import { LabelValue } from './../../shared/models/label-value';
 import { UserService } from './../../services/user.service';
-import { CadastroService } from './cadastro.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -25,7 +22,6 @@ export class CadastroComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private auth: AuthService,
-    public snackBar: MatSnackBar,
     private userService: UserService,
   ) {
     this.form = this.formBuilder.group({
