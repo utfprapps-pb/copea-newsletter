@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  newsletter-db:
+    image: "postgres:latest"
+    container_name: newsletter-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=newsletter
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 6
+    ports:
+      - "5433:5432"
+    networks:
+      - newsletter-net
+
+  newsletter-api:
+    build:
+      context: ./api-java/
+      dockerfile: ./src/main/docker/Dockerfile.jvm
+    image: quarkus/newsletter
+    container_name: newsletter-api
+    environment:      
+      - DB_JDBC_URL=jdbc:postgresql://newsletter-db:5432/newsletter?ApplicationName=newsletter
+      - DB_JDBC_USER=postgres
+      - DB_JDBC_PASSWORD=admin
+      - PORT=8080
+    ports:
+      - "8080:8080"  # the HTTP endpoint
+    depends_on:
+      newsletter-db:
+        condition: service_healthy
+    networks:
+      - newsletter-net
+      
+  newsletter-web:    
+    image: angular/newsletter
+    container_name: newsletter-web
+    build:
+      context: ./web-angular/
+      dockerfile: ./Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - newsletter-net
+    depends_on:      
+      - newsletter-api
+    environment:      
+      - API_URL=http://localhost:8080
+      - PORT=80
+
+networks:
+  newsletter-net:
+    driver: bridge

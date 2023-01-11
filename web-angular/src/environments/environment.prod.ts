@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api: `https://damp-tor-97294.herokuapp.com/`
+  api: `API_URL_WILL_BE_REPLACED`
 };

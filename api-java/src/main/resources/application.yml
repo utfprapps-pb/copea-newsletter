@@ -6,17 +6,17 @@ quarkus:
   # datasource configuration
   datasource:
     db-kind: postgresql
-    username: postgres
-    password: admin
+    username: ${DB_JDBC_USER:postgres}
+    password: ${DB_JDBC_PASSWORD:admin}
     jdbc:
-      url: jdbc:postgresql://localhost:5432/newsletter?ApplicationName=${postgreSQL-app-name}
+      url: ${DB_JDBC_URL:jdbc:postgresql://localhost:5432/newsletter?ApplicationName=${postgreSQL-app-name}}
   hibernate-orm:
     database:
       # drop and create the database at startup (use `update` to only update the schema)
       generation: update #drop-and-create
   http:
     cors: true
-    port: 8081
+    port: ${PORT:8080}
     test-port: 8083
     auth:
       policy:
