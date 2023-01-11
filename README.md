@@ -13,4 +13,6 @@ Comandos para rodar o angular e java no docker:
 3. Exectar na raiz do projeto o comando docker compose build
 
 4. Exectar na raiz do projeto o comando docker compose up
+
+5. Se por acaso alguma alteração não estiver na imagem, remova a imagem com o comando 'docker image rm nome_imagem' ou delete pelo docker desktop e execute os comandos novamente.
 ```
