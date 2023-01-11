@@ -3,6 +3,14 @@
 ## :memo: Descrição
 Sistema para criação e envio por email de notícias.
 
+## :wrench: Versões utilizadas
+* Java: 17.
+* Maven: 3.8.5.
+* Quarkus: 2.14.0.
+
+## :runner: Rodar projeto
+Para rodar o projeto, basta utilizar o comando <b>quarkus dev</b>, mais informações é possível verificar na documentação (https://quarkus.io/get-started/) do Quarkus.
+
 ## <img src="https://github.com/devops-workflow/jenkins-icons/blob/master/icons/docker-logo-32x18.png?raw=true"> Docker
 Comandos para rodar o angular e java no docker:
 ```
