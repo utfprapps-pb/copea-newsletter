@@ -3,7 +3,7 @@
 ## :memo: Descrição
 Sistema para criação e envio por email de notícias.
 
-## :memo: Docker
+## Docker
 Comandos para rodar o angular e java no docker:
 ```
 1. Abrir o projeto do angular (/web-angular) e digitar o comando ng build (se for a primeira vez que abriu o projeto, antes executar npm install)
