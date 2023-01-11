@@ -10,5 +10,7 @@ Comandos para rodar o angular e java no docker:
 
 2. Abrir o projeto do java (/api-java) e executar o comando mvn clean package
 
-3. Exectar na raiz do projeto o comando docker compose up
+3. Exectar na raiz do projeto o comando docker compose build
+
+4. Exectar na raiz do projeto o comando docker compose up
 ```
