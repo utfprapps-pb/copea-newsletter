@@ -4,6 +4,8 @@
 Sistema para criação e envio por email de notícias.
 
 ## :wrench: Versões utilizadas
+* Angular: 14.
+* npm: 9.
 * Java: 17.
 * Maven: 3.8.5.
 * Quarkus: 2.14.0.
