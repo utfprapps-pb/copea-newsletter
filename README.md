@@ -29,3 +29,17 @@ Comandos para rodar o angular e java no docker:
 
 5. Se por acaso alguma alteração não estiver na imagem, remova a imagem com o comando 'docker image rm nome_imagem' ou delete pelo docker desktop e execute os comandos novamente.
 ```
+
+Segue as principais configurações que podem ser alteradas no arquivo docker-compose.yaml que se encontra na raiz do projeto:
+- newsletter-db:
+  - <b>POSTGRES_USER</b>: Usuário do banco postgres.
+  - <b>POSTGRES_PASSWORD</b>: Senha do banco postgres.
+  - <b>POSTGRES_DB</b>: Nome do banco.
+- newsletter-api:
+  - <b>DB_JDBC_URL</b>: url de conexão com o banco.
+  - <b>DB_JDBC_USER</b>: Usuário do banco.
+  - <b>DB_JDBC_PASSWORD</b>: Senha do banco.
+  - <b>PORT</b>: Porta que vai rodar a API.
+- newsletter-web:
+  - <b>API_URL</b>: URL da API, sempre com /api no final.
+  - <b>PORT</b>: Porta que vai rodar o servidor web.
