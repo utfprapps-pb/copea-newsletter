@@ -13,7 +13,7 @@ Sistema para criação e envio por email de notícias.
 ## :runner: Rodar projeto
 Para rodar o projeto, basta utilizar o comando <b>quarkus dev</b>, mais informações é possível verificar na documentação (https://quarkus.io/get-started/) do Quarkus.
 
-## <img src="https://miro.medium.com/max/640/1*CTuO-w7wiq_yhLh9plnkCw.webp" width="32px" height="32px"> Documentação dos métodos
+## <img src="https://miro.medium.com/max/640/1*CTuO-w7wiq_yhLh9plnkCw.webp" width="32px" height="32px"> Documentação da API
 Para a documentação foi utilizado o openapi do próprio Quarkus (https://quarkus.io/guides/openapi-swaggerui), a mesma se encontra no caminho .../api/swagger, exemplo http://localhost:8080/api/swagger
 
 ## <img src="https://github.com/devops-workflow/jenkins-icons/blob/master/icons/docker-logo-32x18.png?raw=true"> Docker
