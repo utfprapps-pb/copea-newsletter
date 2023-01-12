@@ -36,6 +36,8 @@ quarkus:
                  ${quarkus.http.root-path}/user/exists,
                  ${quarkus.http.root-path}/user/send-code-recover-password/username/*,
                  ${quarkus.http.root-path}/user/recover-password,
+                 ${quarkus.http.root-path}/swagger/*,
+                 ${quarkus.http.root-path}/q/openapi/*,
           policy: permit
     resteasy:
       gzip:
@@ -50,6 +52,10 @@ quarkus:
     locations: db/migration
   hibernate-validator:
     method-validation: none
+  swagger-ui:
+    always-include: true
+    path: ${quarkus.http.root-path}/swagger
+    enable: true
 
 #Informacoes locais do jwt
 jwt-newsletter:
