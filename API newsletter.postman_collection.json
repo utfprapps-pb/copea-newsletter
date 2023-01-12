@@ -1,0 +1,699 @@
+{
+	"info": {
+		"_postman_id": "6e53ebfd-12dd-4d3b-a3e7-d9d69a4718e3",
+		"name": "API newsletter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14825453"
+	},
+	"item": [
+		{
+			"name": "email",
+			"item": [
+				{
+					"name": "email",
+					"item": [
+						{
+							"name": "send",
+							"item": [
+								{
+									"name": "send email",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"title\": \"estou testando\",\r\n    \"body\": \"teste email\",\r\n    \"emails-list\": [\r\n        \"erickborges100@gmail.com\",\r\n        \"erickborges100@gmail.com\"\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/v1/email/send",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"v1",
+												"email",
+												"send"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "send emails newsletter",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/v1/newsletter/1/send-email",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"v1",
+												"newsletter",
+												"1",
+												"send-email"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "crud",
+							"item": [
+								{
+									"name": "get",
+									"item": [
+										{
+											"name": "get all",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{url}}/v1/email",
+													"host": [
+														"{{url}}"
+													],
+													"path": [
+														"v1",
+														"email"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "get by id",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{url}}/v1/email/1",
+													"host": [
+														"{{url}}"
+													],
+													"path": [
+														"v1",
+														"email",
+														"1"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "find email",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Bearer {{token}}",
+														"type": "text"
+													}
+												],
+												"url": {
+													"raw": "{{url}}/v1/email/find-email?email=erick",
+													"host": [
+														"{{url}}"
+													],
+													"path": [
+														"v1",
+														"email",
+														"find-email"
+													],
+													"query": [
+														{
+															"key": "email",
+															"value": "erick"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "new",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"erickborges100@gmail.com\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/v1/email",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"v1",
+												"email"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "update",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\": 7,\r\n    \"email\": \"erickborges100@gmail.com\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/v1/email",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"v1",
+												"email"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "delete",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/v1/email/7",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"v1",
+												"email",
+												"7"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "config",
+					"item": [
+						{
+							"name": "new",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"emailFrom\": \"erickborges100@gmail.com\",\r\n    \"passwordEmailFrom\": \"dlydqudqnocahkfz\",\r\n    \"sendHost\": \"smtp.gmail.com\",\r\n    \"sendPort\": 465\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/email/config",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"email",
+										"config"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"emailFrom\": \"erickborges100@gmail.com\",\r\n    \"passwordEmailFrom\": \"dlydqudqnocahkfz\",\r\n    \"sendHost\": \"smtp.gmail.com\",\r\n    \"sendPort\": 465\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/email/config",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"email",
+										"config"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/v1/email/config/:codigo",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"email",
+										"config",
+										":codigo"
+									],
+									"variable": [
+										{
+											"key": "codigo",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/v1/email/config",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"email",
+										"config"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "newsletter",
+			"item": [
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"description\": \"teste\",\r\n    \"subject\": \"teste123\",\r\n    \"newsletter\": \"testeestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrg\",\r\n    \"emails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"email\": \"erickborges100@gmail.com\"            \r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/v1/newsletter",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"newsletter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 43,\r\n    \"description\": \"teste123\",\r\n    \"subject\": \"teste123\",\r\n    \"newsletter\": \"testeestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrgtesteestefrg\",\r\n    \"emails\": [\r\n        {\r\n            \"id\": 1,\r\n            \"email\": \"erickborges100@gmail.com\"            \r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"email\": \"erick@nvsul.com.br\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/v1/newsletter",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"newsletter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/v1/newsletter/42",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"newsletter",
+								"42"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/v1/newsletter/search?newslettersSent=true&newsletterTemplate=true&description=&newslettersNotSent=false",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"newsletter",
+								"search"
+							],
+							"query": [
+								{
+									"key": "newslettersSent",
+									"value": "true"
+								},
+								{
+									"key": "newsletterTemplate",
+									"value": "true"
+								},
+								{
+									"key": "description",
+									"value": ""
+								},
+								{
+									"key": "newslettersNotSent",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "save",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"fullname\": \"Erick Elias Borges\",\r\n    \"username\": \"erick\",\r\n    \"email\": \"erickborges100@gmail.com\",\r\n    \"password\": \"teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enviar código no email para recuperar senha",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/send-code-recover-password/username/erick",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"send-code-recover-password",
+								"username",
+								"erick"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar senha",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"erick\",\r\n    \"code\": 680381,\r\n    \"newPassword\": \"teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/recover-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"recover-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validar se usuário existe",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/exists?username=erick&email=erick",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"exists"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "erick"
+								},
+								{
+									"key": "email",
+									"value": "erick"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200, requisição feita com sucesso\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    \r",
+							"    pm.collectionVariables.set(\"token\", pm.response.json().token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"erick\",\r\n    \"password\": \"teste\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
