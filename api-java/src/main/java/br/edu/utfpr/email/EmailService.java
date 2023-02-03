@@ -7,6 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,6 +30,15 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
 
         return emails;
     }
+
+    public List<Email> findByEmailAndNewsletter(String email, Long newsletterId) {
+        List<Email> emails = getRepository().findByEmailAndNewsletter(email, newsletterId);
+        if (emails.isEmpty())
+            return new ArrayList<>();
+
+        return emails;
+    }
+
 
     public List<Email> findEmailsByGroup(Long groupId) {
         Query query = em.createNativeQuery("SELECT e.id as id, e.email as email " +

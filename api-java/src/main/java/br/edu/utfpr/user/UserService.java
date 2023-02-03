@@ -1,5 +1,6 @@
 package br.edu.utfpr.user;
 
+import br.edu.utfpr.email.config.ConfigEmailService;
 import br.edu.utfpr.email.send.SendEmailService;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.DefaultResponse;
@@ -26,6 +27,9 @@ public class UserService extends GenericService<User, Long, UserRepository> {
 
     @Inject
     RecoverPasswordService recoverPasswordService;
+
+    @Inject
+    ConfigEmailService configEmailService;
 
     @Override
     public GenericResponse save(User entity) {
@@ -63,9 +67,11 @@ public class UserService extends GenericService<User, Long, UserRepository> {
         Integer codigo = new Random().nextInt(1000000);
         recoverPasswordService.addCode(username, new RecoverPassword(username, codigo, DateTimeUtil.getCurrentDateTime()));
 
-        sendEmailService.setFindConfigEmailByUsernameUser(true);
-        sendEmailService.setUsernameUser(user.getUsername());
-        sendEmailService.send("Recuperação de senha", "O código para recuperação da sua senha no sistema de Newsletter é <b>"+codigo+"</b>.", user.getEmail());
+        sendEmailService.send(
+                "Recuperação de senha",
+                "O código para recuperação da sua senha no sistema de Newsletter é <b>"+codigo+"</b>.",
+                configEmailService.getConfigEmailByUsernameUser(username),
+                user.getEmail());
 
         return new SendEmailCodeRecoverPassword("Código enviado com sucesso para o e-mail " + user.getEmail() + ".", user.getEmail());
     }

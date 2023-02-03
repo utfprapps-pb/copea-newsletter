@@ -1,11 +1,13 @@
 package br.edu.utfpr.email;
 
 import br.edu.utfpr.emailgroup.EmailGroup;
+import br.edu.utfpr.shared.enums.NoYesEnum;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -21,6 +23,12 @@ public class Email {
     @NotBlank(message = "Parameter email is required.")
     @Column(nullable = false)
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    private NoYesEnum subscribed;
+
+    @Column(name = "unsubscribed_date")
+    private LocalDateTime unsubscribedDate;
 
     @ManyToMany(cascade = { CascadeType.MERGE  })
     @JoinTable(

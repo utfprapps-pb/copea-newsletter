@@ -2,19 +2,17 @@ package br.edu.utfpr.email.send;
 
 import br.edu.utfpr.email.Email;
 import br.edu.utfpr.email.config.ConfigEmail;
-import br.edu.utfpr.email.config.ConfigEmailService;
 import br.edu.utfpr.email.send.log.SendEmailLog;
 import br.edu.utfpr.email.send.log.SendEmailLogService;
+import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFileModel;
 import br.edu.utfpr.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
-import lombok.Setter;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mail.internet.*;
@@ -22,13 +20,9 @@ import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @RequestScoped
 public class SendEmailService {
-
-    @Inject
-    ConfigEmailService configEmailService;
 
     @Autowired
     HtmlFilesWithCidInsteadBase64Service htmlFilesWithCidInsteadBase64Service;
@@ -38,26 +32,13 @@ public class SendEmailService {
 
     private ConfigEmail configEmail;
 
-    @Setter
-    public Boolean findConfigEmailByUsernameUser = false;
-    @Setter
-    public String usernameUser = "";
-
-    private ConfigEmail setFirstConfigEmail() {
-        List<ConfigEmail> configEmails =
-                ((findConfigEmailByUsernameUser) ? configEmailService.findByUsernameUser(usernameUser) : configEmailService.findByLoggedUser());
-        if (configEmails.size() > 0)
-            configEmail = configEmails.get(0);
-        else
-            throw new NotFoundException("Nenhuma configuração para envio de e-mail encontrada.");
-        return configEmail;
-    }
-
-    public SendEmailLog send(String title, String body, String ...emailsList) throws Exception {
+    public SendEmailLog send(String title, String body, ConfigEmail configEmail, String ...emailsList) throws Exception {
         HtmlEmail htmlEmail = new HtmlEmail();
         try {
+            if (emailsList.length == 0)
+                throw new ValidationException("Nenhum e-mail inscrito encontrado para a newsletter.");
 
-            setFirstConfigEmail();
+            this.configEmail = configEmail;
 
             htmlEmail = buildEmail();
 
@@ -128,7 +109,9 @@ public class SendEmailService {
         return htmlEmail;
     }
 
-    public String[] convertArrayEmailEntityToStringArray(Set<Email> array) {
+    public String[] convertArrayEmailEntityToStringArray(List<Email> array) {
+        if (array.isEmpty())
+            return new String[0];
 
         String stringArray = "";
 
@@ -137,7 +120,6 @@ public class SendEmailService {
         }
 
         return stringArray.trim().split(" ");
-
     }
 
 }

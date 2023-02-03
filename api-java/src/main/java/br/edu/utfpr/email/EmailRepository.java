@@ -11,6 +11,12 @@ public interface EmailRepository extends GenericRepository<Email, Long> {
 
     List<Email> findAllByEmailContaining(String email);
 
+    @Query(value = "SELECT emails " +
+            "FROM Newsletter newsletter " +
+            "JOIN newsletter.emails emails " +
+            "WHERE (emails.email = :email) and (newsletter.id = :newsletterId)")
+    List<Email> findByEmailAndNewsletter(String email, Long newsletterId);
+
     @Query("SELECT e " +
             "FROM email_group_email g " +
             "LEFT JOIN g.email e " +

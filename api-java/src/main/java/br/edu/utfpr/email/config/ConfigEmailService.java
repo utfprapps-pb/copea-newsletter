@@ -8,6 +8,7 @@ import br.edu.utfpr.user.UserService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -65,6 +66,25 @@ public class ConfigEmailService extends GenericService<ConfigEmail, Long, Config
             throwNotFoundException();
 
         return configEmailOptional.get();
+    }
+
+    public ConfigEmail getConfigEmailByUsernameUser(String usernameUser) {
+        return getConfigEmail(findByUsernameUser(usernameUser));
+    }
+
+    public ConfigEmail getConfigEmailByLoggedUser() {
+        return getConfigEmail(findByLoggedUser());
+    }
+
+    private ConfigEmail getConfigEmail(List<ConfigEmail> configEmails) {
+        if (configEmails.size() == 0)
+            throwConfigEmailNotFoundException();
+
+        return configEmails.get(0);
+    }
+
+    private void throwConfigEmailNotFoundException() {
+        throw new NotFoundException("Nenhuma configuração para envio de e-mail encontrada.");
     }
 
 }

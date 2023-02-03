@@ -1,26 +1,48 @@
 package br.edu.utfpr.newsletter;
 
+import br.edu.utfpr.email.Email;
+import br.edu.utfpr.email.EmailService;
+import br.edu.utfpr.email.config.ConfigEmailService;
+import br.edu.utfpr.email.read.ReadEmailService;
 import br.edu.utfpr.email.send.SendEmailService;
 import br.edu.utfpr.email.send.log.SendEmailLog;
 import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
+import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.shared.enums.NoYesEnum;
 import br.edu.utfpr.user.User;
+import br.edu.utfpr.utils.DateTimeUtil;
 import org.jboss.resteasy.reactive.RestResponse;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.search.*;
+import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestScoped
 public class NewsletterService extends GenericService<Newsletter, Long, NewsletterRepository> {
 
     @Inject
     SendEmailService sendEmailService;
+
+    @Inject
+    ConfigEmailService configEmailService;
+
+    @Inject
+    ReadEmailService readEmailService;
+
+    @Inject
+    EmailService emailService;
 
     @Override
     public GenericResponse save(Newsletter entity) {
@@ -45,7 +67,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         else
             entity.setInclusionDate(LocalDateTime.now());
     }
-    
+
     private void setDefaultValues(Newsletter entity) {
         setDatesByNewOrUpdate(entity);
         if (Objects.isNull(entity.getUser()))
@@ -64,10 +86,18 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
         Newsletter newsletterEntity = optionalNewsletterEntity.get();
 
+        List<Email> subscribedEmails =
+                newsletterEntity.getEmails().stream().filter(
+                        (Email email) -> Objects.equals(email.getSubscribed(), NoYesEnum.YES)
+                ).collect(Collectors.toList());
+
+        validateSubscribedEmails(subscribedEmails);
+        checkAnswersInEmailToUnsubscribe(subscribedEmails);
         SendEmailLog sendEmailLog = sendEmailService.send(
                 newsletterEntity.getSubject(),
                 newsletterEntity.getNewsletter(),
-                sendEmailService.convertArrayEmailEntityToStringArray(newsletterEntity.getEmails()));
+                configEmailService.getConfigEmailByLoggedUser(),
+                sendEmailService.convertArrayEmailEntityToStringArray(subscribedEmails));
 
         newsletterEntity.getSendEmailLogs().add(sendEmailLog);
         getRepository().save(newsletterEntity);
@@ -83,6 +113,61 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
                 .message(sendEmailLog.getError())
                 .build();
 
+    }
+
+    private void checkAnswersInEmailToUnsubscribe(List<Email> subscribedEmails) throws MessagingException, IOException, ParseException {
+        List<SearchTerm> andTermArrayList = new ArrayList<>();
+
+        for (Email email : subscribedEmails) {
+            List<SearchTerm> searchTerms = new ArrayList<>();
+
+            searchTerms.add(new BodyTerm("unsubscribe"));
+
+            searchTerms.add(new FromStringTerm(email.getEmail()));
+            if (Objects.nonNull(email.getUnsubscribedDate()))
+                searchTerms.add(new ReceivedDateTerm(ComparisonTerm.GE, DateTimeUtil.localDateTimeToDate(email.getUnsubscribedDate())));
+
+            AndTerm andTerm = new AndTerm(searchTerms.toArray(new SearchTerm[0]));
+            andTermArrayList.add(andTerm);
+        }
+
+        OrTerm orTerm = new OrTerm(andTermArrayList.toArray(new SearchTerm[0]));
+
+        Message[] messages = readEmailService.read(orTerm);
+
+        for (Message message : messages) {
+            Address[] addresses = message.getFrom();
+            if (addresses.length == 0)
+                continue;
+            String justEmail = ((InternetAddress) addresses[0]).getAddress();
+            List<Email> emailsByAddressEmail = emailService.findEmail(justEmail);
+            unsubscribeEmails(emailsByAddressEmail, subscribedEmails, message);
+        }
+
+        readEmailService.close();
+
+    }
+
+    private void unsubscribeEmails(List<Email> emails, List<Email> subscribedEmails, Message messageEmail) {
+        emails.forEach((email) -> {
+            try {
+                Date dateEmail = messageEmail.getReceivedDate();
+                if ((Objects.isNull(email.getUnsubscribedDate())) || (dateEmail.after(DateTimeUtil.localDateTimeToDate(email.getUnsubscribedDate())))) {
+                    subscribedEmails.remove(email);
+                    email.setSubscribed(NoYesEnum.NO);
+                    email.setUnsubscribedDate(LocalDateTime.now());
+                    emailService.save(email);
+                }
+            } catch (MessagingException e) {
+                e.printStackTrace();
+                throw new ValidationException("Erro ao buscar data do e-mail de unsubscribe.");
+            }
+        });
+    }
+
+    private void validateSubscribedEmails(List subscribedEmails) {
+        if (subscribedEmails.isEmpty())
+            throw new ValidationException("Nenhum e-mail inscrito encontrado para a newsletter.");
     }
 
     public List<Newsletter> findByUser() {
