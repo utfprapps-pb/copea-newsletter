@@ -23,8 +23,6 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.search.*;
-import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -78,8 +76,8 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
     public DefaultResponse sendNewsletterByEmail(Long newsletterId) throws Exception {
         Optional<Newsletter> optionalNewsletterEntity = getRepository().findByIdAndUser(newsletterId, getAuthSecurityFilter().getAuthUserContext().findByToken());
-        if (!optionalNewsletterEntity.isPresent())
-            return new DefaultResponse().builder()
+        if (optionalNewsletterEntity.isEmpty())
+            return DefaultResponse.builder()
                     .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
                     .message("Nenhuma newsletter encontrada para o parâmetro informado.")
                     .build();
@@ -103,19 +101,19 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         getRepository().save(newsletterEntity);
 
         if (SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus()))
-            return new DefaultResponse().builder()
+            return DefaultResponse.builder()
                     .httpStatus(RestResponse.StatusCode.OK)
                     .message("Newsletter enviada aos emails vinculados com sucesso.")
                     .build();
 
-        return new DefaultResponse().builder()
+        return DefaultResponse.builder()
                 .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
                 .message(sendEmailLog.getError())
                 .build();
 
     }
 
-    private void checkAnswersInEmailToUnsubscribe(List<Email> subscribedEmails) throws MessagingException, IOException, ParseException {
+    private void checkAnswersInEmailToUnsubscribe(List<Email> subscribedEmails) throws MessagingException {
         List<SearchTerm> andTermArrayList = new ArrayList<>();
 
         for (Email email : subscribedEmails) {
@@ -165,7 +163,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         });
     }
 
-    private void validateSubscribedEmails(List subscribedEmails) {
+    private void validateSubscribedEmails(List<Email> subscribedEmails) {
         if (subscribedEmails.isEmpty())
             throw new ValidationException("Nenhum e-mail inscrito encontrado para a newsletter.");
     }
