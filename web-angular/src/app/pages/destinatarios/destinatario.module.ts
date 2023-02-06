@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // material
 import { MaterialModule } from 'src/app/modules/material.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // shared
 import { SysPipesModule } from 'src/app/shared/pipes/sys-pipes.module';
@@ -42,6 +43,7 @@ const routes: Routes = [
 
         // material
         MaterialModule,
+        MatCheckboxModule,
 
         // shared
         SysPipesModule,

@@ -3,5 +3,7 @@ import { GrupoDestinatario } from "../../grupo-destinatarios/model/grupo-destina
 export interface Destinatario {
     id?: number;
     email?: string;
-    groups?: GrupoDestinatario[];
+    groups?: GrupoDestinatario[],
+    subscribed?: string;
+    unsubscribedDate?: Date;
 }

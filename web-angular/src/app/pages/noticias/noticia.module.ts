@@ -57,7 +57,7 @@ const routes: Routes = [
 
     MatDialogModule,
 
-    PesquisaNoticiaModule
+    PesquisaNoticiaModule,
   ],
   exports: [],
   providers: [

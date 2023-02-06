@@ -66,7 +66,9 @@ export class DestinatarioComponent extends BasicCrudComponent<Destinatario> impl
         return this.formBuilder.group({
             id: [null],
             email: [null, [Validators.required, Validators.email]],
-            groups: [null]
+            groups: [null],
+            subscribed: [null],
+            unsubscribedDate: [null],
         })
     }
 

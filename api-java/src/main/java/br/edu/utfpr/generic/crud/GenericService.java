@@ -32,9 +32,13 @@ public abstract class GenericService<T, ID, R extends GenericRepository> {
     }
 
     public GenericResponse save(T entity) {
+        setDefaultValuesWhenNew(entity);
         repository.save(entity);
         return GenericResponse.getGenericResponse("Registro(s) incluído(s) com sucesso.", Response.Status.CREATED.getStatusCode());
     }
+
+    public void setDefaultValuesWhenNew(T entity) {
+    };
 
     public GenericResponse update(T entity) {
         repository.save(entity);

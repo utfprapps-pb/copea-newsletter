@@ -66,6 +66,14 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
         return this.form.get('groups')?.value || [];
     }
 
+    public get subscribed(): AbstractControl {
+      return this.form.get('subscribed')!;
+    }
+
+    public get unsubscribedDate(): AbstractControl {
+      return this.form.get('unsubscribedDate')!;
+    }
+
     /**
      * @description Lança o evento de persistência da edição
      */
@@ -127,6 +135,10 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
      */
     public abrirModalCadastroGrupo(registro?: GrupoDestinatario): void {
         this._dialog.open(GrupoDestinatarioDialogComponent, { data: { registro: registro } })
+    }
+
+    public changeEventCheckSubscribed(event) {
+      this.subscribed.setValue(event.checked ? "YES" : "NO");
     }
 
 }

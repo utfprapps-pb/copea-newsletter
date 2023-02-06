@@ -57,6 +57,15 @@
 
             </div>
 
+            <div>
+              <mat-checkbox [checked]="this.subscribed.value == 'YES' " color="primary"
+              (change)="changeEventCheckSubscribed($event)">
+                Inscrito para receber as newsletters via e-mail
+              </mat-checkbox>
+
+              <span *ngIf="(subscribed.value != 'YES' && unsubscribedDate.value)"> <b> | O destinatário se desinscreveu pela última vez em {{unsubscribedDate.value | date: 'dd/MM/yyyy HH:mm:ss'}}</b></span>
+            </div>
+
         </form>
     </mat-card-subtitle>
 
