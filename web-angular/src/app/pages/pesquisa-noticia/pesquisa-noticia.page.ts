@@ -100,7 +100,6 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
    * @description Busca as noticias de acordo com o filtro informado
    */
   public filtrarNoticias() {
-    console.log(this.form.value);
     this.loading = true;
     this.noticiaService.search(this.form.value).subscribe(res => {
       this.loading = false;

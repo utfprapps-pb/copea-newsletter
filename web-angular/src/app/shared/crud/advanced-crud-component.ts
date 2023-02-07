@@ -156,7 +156,6 @@ export abstract class AdvancedCrudComponent<T> implements CrudComponent<T>, OnIn
 	public resetFormNovoECarregarRegistro(registro) {
 		this.resetFormNovo();
 		this.carregarRegistro(registro);
-		console.log(registro);
 	}
 
 	/**

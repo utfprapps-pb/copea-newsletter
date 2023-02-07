@@ -30,7 +30,6 @@ export class AdminComponent implements OnInit {
 
     ngOnInit() {
       this.sidenavService.setDrawer(this.drawer);
-      console.log(this.drawerContainer);
       this.sidenavService.matDrawerContainer = this.drawerContainer;
     }
 
@@ -43,7 +42,6 @@ export class AdminComponent implements OnInit {
     }
 
     onOpenedChange(e: boolean) {
-      console.log('onOpenedChange' + e);
     }
 
 }

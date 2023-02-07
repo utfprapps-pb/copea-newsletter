@@ -65,7 +65,7 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
       image_advtab: true,
       init_instance_callback: function (editor) {
         editor.on('ExecCommand', function (e) {
-          console.log('The ' + e.command + ' command was fired.');
+          // console.log('The ' + e.command + ' command was fired.');
         });
       },
       setup: (editor) => { this.addEventFullscreenStateChanged(editor) }
