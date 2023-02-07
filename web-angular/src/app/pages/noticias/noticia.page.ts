@@ -53,6 +53,7 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
 
     this.setLoading(true);
     this.service.enviarNoticia(this.registro.id!).subscribe(res => {
+      this.getLastSentEmail(this.registro.id!);
       this.mensagemService.mostrarMensagem('A newsletter foi enviada com sucesso!');
       this.setLoading(false);
     }, error => {
@@ -123,6 +124,10 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
 
   public override carregar(registroId: number): void {
     super.carregar(registroId);
+    this.getLastSentEmail(registroId);
+  }
+
+  public getLastSentEmail(registroId) {
     this.lastSentEmailNewsletter = {};
     this.service.getLastSentEmail(registroId).subscribe(
       {
