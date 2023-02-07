@@ -9,7 +9,7 @@
 
             <!-- Email -->
             <mat-form-field class="full-width d-pad-top" appearance="fill">
-                <mat-label>Email</mat-label>
+                <mat-label>E-mail</mat-label>
                 <input matInput formControlName="email" required placeholder="seunome@exemplo.com" type="email"
                     (keyup.enter)="persistirEdicao()">
                 <mat-error>{{email.errors | erro}}</mat-error>
@@ -72,9 +72,10 @@
     <!-- Ações -->
     <mat-card-actions align="end" class="align-center">
         <b class="d-m-right">ID:</b> {{form.controls['id'].value || 'Nada (novo registro)'}}
-        <button mat-button class="mat-button-sucess d-m-left" (click)="persistirEdicao()">Gravar</button>
+        <button mat-stroked-button (click)="resetFormNovo()">Novo registro</button>
+        <button mat-button class="mat-button-sucess" (click)="persistirEdicao()">Gravar</button>
         <button *ngIf="form.controls['id'].value" mat-button class="mat-button-warn"
-            (click)="removerRegistro()">Remover</button>
+            (click)="removerRegistro()">Excluir</button>
     </mat-card-actions>
 
 </mat-card>

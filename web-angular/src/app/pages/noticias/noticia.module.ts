@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PesquisaNoticiaComponent } from './../pesquisa-noticia/pesquisa-noticia.page';
 import { PesquisaNoticiaModule } from './../pesquisa-noticia/pesquisa-noticia.module';
 import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
@@ -48,6 +49,7 @@ const routes: Routes = [
 
     // material
     MaterialModule,
+    MatProgressSpinnerModule,
 
     // shared
     SysPipesModule,

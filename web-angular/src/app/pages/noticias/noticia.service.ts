@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 
 // shared
 import { CrudService } from 'src/app/shared/crud/crud.service';
+import { LastSentEmailNewsletter } from './models/lastSentEmailNewsletter';
 
 // aplicação
 import { Noticia } from './models/noticia';
@@ -29,7 +30,13 @@ export class NoticiaService extends CrudService<Noticia> {
       .append('newslettersNotSent', (filtro.filtros.indexOf('NAO_ENVIADAS') > -1))
       .append('newsletterTemplate', (filtro.filtros.indexOf('MODELO') > -1))
       .append('description', filtro.descricao);
-    return this.http.get<Noticia[]>(`${this.baseUrl + this.url}/search`, {params: params});
+    return this.http.get<Noticia[]>(`${this.baseUrl + this.url}/search`, { params: params });
+  }
+
+  public getLastSentEmail(newsletterId): Observable<LastSentEmailNewsletter> {
+    if (!newsletterId)
+      return new Observable<LastSentEmailNewsletter>;
+    return this.http.get<LastSentEmailNewsletter>(`${this.baseUrl}/${this.url}/last-sent-email/newsletter/${newsletterId}`);
   }
 
 }

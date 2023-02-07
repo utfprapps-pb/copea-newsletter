@@ -1,12 +1,15 @@
 package br.edu.utfpr.newsletter;
 
+import br.edu.utfpr.email.send.log.SendEmailLog;
 import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.generic.crud.GenericRepository;
+import br.edu.utfpr.newsletter.responses.LastSentEmailNewsletter;
 import br.edu.utfpr.user.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +40,7 @@ public interface NewsletterRepository extends GenericRepository<Newsletter, Long
 
     List<Newsletter> findByNewsletterTemplateAndDescriptionContainsAndUser(Boolean newsletterTemplate, String description, User user);
 
-
+    @Query("select max(send_email_logs.logDate) from Newsletter newsletter join newsletter.sendEmailLogs send_email_logs where (send_email_logs.sentStatus = 'SENT') and (newsletter.id = :newsletterId)")
+    LocalDateTime findLastSentEmail(Long newsletterId);
 
 }

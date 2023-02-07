@@ -1,5 +1,6 @@
+import { LastSentEmailNewsletter } from './../../models/lastSentEmailNewsletter';
 import { DrawerService } from '../../../admin/drawer.service';
-import { Component, ViewChild, OnInit, ElementRef, Output } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { DomSanitizer } from '@angular/platform-browser';
@@ -20,6 +21,8 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
 
   @ViewChild('editor', { static: true }) public editorComponent: ElementRef;
 
+  @Input() public lastSentEmailNewsletter: LastSentEmailNewsletter;
+
   public ngOnInit(): void {
   }
 
@@ -36,8 +39,13 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
     return this.form.get('newsletter')?.value;
   }
 
+  public get id(): number {
+    return this.form.get('id')?.value;
+  }
+
   criarForm(): FormGroup {
     return this.formBuilder.group({
+      id: [null],
       newsletter: [null, Validators.required],
       newsletterTemplate: [false],
     })

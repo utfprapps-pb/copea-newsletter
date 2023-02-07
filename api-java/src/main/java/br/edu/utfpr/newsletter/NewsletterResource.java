@@ -56,4 +56,10 @@ public class NewsletterResource extends GenericResource<Newsletter, Newsletter, 
         ).build();
     }
 
+    @GET
+    @Path("last-sent-email/newsletter/{id}")
+    public Response getLastSentEmail(@PathParam("id") Long newsletterId) {
+        return Response.ok(getService().getLastSentEmail(newsletterId)).build();
+    }
+
 }

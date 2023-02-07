@@ -10,11 +10,13 @@
       <!-- Slide toggle -->
       <!-- [checked]="slideChecked" (toggleChange)="onSlideChange() -->
       <form [formGroup]="form">
-      <mat-slide-toggle class="title-slide-toggle" formControlName="newsletterTemplate">
-        Notícia modelo
-    </mat-slide-toggle>
-  </form>
+        <mat-slide-toggle class="title-slide-toggle" formControlName="newsletterTemplate">
+          Newsletter modelo
+        </mat-slide-toggle>
+      </form>
 
+      <span *ngIf="(lastSentEmailNewsletter && lastSentEmailNewsletter.logDate)" class="font-size-14px">O último envio registrado foi em {{((lastSentEmailNewsletter) ? lastSentEmailNewsletter.logDate : null) | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
+      <span *ngIf="(id && (!lastSentEmailNewsletter || !lastSentEmailNewsletter.logDate))" class="font-size-14px">Nenhum envio registrado</span>
     </div>
   </mat-card-title>
 

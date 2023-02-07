@@ -57,6 +57,7 @@ export class DestinatarioComponent extends BasicCrudComponent<Destinatario> impl
         // events do card de edição
         this.subscription.add(this.cardEdicao.persistirEdicaoEvent.subscribe(() => super.persistirAlteracoes(this.form.get('id')?.value != null)));
         this.subscription.add(this.cardEdicao.removerRegistroEvent.subscribe(this.removerRegistro.bind(this)));
+        this.subscription.add(this.cardEdicao.resetFormNovoEvent.subscribe(this.resetFormNovo.bind(this)));
         // events do card de pesquisa
         this.subscription.add(this.cardPesquisa.editarRegistroEvent.subscribe(super.carregar.bind(this)));
         this.subscription.add(this.cardPesquisa.removerRegistroEvent.subscribe(this.removerRegistro.bind(this)));

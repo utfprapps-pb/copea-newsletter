@@ -9,6 +9,7 @@ import br.edu.utfpr.email.send.log.SendEmailLog;
 import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
+import br.edu.utfpr.newsletter.responses.LastSentEmailNewsletter;
 import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
@@ -198,6 +199,10 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
             return getRepository().findBySentStatusAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description, loggedUser.getId());
 
         return getRepository().findBySentStatusIsNotAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description, loggedUser.getId());
+    }
+
+    public LastSentEmailNewsletter getLastSentEmail(Long newsletterId) {
+        return new LastSentEmailNewsletter(getRepository().findLastSentEmail(newsletterId));
     }
 
 }
