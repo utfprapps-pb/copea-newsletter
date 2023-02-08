@@ -15,7 +15,7 @@
         </mat-slide-toggle>
       </form>
 
-      <span class="font-size-14px">Palavra chave para desinscrição via e-mail: <b>unsubscribe</b></span>
+      <span class="font-size-14px">Palavra chave para cancelar a inscrição via e-mail: <b>unsubscribe</b></span>
 
       <span *ngIf="(lastSentEmailNewsletter && lastSentEmailNewsletter.logDate)" class="font-size-14px">O último envio registrado foi em {{((lastSentEmailNewsletter) ? lastSentEmailNewsletter.logDate : null) | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
       <span *ngIf="(id && (!lastSentEmailNewsletter || !lastSentEmailNewsletter.logDate))" class="font-size-14px">Nenhum envio registrado</span>

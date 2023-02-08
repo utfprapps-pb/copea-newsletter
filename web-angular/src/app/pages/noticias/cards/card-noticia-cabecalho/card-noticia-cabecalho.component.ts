@@ -21,108 +21,120 @@ import { Noticia } from '../../models/noticia';
 import { GrupoDestinatarioPesquisaDialogComponent } from 'src/app/pages/grupo-destinatarios/components/grupo-destinatario-pesquisa-dialog/grupo-destinatario-pesquisa-dialog.component';
 
 @Component({
-    selector: 'app-card-noticia-cabecalho',
-    templateUrl: 'card-noticia-cabecalho.component.html',
-    styleUrls: ['./card-noticia-cabecalho.component.scss'],
-    providers: [DestinatarioService],
+  selector: 'app-card-noticia-cabecalho',
+  templateUrl: 'card-noticia-cabecalho.component.html',
+  styleUrls: ['./card-noticia-cabecalho.component.scss'],
+  providers: [DestinatarioService],
 })
 export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> implements OnInit {
 
-    @ViewChild('destinatarioInput') public destinatarioInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('destinatarioInput') public destinatarioInput!: ElementRef<HTMLInputElement>;
 
-    /**
-     * @description Classe de controle do auto-complete de destinatários
-     */
-    public destinatarioAutocomplete!: SysAutocompleteControl;
+  /**
+   * @description Classe de controle do auto-complete de destinatários
+   */
+  public destinatarioAutocomplete!: SysAutocompleteControl;
 
-    constructor(
-        public override crudController: AdvancedCrudController<Noticia>,
-        public override formBuilder: FormBuilder,
-        public destinatarioService: DestinatarioService,
-        public mensagemService: MensagemService,
-        public dialog: MatDialog,
-    ) {
-        super(crudController, formBuilder);
+  constructor(
+    public override crudController: AdvancedCrudController<Noticia>,
+    public override formBuilder: FormBuilder,
+    public destinatarioService: DestinatarioService,
+    public mensagemService: MensagemService,
+    public dialog: MatDialog,
+  ) {
+    super(crudController, formBuilder);
+  }
+
+  public get tituloControl() {
+    return this.form.get('description');
+  }
+
+  public get subjectControl() {
+    return this.form.get('subject');
+  }
+
+  public get destinatariosControl() {
+    return this.form.get('emails');
+  }
+
+  public get destinatarios(): Destinatario[] {
+    return this.form.get('emails')?.value || [];
+  }
+
+  ngOnInit(): void {
+    this.registerControls();
+  }
+
+  public override setForm(registro: Noticia) {
+    super.setForm(registro);
+
+    if (!registro.emails) {
+      this.form.get('emails')?.reset([]);
     }
+  }
 
-    public get tituloControl() {
-        return this.form.get('description');
-    }
+  private registerControls() {
+    this.destinatarioAutocomplete = new SysAutocompleteControl(
+      this.destinatarioService.pesquisarTodos.bind(this.destinatarioService),
+      this.mensagemService,
+      'email'
+    );
+  }
 
-    public get subjectControl() {
-        return this.form.get('subject');
-    }
+  criarForm(): FormGroup {
+    return this.formBuilder.group({
+      description: [null, [Validators.required, MaxLenghtValidator(80)]],
+      subject: [null, [Validators.required, MaxLenghtValidator(100)]],
+      emails: [null]
+    })
+  }
 
-    public get destinatariosControl() {
-        return this.form.get('emails');
-    }
+  /**
+   * @description Inclui um destinatário na lista e limpa o input
+   */
+  public addDestinatario(event: MatAutocompleteSelectedEvent): void {
+    if (this.findDestinatarioNoArray(event.option.value.email))
+      return;
 
-    public get destinatarios(): Destinatario[] {
-        return this.form.get('emails')?.value || [];
-    }
+    this.destinatarios.push(event.option.value);
+    this.destinatariosControl?.reset(this.destinatarios);
+    this.destinatarioInput.nativeElement.value = '';
+  }
 
-    ngOnInit(): void {
-        this.registerControls();
-    }
+  /**
+   * @description Remove um destinatário na lista
+   */
+  public removeDestinatario(index: number): void {
+    this.destinatarios.splice(index, 1);
+    this.destinatariosControl?.reset(this.destinatarios);
+  }
 
-    public override setForm(registro: Noticia) {
-        super.setForm(registro);
+  /**
+   * @description Filtra o auto-complete de destinatários
+   */
+  public filtrarDestinatarios() {
+    this.destinatarioAutocomplete.filtrar(this.destinatarioInput.nativeElement.value);
+  }
 
-        if (!registro.emails) {
-            this.form.get('emails')?.reset([]);
-        }
-    }
+  /**
+   * @description Abre a modal de importação do grupo
+   */
+  public importarGrupo() {
+    const dialogRef = this.dialog.open(GrupoDestinatarioPesquisaDialogComponent);
+    dialogRef.afterClosed().subscribe((res: Destinatario[]) => {
+      if (res) {
+        res.forEach(d => {
+          let id: number = d['0'];
+          let email: string = d['1'];
+          if (!this.findDestinatarioNoArray(email))
+            this.destinatarios.push({ id: id, email: email });
+        });
+      }
+    })
+  }
 
-    private registerControls() {
-        this.destinatarioAutocomplete = new SysAutocompleteControl(
-            this.destinatarioService.pesquisarTodos.bind(this.destinatarioService),
-            this.mensagemService,
-            'email'
-        );
-    }
-
-    criarForm(): FormGroup {
-        return this.formBuilder.group({
-            description: [null, [Validators.required, MaxLenghtValidator(80)]],
-            subject: [null, [Validators.required, MaxLenghtValidator(100)]],
-            emails: [null]
-        })
-    }
-
-    /**
-     * @description Inclui um destinatário na lista e limpa o input
-     */
-    public addDestinatario(event: MatAutocompleteSelectedEvent): void {
-        this.destinatarios.push(event.option.value);
-        this.destinatariosControl?.reset(this.destinatarios);
-        this.destinatarioInput.nativeElement.value = '';
-    }
-
-    /**
-     * @description Remove um destinatário na lista
-     */
-    public removeDestinatario(index: number): void {
-        this.destinatarios.splice(index, 1);
-        this.destinatariosControl?.reset(this.destinatarios);
-    }
-
-    /**
-     * @description Filtra o auto-complete de destinatários
-     */
-    public filtrarDestinatarios() {
-        this.destinatarioAutocomplete.filtrar(this.destinatarioInput.nativeElement.value);
-    }
-
-    /**
-     * @description Abre a modal de importação do grupo
-     */
-    public importarGrupo() {
-        const dialogRef = this.dialog.open(GrupoDestinatarioPesquisaDialogComponent);
-        dialogRef.afterClosed().subscribe((res: Destinatario[]) => {
-            if (res) {
-                res.forEach(d => this.destinatarios.push({ id: d['0'], email: d['1'] }));
-            }
-        })
-    }
+  private findDestinatarioNoArray(email) {
+    return this.destinatarios.find(element => element.email == email);
+  }
 
 }

@@ -46,6 +46,8 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
 
   private _resetFormNovo: Subject<void> = new Subject();
 
+  private _adicionandoGrupo: boolean = false;
+
   constructor(
     private _grupoService: GrupoDestinatarioService,
     private _dialog: MatDialog,
@@ -80,6 +82,10 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
    * @description Lança o evento de persistência da edição
    */
   public persistirEdicao(): void {
+    if (this.adicionandoGrupo) {
+      this.adicionandoGrupo = false;
+      return;
+    }
     this._persistirEdicaoEvent.next();
   }
 
@@ -119,6 +125,16 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
     this.grupos.push(event.option.value);
     this.gruposControl?.reset(this.grupos);
     this.grupoInput.nativeElement.value = '';
+
+    this.adicionandoGrupo = true;
+  }
+
+  public set adicionandoGrupo(value: boolean) {
+    this._adicionandoGrupo = value;
+  }
+
+  public get adicionandoGrupo(): boolean {
+    return this._adicionandoGrupo;
   }
 
   /**

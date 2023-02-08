@@ -43,7 +43,7 @@ public class Newsletter {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String newsletter;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany
     @JoinTable(
             name = "newsletter_email",
             joinColumns = @JoinColumn(name = "newsletter_id"),
@@ -51,7 +51,7 @@ public class Newsletter {
     )
     private Set<Email> emails = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "newsletter_send_email_log",
             joinColumns = @JoinColumn(name = "newsletter_id"),

@@ -30,7 +30,7 @@ public class Email {
     @Column(name = "unsubscribed_date")
     private LocalDateTime unsubscribedDate;
 
-    @ManyToMany(cascade = { CascadeType.MERGE  })
+    @ManyToMany
     @JoinTable(
             name = "email_group_email",
             joinColumns = { @JoinColumn(name = "email_id") },

@@ -1,81 +1,83 @@
 <mat-card class="d-m">
 
-    <!-- Título -->
-    <mat-card-title>Destinatário</mat-card-title>
+  <!-- Título -->
+  <mat-card-title>Destinatário</mat-card-title>
 
-    <!-- Form -->
-    <mat-card-subtitle>
-        <form [formGroup]="form">
+  <!-- Form -->
+  <mat-card-subtitle>
+    <form [formGroup]="form">
 
-            <!-- Email -->
-            <mat-form-field class="full-width d-pad-top" appearance="fill">
-                <mat-label>E-mail</mat-label>
-                <input matInput formControlName="email" required placeholder="seunome@exemplo.com" type="email"
-                    (keyup.enter)="persistirEdicao()">
-                <mat-error>{{email.errors | erro}}</mat-error>
-            </mat-form-field>
+      <!-- Email -->
+      <mat-form-field class="full-width d-pad-top" appearance="fill">
+        <mat-label>E-mail</mat-label>
+        <input matInput formControlName="email" required placeholder="seunome@exemplo.com" type="email"
+          (keyup.enter)="persistirEdicao()">
+        <mat-error>{{email.errors | erro}}</mat-error>
+      </mat-form-field>
 
-            <!-- Grupos -->
-            <div class="full-width d-flex align-center">
+      <!-- Grupos -->
+      <div class="full-width d-flex align-center">
 
-                <!-- Form-Field -->
-                <mat-form-field class="grow" appearance="fill">
-                    <!-- Label -->
-                    <mat-label>Grupos</mat-label>
+        <!-- Form-Field -->
+        <mat-form-field class="grow" appearance="fill">
+          <!-- Label -->
+          <mat-label>Grupos</mat-label>
 
-                    <!-- Chips -->
-                    <mat-chip-list #chipList aria-label="Grupos">
-                        <mat-chip *ngFor="let grupo of gruposControl?.value; index as i" (removed)="removeGrupo(i)">
-                            {{grupo | iddescription : '' : 'name'}}
-                            <button class="mat-chip-remove" (click)="abrirModalCadastroGrupo(grupo)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button matChipRemove>
-                                <mat-icon>cancel</mat-icon>
-                            </button>
-                        </mat-chip>
-                        <input #grupoInput placeholder="Adicionar grupo..." [matAutocomplete]="auto"
-                            [matChipInputFor]="chipList" (input)="filtrarGrupos()"
-                            (focus)="grupoAutocomplete.onFocusAutocomplete()" required>
-                    </mat-chip-list>
+          <!-- Chips -->
+          <mat-chip-list #chipList aria-label="Grupos">
+            <mat-chip *ngFor="let grupo of gruposControl?.value; index as i" (removed)="removeGrupo(i)">
+              {{grupo | iddescription : '' : 'name'}}
+              <button type="button" class="mat-chip-remove" (click)="abrirModalCadastroGrupo(grupo)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input #grupoInput placeholder="Adicionar grupo..." [matAutocomplete]="auto" [matChipInputFor]="chipList"
+              (input)="filtrarGrupos()" (focus)="grupoAutocomplete.onFocusAutocomplete()"
+              (keyup.enter)="persistirEdicao()" required>
+          </mat-chip-list>
 
-                    <!-- Autocomplete -->
-                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="addGrupo($event)">
-                        <mat-option *ngFor="let option of grupoAutocomplete.optionsFiltradas | async" [value]="option">
-                            {{option | iddescription : '' : 'name'}}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
+          <!-- Autocomplete -->
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="addGrupo($event)">
+            <mat-option *ngFor="let option of grupoAutocomplete.optionsFiltradas | async" [value]="option" (click) = "this.adicionandoGrupo = false">
+              {{option | iddescription : '' : 'name'}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
 
-                <!-- Botão incluir novo -->
-                <div class="d-m-bottom-lg">
-                    <button class="button-outline" mat-icon-button color="primary" (click)="abrirModalCadastroGrupo()"
-                        title="Incluir novo">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </div>
+        <!-- Botão incluir novo -->
+        <div class="d-m-bottom-lg">
+          <button type="button" class="button-outline" mat-icon-button color="primary"
+            title="Incluir novo"
+            (click)="abrirModalCadastroGrupo()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
 
-            </div>
+      </div>
 
-            <div>
-              <mat-checkbox [checked]="this.subscribed.value == 'YES' " color="primary"
-              (change)="changeEventCheckSubscribed($event)">
-                Inscrito para receber as newsletters via e-mail
-              </mat-checkbox>
+      <div>
+        <mat-checkbox [checked]="this.subscribed.value == 'YES' " color="primary"
+          (change)="changeEventCheckSubscribed($event)">
+          Inscrito para receber as newsletters via e-mail
+        </mat-checkbox>
 
-              <span *ngIf="(subscribed.value != 'YES' && unsubscribedDate.value)"> <b> | O destinatário se desinscreveu pela última vez em {{unsubscribedDate.value | date: 'dd/MM/yyyy HH:mm:ss'}}</b></span>
-            </div>
+        <span *ngIf="(subscribed.value != 'YES' && unsubscribedDate.value)"> <b> | O destinatário cancelou sua inscrição
+            pela última vez em {{unsubscribedDate.value | date: 'dd/MM/yyyy HH:mm:ss'}}</b></span>
+      </div>
 
-        </form>
-    </mat-card-subtitle>
+    </form>
+  </mat-card-subtitle>
 
-    <!-- Ações -->
-    <mat-card-actions align="end" class="align-center">
-        <b class="d-m-right">ID:</b> {{form.controls['id'].value || 'Nada (novo registro)'}}
-        <button mat-stroked-button (click)="resetFormNovo()">Novo registro</button>
-        <button mat-button class="mat-button-sucess" (click)="persistirEdicao()">Gravar</button>
-        <button *ngIf="form.controls['id'].value" mat-button class="mat-button-warn"
-            (click)="removerRegistro()">Excluir</button>
-    </mat-card-actions>
+  <!-- Ações -->
+  <mat-card-actions align="end" class="align-center">
+    <b class="d-m-right">ID:</b> {{form.controls['id'].value || 'Nada (novo registro)'}}
+    <button mat-stroked-button (click)="resetFormNovo()">Novo registro</button>
+    <button mat-button class="mat-button-sucess" (click)="persistirEdicao()">Gravar</button>
+    <button *ngIf="form.controls['id'].value" mat-button class="mat-button-warn"
+      (click)="removerRegistro()">Excluir</button>
+  </mat-card-actions>
 
 </mat-card>
