@@ -121,7 +121,8 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
      * @param id Identificador do registro
      */
     public removerRegistro(id: number): void {
-        this._removerRegistroEvent.next(id);
+        if (id && confirm('Você tem certeza que deseja remover o destinatário? Essa ação não poderá ser desfeita.'))
+          this._removerRegistroEvent.next(id);
     }
 
     public get editarRegistroEvent(): Observable<number> {

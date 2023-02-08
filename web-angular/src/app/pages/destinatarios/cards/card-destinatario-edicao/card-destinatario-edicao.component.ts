@@ -74,8 +74,8 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
     return this.form.get('subscribed')!;
   }
 
-  public get unsubscribedDate(): AbstractControl {
-    return this.form.get('unsubscribedDate')!;
+  public get lastEmailUnsubscribedDate(): AbstractControl {
+    return this.form.get('lastEmailUnsubscribedDate')!;
   }
 
   /**
@@ -93,7 +93,7 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
    * @description Lança o evento de remoção do registro
    */
   public removerRegistro(): void {
-    if (this.form.get('id')?.value) {
+    if (this.form.get('id')?.value && confirm('Você tem certeza que deseja remover o destinatário? Essa ação não poderá ser desfeita.')) {
       this._removerRegistroEvent.next(this.form.get('id')?.value);
     }
   }

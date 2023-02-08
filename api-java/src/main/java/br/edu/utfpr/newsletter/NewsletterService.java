@@ -15,6 +15,7 @@ import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
 import br.edu.utfpr.user.User;
 import br.edu.utfpr.utils.DateTimeUtil;
+import com.sun.mail.imap.IMAPMessage;
 import org.jboss.resteasy.reactive.RestResponse;
 
 import javax.enterprise.context.RequestScoped;
@@ -123,8 +124,8 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
             searchTerms.add(new BodyTerm("unsubscribe"));
 
             searchTerms.add(new FromStringTerm(email.getEmail()));
-            if (Objects.nonNull(email.getUnsubscribedDate()))
-                searchTerms.add(new ReceivedDateTerm(ComparisonTerm.GE, DateTimeUtil.localDateTimeToDate(email.getUnsubscribedDate())));
+            if (Objects.nonNull(email.getLastUnsubscribedDate()))
+                searchTerms.add(new ReceivedDateTerm(ComparisonTerm.GE, DateTimeUtil.localDateTimeToDate(email.getLastUnsubscribedDate())));
 
             AndTerm andTerm = new AndTerm(searchTerms.toArray(new SearchTerm[0]));
             andTermArrayList.add(andTerm);
@@ -151,10 +152,12 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         emails.forEach((email) -> {
             try {
                 Date dateEmail = messageEmail.getReceivedDate();
-                if ((Objects.isNull(email.getUnsubscribedDate())) || (dateEmail.after(DateTimeUtil.localDateTimeToDate(email.getUnsubscribedDate())))) {
+                if ((Objects.isNull(email.getLastUnsubscribedDate())) || (dateEmail.after(DateTimeUtil.localDateTimeToDate(email.getLastUnsubscribedDate())))) {
                     subscribedEmails.remove(email);
                     email.setSubscribed(NoYesEnum.NO);
-                    email.setUnsubscribedDate(LocalDateTime.now());
+                    email.setLastUnsubscribedDate(LocalDateTime.now());
+                    email.setLastEmailUnsubscribedDate(DateTimeUtil.dateToLocalDateTime(dateEmail));
+                    email.setLastEmailUnsubscribedMessageID(((IMAPMessage) messageEmail).getMessageID());
                     emailService.save(email);
                 }
             } catch (MessagingException e) {

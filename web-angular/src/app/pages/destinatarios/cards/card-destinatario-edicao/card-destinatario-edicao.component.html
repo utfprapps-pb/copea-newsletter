@@ -64,8 +64,8 @@
           Inscrito para receber as newsletters via e-mail
         </mat-checkbox>
 
-        <span *ngIf="(subscribed.value != 'YES' && unsubscribedDate.value)"> <b> | O destinatário cancelou sua inscrição
-            pela última vez em {{unsubscribedDate.value | date: 'dd/MM/yyyy HH:mm:ss'}}</b></span>
+        <span *ngIf="(subscribed.value != 'YES' && lastEmailUnsubscribedDate.value)"> <b> | O destinatário cancelou sua inscrição
+            pela última vez em {{lastEmailUnsubscribedDate.value | date: 'dd/MM/yyyy HH:mm:ss'}}</b></span>
       </div>
 
     </form>

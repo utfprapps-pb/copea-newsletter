@@ -65,7 +65,7 @@ export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDe
      * @description Executa no click do botão excluir
      */
      public onClickRemover() {
-        if (this.id && confirm('Você tem certeza que deseja remover o noticia? Essa ação não poderá ser desfeita.')) {
+        if (this.id && confirm('Você tem certeza que deseja remover o grupo? Essa ação não poderá ser desfeita.')) {
             super.remover(this.id);
         }
     }

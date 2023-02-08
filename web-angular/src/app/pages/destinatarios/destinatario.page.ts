@@ -69,7 +69,9 @@ export class DestinatarioComponent extends BasicCrudComponent<Destinatario> impl
             email: [null, [Validators.required, Validators.email]],
             groups: [null],
             subscribed: [null],
-            unsubscribedDate: [null],
+            lastUnsubscribedDate: [null],
+            lastEmailUnsubscribedDate: [null],
+            lastEmailUnsubscribedMessageID: [null],
         })
     }
 

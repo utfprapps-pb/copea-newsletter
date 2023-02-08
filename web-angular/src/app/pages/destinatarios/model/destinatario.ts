@@ -5,5 +5,5 @@ export interface Destinatario {
     email?: string;
     groups?: GrupoDestinatario[],
     subscribed?: string;
-    unsubscribedDate?: Date;
+    lastEmailUnsubscribedDate?: Date;
 }

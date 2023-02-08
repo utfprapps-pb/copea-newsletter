@@ -40,4 +40,6 @@ public class SendEmailLog implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String error;
 
+    private String messageID;
+
 }

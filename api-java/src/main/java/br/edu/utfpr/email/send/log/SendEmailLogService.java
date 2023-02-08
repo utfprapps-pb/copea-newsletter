@@ -5,17 +5,18 @@ import br.edu.utfpr.generic.crud.GenericService;
 import org.apache.commons.mail.HtmlEmail;
 
 import javax.enterprise.context.RequestScoped;
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @RequestScoped
 public class SendEmailLogService extends GenericService<SendEmailLog, Long, SendEmailLogRepository> {
 
-    public SendEmailLog saveLog(HtmlEmail htmlEmail, String message, String error) {
+    public SendEmailLog saveLog(HtmlEmail htmlEmail, String message, String error) throws MessagingException {
         return getRepository().save(convertSendEmailToSendEmailLog(htmlEmail, message, error));
     }
 
-    public SendEmailLog convertSendEmailToSendEmailLog(HtmlEmail htmlEmail, String message, String error) {
+    public SendEmailLog convertSendEmailToSendEmailLog(HtmlEmail htmlEmail, String message, String error) throws MessagingException {
         SendEmailLog sendEmailLog = new SendEmailLog();
 
         sendEmailLog.setError(error);
@@ -23,8 +24,10 @@ public class SendEmailLogService extends GenericService<SendEmailLog, Long, Send
         sendEmailLog.setLogDate(LocalDateTime.now());
         sendEmailLog.setSentHost(htmlEmail.getHostName());
 
-        if (SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus()))
+        if (SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus())) {
             sendEmailLog.setSentPort(Integer.valueOf(htmlEmail.getSmtpPort()));
+            sendEmailLog.setMessageID(htmlEmail.getMimeMessage().getMessageID());
+        }
 
         if (!Objects.isNull(htmlEmail.getFromAddress()))
             sendEmailLog.setEmailFrom(htmlEmail.getFromAddress().toString());

@@ -27,8 +27,14 @@ public class Email {
     @Enumerated(EnumType.STRING)
     private NoYesEnum subscribed;
 
-    @Column(name = "unsubscribed_date")
-    private LocalDateTime unsubscribedDate;
+    @Column(name = "last_unsubscribed_date")
+    private LocalDateTime lastUnsubscribedDate;
+
+    @Column(name = "last_email_unsubscribed_date")
+    private LocalDateTime lastEmailUnsubscribedDate;
+
+    @Column(name = "last_email_unsubscribed_message_id")
+    private String lastEmailUnsubscribedMessageID;
 
     @ManyToMany
     @JoinTable(
