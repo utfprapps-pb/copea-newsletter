@@ -16,6 +16,7 @@ const routes: Routes = [
         children: [
             { path: 'destinatario', loadChildren: () => import('../destinatarios/destinatario.module').then(mod => mod.DestinatarioModule) },
             { path: 'noticia', loadChildren: () => import('../noticias/noticia.module').then(mod => mod.NoticiaModule) },
+            { path: 'bem-vindo', loadChildren: () => import('../bem-vindo/bem-vindo.module').then(mod => mod.BemVindoModule) },
             // { path: 'noticia-pesquisa', loadChildren: () => import('../pesquisa-noticia/pesquisa-noticia.module').then(mod => mod.PesquisaNoticiaModule) },
         ]
     },

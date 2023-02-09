@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     this._loginService.login(this.form.value).subscribe((resposta: any) => {
       // this.auth.token = resposta.data.token;
       this.mensagemErro = '';
-      this.router.navigateByUrl('admin');
+      this.router.navigateByUrl('admin/bem-vindo');
     }, error => {
       console.error(error);
       this.mensagemErro = error;

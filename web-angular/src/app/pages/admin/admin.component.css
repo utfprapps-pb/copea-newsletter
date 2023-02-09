@@ -40,3 +40,8 @@ mat-toolbar{
     border-bottom: 1px solid #dcdcdc;
     min-height: 64px!important;
 }
+
+.logo-navbar {
+  display: flex;
+  align-items: center;
+}
