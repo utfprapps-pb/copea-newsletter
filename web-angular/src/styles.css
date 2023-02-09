@@ -44,7 +44,7 @@ body {
 
 .auth-container {
   height: 100%;
-  background-color: #424242;
+  background-color: rgb(238, 238, 238);
   display: flex;
   justify-content: center;
   align-items: center;
