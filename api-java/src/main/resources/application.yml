@@ -59,7 +59,7 @@ quarkus:
 
 #Informacoes locais do jwt
 jwt-newsletter:
-  duration: 10800
+  duration: 20000
   password:
     iteration: 33
     keylength: 256
