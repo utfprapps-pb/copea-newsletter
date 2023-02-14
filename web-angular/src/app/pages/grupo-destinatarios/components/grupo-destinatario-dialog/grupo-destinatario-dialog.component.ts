@@ -49,6 +49,10 @@ export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDe
         return this.form.get('id')!.value;
     }
 
+    public get name(): string {
+      return this.form.get('name')!.value;
+  }
+
     public criarForm(): FormGroup<any> {
         return this.formBuilder.group({
             id: [null],
@@ -57,6 +61,7 @@ export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDe
     }
 
     public override persistirAlteracoes(): void {
+        this.data.parentComponent.atualizarVizualizacaoNomeGrupoNoCampo({id: this.id, name: this.name});
         super.persistirAlteracoes(this.id != null)
         this.dialog.closeAll();
     }

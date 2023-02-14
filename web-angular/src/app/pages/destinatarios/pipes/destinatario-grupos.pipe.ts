@@ -20,7 +20,6 @@ export class DestinatariosGruposPipe implements PipeTransform {
   private getAllGroups(groups: GrupoDestinatario[]): string {
     let all: string = "";
     groups.forEach((value) => {
-      console.log(value);
       all += (all !== "" ? ', ' : '') + value.id + ' - ' + value.name;
     })
     return all;

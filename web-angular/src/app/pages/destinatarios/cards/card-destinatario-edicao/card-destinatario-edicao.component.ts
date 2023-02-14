@@ -23,6 +23,7 @@ import { GrupoDestinatario } from '../../../grupo-destinatarios/model/grupo-dest
 export class CardDestinatarioEdicaoComponent implements OnInit {
 
   @ViewChild('grupoInput') public grupoInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('chipList') public chipList!: ElementRef<HTMLInputElement>;
 
   /**
    * @description Recebe o FormGroup do card
@@ -142,6 +143,14 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
    */
   public removeGrupo(index: number): void {
     this.grupos.splice(index, 1);
+    this.gruposControl?.reset(this.grupos);
+  }
+
+  public atualizarVizualizacaoNomeGrupoNoCampo(grupo: GrupoDestinatario): void {
+    this.grupos.forEach((value: GrupoDestinatario) => {
+      if (value.id == grupo.id)
+        value.name = grupo.name;
+    });
     this.gruposControl?.reset(this.grupos);
   }
 
