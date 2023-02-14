@@ -23,7 +23,7 @@ import { GrupoDestinatario } from '../../../grupo-destinatarios/model/grupo-dest
 export class CardDestinatarioEdicaoComponent implements OnInit {
 
   @ViewChild('grupoInput') public grupoInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('chipList') public chipList!: ElementRef<HTMLInputElement>;
+  @ViewChild('emailInput') public emailInput!: ElementRef<HTMLInputElement>;
 
   /**
    * @description Recebe o FormGroup do card
@@ -88,6 +88,7 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
       return;
     }
     this._persistirEdicaoEvent.next();
+    this.emailInput.nativeElement.focus();
   }
 
   /**
