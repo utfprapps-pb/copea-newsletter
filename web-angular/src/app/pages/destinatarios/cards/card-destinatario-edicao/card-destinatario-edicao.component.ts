@@ -123,11 +123,18 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
    * @description Inclui um grupo na lista e limpa o input
    */
   public addGrupo(event: MatAutocompleteSelectedEvent): void {
+    if (this.findNameGrupoNoArray(event.option.value.name))
+      return;
+
     this.grupos.push(event.option.value);
     this.gruposControl?.reset(this.grupos);
     this.grupoInput.nativeElement.value = '';
 
     this.adicionandoGrupo = true;
+  }
+
+  private findNameGrupoNoArray(name) {
+    return this.grupos.find(element => element.name == name);
   }
 
   public set adicionandoGrupo(value: boolean) {
