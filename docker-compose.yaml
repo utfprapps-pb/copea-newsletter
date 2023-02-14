@@ -8,6 +8,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=newsletter
+      - TZ=America/Sao_Paulo
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -29,6 +30,7 @@ services:
       - DB_JDBC_USER=postgres
       - DB_JDBC_PASSWORD=admin
       - PORT=8080
+      - TZ=America/Sao_Paulo
     ports:
       - "8080:8080"  # the HTTP endpoint
     depends_on:
@@ -52,6 +54,7 @@ services:
     environment:      
       - API_URL=http://localhost:8080/api
       - PORT=80
+      - TZ=America/Sao_Paulo
 
 networks:
   newsletter-net:
