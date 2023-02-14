@@ -77,8 +77,8 @@
 ###
 FROM registry.access.redhat.com/ubi8/openjdk-17:latest
 
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
-
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
 COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
