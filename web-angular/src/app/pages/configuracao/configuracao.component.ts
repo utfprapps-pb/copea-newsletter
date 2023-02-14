@@ -49,6 +49,7 @@ export class ConfiguracaoComponent extends BasicCrudComponent<ConfigEmail> imple
 
     public override persistirAlteracoes(): void {
         super.persistirAlteracoes(this.form.get('id')!.value != null)
+        this.dialog.closeAll();
     }
 
 }

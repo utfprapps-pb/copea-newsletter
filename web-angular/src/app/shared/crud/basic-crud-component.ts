@@ -158,6 +158,7 @@ export abstract class BasicCrudComponent<T> implements CrudComponent<T>, OnInit 
     public resetFormNovo() {
         this.loading = true;
         this.service.novoRegistro.subscribe(res => {
+            this.controller.notificarOperacaoConcluida();
             this.loading = false;
             this.form.reset(res);
         }, error => {
