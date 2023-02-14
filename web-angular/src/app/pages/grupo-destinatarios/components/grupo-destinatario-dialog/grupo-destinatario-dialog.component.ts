@@ -26,7 +26,7 @@ import { GrupoDestinatario } from '../../model/grupo-destinatario';
 export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDestinatario> implements OnInit {
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) private data: { registro: GrupoDestinatario },
+        @Inject(MAT_DIALOG_DATA) private data: { registro: GrupoDestinatario, indexGrupo: number, parentComponent: any },
         public crudController: CrudController,
         public override formBuilder: FormBuilder,
         public override service: GrupoDestinatarioService,
@@ -67,6 +67,8 @@ export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDe
      public onClickRemover() {
         if (this.id && confirm('Você tem certeza que deseja remover o grupo? Essa ação não poderá ser desfeita.')) {
             super.remover(this.id);
+            this.data.parentComponent.removeGrupo(this.data.indexGrupo);
+            this.dialog.closeAll();
         }
     }
 

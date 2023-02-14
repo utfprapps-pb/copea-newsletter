@@ -155,8 +155,8 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
   /**
    * @description Abre o cadastro do grupo
    */
-  public abrirModalCadastroGrupo(registro?: GrupoDestinatario): void {
-    this._dialog.open(GrupoDestinatarioDialogComponent, { data: { registro: registro } })
+  public abrirModalCadastroGrupo(registro?: GrupoDestinatario, indexGrupo?: number): void {
+    this._dialog.open(GrupoDestinatarioDialogComponent, { data: { registro: registro, indexGrupo: indexGrupo, parentComponent: this } });
   }
 
   public changeEventCheckSubscribed(event) {
