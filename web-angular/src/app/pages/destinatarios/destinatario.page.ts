@@ -17,7 +17,7 @@ import { CardDestinatarioPesquisaComponent } from './cards/card-destinatario-pes
 
 @Component({
     selector: 'app-Destinatario',
-    templateUrl: 'Destinatario.page.html',
+    templateUrl: 'destinatario.page.html',
     providers: [
         CrudController,
         DestinatarioService,
