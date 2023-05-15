@@ -18,8 +18,8 @@ Para a documentação foi utilizado o openapi do próprio Quarkus (https://quark
 
 ## <img src="https://github.com/devops-workflow/jenkins-icons/blob/master/icons/docker-logo-32x18.png?raw=true"> Docker
 Neste projeto existem duas opções para fazer o deploy no Docker:
-1ª Opção. Utilizando o /api-java/Dockerfile.build para a API e o /web-angular/Dockerfile.build para o WEB, esses dois arquivos fazem o build do projeto (mvn clean package e ng build) e depois o deploy. Portanto, não é necessário realizar o build dos projetos, isso será feito dentro do Docker, é útil pois não precisa do Java e o Angular instalado na máquina para fazer o build dos projetos, basta ter o docker que funcionará. No docker-compose.yaml já está configurado para o caminho desses Dockerfiles.
-2ª Opção. Utilizando o /api-java/src/main/docker/Dockerfile.jvm para a API e o /web-angular/Dockerfile para o WEB, esses dois arquivos fazem somente o deploy, sem fazer o build do projeto, por exemplo, sem fazer o mvn clean package ou o ng build. Se quiser utilizar dessa maneira é necessário alterar no docker-compose-up o caminho dos Dockerfiles, pois estão apontando para a primeira opção. 
+1. Utilizando o /api-java/Dockerfile.build para a API e o /web-angular/Dockerfile.build para o WEB, esses dois arquivos fazem o build do projeto (mvn clean package e ng build) e depois o deploy. Portanto, não é necessário realizar o build dos projetos, isso será feito dentro do Docker, é útil pois não precisa do Java e o Angular instalado na máquina para fazer o build dos projetos, basta ter o docker que funcionará. No docker-compose.yaml já está configurado para o caminho desses Dockerfiles.
+2. Utilizando o /api-java/src/main/docker/Dockerfile.jvm para a API e o /web-angular/Dockerfile para o WEB, esses dois arquivos fazem somente o deploy, sem fazer o build do projeto, por exemplo, sem fazer o mvn clean package ou o ng build. Se quiser utilizar dessa maneira é necessário alterar no docker-compose-up o caminho dos Dockerfiles, pois estão apontando para a primeira opção. 
 
 Comandos para rodar o angular e java no docker utilizando o docker compose:
 ```
