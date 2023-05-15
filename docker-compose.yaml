@@ -22,7 +22,7 @@ services:
   newsletter-api:
     build:
       context: ./api-java/
-      dockerfile: ./src/main/docker/Dockerfile.jvm
+      dockerfile: ./Dockerfile.build
     image: quarkus/newsletter
     container_name: newsletter-api
     environment:      
@@ -44,7 +44,7 @@ services:
     container_name: newsletter-web
     build:
       context: ./web-angular/
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.build
     ports:
       - 80:80
     networks:
