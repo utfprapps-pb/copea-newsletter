@@ -17,17 +17,21 @@ Para rodar o projeto, basta utilizar o comando <b>quarkus dev</b>, mais informa�
 Para a documentação foi utilizado o openapi do próprio Quarkus (https://quarkus.io/guides/openapi-swaggerui), a mesma se encontra no caminho .../api/swagger, exemplo http://localhost:8080/api/swagger
 
 ## <img src="https://github.com/devops-workflow/jenkins-icons/blob/master/icons/docker-logo-32x18.png?raw=true"> Docker
-Comandos para rodar o angular e java no docker:
-```
-1. Abrir o projeto do angular (/web-angular) e digitar o comando ng build (se for a primeira vez que abriu o projeto, antes executar npm install)
+Neste projeto existem duas opções para fazer o deploy no Docker:
+1. Utilizando o /api-java/Dockerfile.build para a API e o /web-angular/Dockerfile.build para o WEB, esses dois arquivos fazem o build do projeto (mvn clean package e ng build) e depois o deploy. Portanto, não é necessário realizar o build dos projetos, isso será feito dentro do Docker, é útil pois não precisa do Java e o Angular instalado na máquina para fazer o build dos projetos, basta ter o docker que funcionará. No docker-compose.yaml já está configurado para o caminho desses Dockerfiles.
+2. Utilizando o /api-java/src/main/docker/Dockerfile.jvm para a API e o /web-angular/Dockerfile para o WEB, esses dois arquivos fazem somente o deploy, sem fazer o build do projeto, por exemplo, sem fazer o mvn clean package ou o ng build. Se quiser utilizar dessa maneira é necessário alterar no docker-compose-up o caminho dos Dockerfiles, pois estão apontando para a primeira opção. 
 
-2. Abrir o projeto do java (/api-java) e executar o comando mvn clean package
+Comandos para rodar o angular e java no docker utilizando o docker compose:
+```
+1. (Ignorar se estiver utilizando a 1ª opção) Abrir o projeto do angular (/web-angular) e digitar o comando ng build (se for a primeira vez que abriu o projeto, antes executar npm install)
+
+2. (Ignorar se estiver utilizando a 1ª opção) Abrir o projeto do java (/api-java) e executar o comando mvn clean package
 
 3. Executar na raiz do projeto o comando docker compose build
 
 4. Executar na raiz do projeto o comando docker compose up
 
-5. Se por acaso alguma alteração não estiver na imagem, remova a imagem com o comando 'docker image rm nome_imagem' ou delete pelo docker desktop e execute os comandos novamente.
+5. Se por acaso alguma alteração não estiver na imagem, tente rodar o docker compose down e fazer o build e up novamente, caso não funcione, remova a imagem com o comando 'docker image rm nome_imagem' ou delete pelo docker desktop e execute os comandos novamente.
 ```
 
 Segue as principais configurações que podem ser alteradas no arquivo docker-compose.yaml que se encontra na raiz do projeto:
