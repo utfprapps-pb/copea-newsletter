@@ -16,7 +16,7 @@ pipeline {
         TZ_API="America/Sao_Paulo"
         
         // WEB
-        API_URL="http://localhost:8081/api"
+        API_URL="http://newsletter-api:8081/api"
         PORT_WEB="80"
         TZ_WEB="America/Sao_Paulo"
     }
