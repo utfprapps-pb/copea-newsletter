@@ -20,6 +20,7 @@ pipeline {
         stage('Docker Compose UP') {
             steps {
                 sh '''
+                  cd api-java
 	          docker compose down
 	          docker compose up -d --build
                 '''
