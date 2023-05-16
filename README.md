@@ -36,17 +36,20 @@ Comandos para rodar o angular e java no docker utilizando o docker compose:
 
 Segue as principais configurações que podem ser alteradas no arquivo docker-compose.yaml que se encontra na raiz do projeto:
 - newsletter-db:
-  - <b>POSTGRES_USER</b>: Usuário do banco postgres.
-  - <b>POSTGRES_PASSWORD</b>: Senha do banco postgres.
-  - <b>POSTGRES_DB</b>: Nome do banco.
+  - <b>POSTGRES_USER</b>: Usuário do banco postgres. (pode ser substituída por meio da env POSTGRES_USER)
+  - <b>POSTGRES_PASSWORD</b>: Senha do banco postgres. (pode ser substituída por meio da env POSTGRES_PASSWORD)
+  - <b>POSTGRES_DB</b>: Nome do banco. (pode ser substituída por meio da env POSTGRES_DB)
+  - <b>TZ</b>: Timezone do banco. (pode ser substituída por meio da env TZ_DB) 
 - newsletter-api:
-  - <b>DB_JDBC_URL</b>: url de conexão com o banco.
-  - <b>DB_JDBC_USER</b>: Usuário do banco.
-  - <b>DB_JDBC_PASSWORD</b>: Senha do banco.
-  - <b>PORT</b>: Porta que vai rodar a API.
+  - <b>DB_JDBC_URL</b>: url de conexão com o banco. (pode ser substituída por meio da env DB_JDBC_URL)
+  - <b>DB_JDBC_USER</b>: Usuário do banco. (pode ser substituída por meio da env DB_JDBC_USER)
+  - <b>DB_JDBC_PASSWORD</b>: Senha do banco. (pode ser substituída por meio da env DB_JDBC_PASSWORD)
+  - <b>PORT</b>: Porta que vai rodar a API. (pode ser substituída por meio da env PORT_API)
+  - <b>TZ</b>: Timezone da API. (pode ser substituída por meio da env TZ_API) 
 - newsletter-web:
-  - <b>API_URL</b>: URL da API, sempre com /api no final.
-  - <b>PORT</b>: Porta que vai rodar o servidor web.
+  - <b>API_URL</b>: URL da API, sempre com /api no final. (pode ser substituída por meio da env API_URL)
+  - <b>PORT</b>: Porta que vai rodar o servidor web. (pode ser substituída por meio da env PORT_WEB)
+  - <b>TZ</b>: Timezone do WEB. (pode ser substituída por meio da env TZ_WEB)
 
 ## <img width="30px" src="https://github.com/devops-workflow/jenkins-icons/blob/master/icons/jenkins-logo-48x48.png?raw=true"> Jenkins
 O Jenkins está configurado de 3 maneiras, na raiz do projeto possui o Jenkinsfile que roda o docker compose up do docker-compose.yaml da raiz do projeto, esse abrange tanto o banco de dados, API e WEB. Já na pasta de cada projeto tem o Jenkinsfile separado. Portanto, se quiser configurar um Job do Jenkins para a API e outro para WEB, basta apontar para o Jenkinsfile da pasta do projeto, exemplo api-java/Jenkinsfile ou web-angular/Jenkinsfile.
