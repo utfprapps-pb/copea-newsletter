@@ -5,10 +5,10 @@ services:
     image: "postgres:latest"
     container_name: newsletter-db
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=newsletter
-      - TZ=America/Sao_Paulo
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-admin}
+      - POSTGRES_DB=${POSTGRES_DB:-newsletter}
+      - TZ=${TZ_DB:-America/Sao_Paulo}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -26,11 +26,11 @@ services:
     image: quarkus/newsletter
     container_name: newsletter-api
     environment:      
-      - DB_JDBC_URL=jdbc:postgresql://newsletter-db:5432/newsletter?ApplicationName=newsletter
-      - DB_JDBC_USER=postgres
-      - DB_JDBC_PASSWORD=admin
-      - PORT=8080
-      - TZ=America/Sao_Paulo
+      - DB_JDBC_URL=${DB_JDBC_URL:-jdbc:postgresql://newsletter-db:5432/newsletter?ApplicationName=newsletter}
+      - DB_JDBC_USER=${DB_JDBC_USER:-postgres}
+      - DB_JDBC_PASSWORD=${DB_JDBC_PASSWORD:-admin}
+      - PORT=${PORT_API:-8080}
+      - TZ=${TZ_API:-America/Sao_Paulo}
     ports:
       - "8080:8080"  # the HTTP endpoint
     depends_on:
@@ -52,9 +52,9 @@ services:
     depends_on:      
       - newsletter-api
     environment:      
-      - API_URL=http://localhost:8080/api
-      - PORT=80
-      - TZ=America/Sao_Paulo
+      - API_URL=${API_URL:-http://localhost:8080/api}
+      - PORT=${PORT_WEB:-80}
+      - TZ=${TZ_WEB:-America/Sao_Paulo}
 
 networks:
   newsletter-net:
