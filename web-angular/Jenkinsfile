@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    environment {
+        // WEB
+        API_URL="http://localhost:8081/api"
+        PORT_WEB="80"
+        TZ_WEB="America/Sao_Paulo"
+    }
+
+    stages {   
+        stage('Docker Compose UP') {
+            steps {
+                sh '''
+	          docker compose down
+	          docker compose up -d --build
+                '''
+            }
+        }
+    }
+}

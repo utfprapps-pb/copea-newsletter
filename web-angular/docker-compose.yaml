@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  newsletter-web:    
+    image: angular/newsletter
+    container_name: newsletter-web
+    build:
+      context: ./
+      dockerfile: Dockerfile.build
+    ports:
+      - 80:80
+    networks:
+      - newsletter-net
+    environment:      
+      - API_URL=${API_URL:-http://localhost:8080/api}
+      - PORT=${PORT_WEB:-80}
+      - TZ=${TZ_WEB:-America/Sao_Paulo}
+
+networks:
+  newsletter-net:
+    driver: bridge

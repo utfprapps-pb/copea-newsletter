@@ -14,11 +14,6 @@ pipeline {
         DB_JDBC_PASSWORD="admin"
         PORT_API="8081"
         TZ_API="America/Sao_Paulo"
-        
-        // WEB
-        API_URL="http://localhost:8081/api"
-        PORT_WEB="80"
-        TZ_WEB="America/Sao_Paulo"
     }
 
     stages {   
