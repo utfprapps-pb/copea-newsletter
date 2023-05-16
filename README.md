@@ -47,3 +47,7 @@ Segue as principais configurações que podem ser alteradas no arquivo docker-co
 - newsletter-web:
   - <b>API_URL</b>: URL da API, sempre com /api no final.
   - <b>PORT</b>: Porta que vai rodar o servidor web.
+
+## <img width="30px" src="https://github.com/devops-workflow/jenkins-icons/blob/master/icons/jenkins-logo-48x48.png?raw=true"> Jenkins
+O Jenkins está configurado de 3 maneiras, na raiz do projeto possui o Jenkinsfile que roda o docker compose up do docker-compose.yaml da raiz do projeto, esse abrange tanto o banco de dados, API e WEB. Já na pasta de cada projeto tem o Jenkinsfile separado. Portanto, se quiser configurar um Job do Jenkins para a API e outro para WEB, basta apontar para o Jenkinsfile da pasta do projeto, exemplo api-java/Jenkinsfile ou web-angular/Jenkinsfile.
+ATENÇÃO: Nos Jenkinsfiles citados acima é feito o docker compose down, e no da API, junto está o banco, então toda vez que executar o docker compose down vai apagar o banco e criar novamente. 
