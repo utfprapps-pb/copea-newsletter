@@ -12,11 +12,11 @@ pipeline {
         DB_JDBC_URL="jdbc:postgresql://newsletter-db:5432/newsletter?ApplicationName=newsletter"
         DB_JDBC_USER="postgres"
         DB_JDBC_PASSWORD="admin"
-        PORT_API="8080"
+        PORT_API="8081"
         TZ_API="America/Sao_Paulo"
         
         // WEB
-        API_URL="http://localhost:8080/api"
+        API_URL="http://localhost:8081/api"
         PORT_WEB="80"
         TZ_WEB="America/Sao_Paulo"
     }
