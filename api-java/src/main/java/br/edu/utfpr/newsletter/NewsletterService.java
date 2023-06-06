@@ -132,9 +132,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         }
 
         OrTerm orTerm = new OrTerm(andTermArrayList.toArray(new SearchTerm[0]));
-
-        Message[] messages = readEmailService.read(orTerm);
-
+        List<Message> messages = readEmailService.read(orTerm);
         for (Message message : messages) {
             Address[] addresses = message.getFrom();
             if (addresses.length == 0)
@@ -145,7 +143,6 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         }
 
         readEmailService.close();
-
     }
 
     private void unsubscribeEmails(List<Email> emails, List<Email> subscribedEmails, Message messageEmail) {
