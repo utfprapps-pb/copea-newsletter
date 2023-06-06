@@ -1,44 +1,42 @@
-version: "3.8"
+version: '3.9'
 
+########################### NETWORKS
+networks:
+  web:
+    name: web
+    driver: bridge
+    external: false
+    attachable: true
+  database:
+    name: database
+    driver: bridge
+    external: false
+    attachable: true
+
+########################### SERVICES
 services:
-  newsletter-db:
-    image: "postgres:latest"
-    container_name: newsletter-db
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER:-postgres}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-admin}
-      - POSTGRES_DB=${POSTGRES_DB:-newsletter}
-      - TZ=${TZ_DB:-America/Sao_Paulo}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 6
-    ports:
-      - "5433:5432"
-    networks:
-      - newsletter-net
-
-  newsletter-api:
+########################### API
+  copea-newsletter-api:
     build:
       context: ./
       dockerfile: Dockerfile.build
-    image: quarkus/newsletter
-    container_name: newsletter-api
+    image: copea-newsletter-api
+    container_name: copea-newsletter-api
     environment:      
-      - DB_JDBC_URL=${DB_JDBC_URL:-jdbc:postgresql://newsletter-db:5432/newsletter?ApplicationName=newsletter}
+      - DB_JDBC_URL=${DB_JDBC_URL:-jdbc:postgresql://postgresql:5432/copea-newsletter}
       - DB_JDBC_USER=${DB_JDBC_USER:-postgres}
       - DB_JDBC_PASSWORD=${DB_JDBC_PASSWORD:-admin}
-      - PORT=${PORT_API:-8081}
+      - PORT=${PORT_API:-8620}
       - TZ=${TZ_API:-America/Sao_Paulo}
     ports:
-      - "8081:8081"  # the HTTP endpoint
-    depends_on:
-      newsletter-db:
-        condition: service_healthy
+      - "8620:8620"  # the HTTP endpoint
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.copea-newsletter-api.rule=Host(`copea-newsletter-api.app.pb.utfpr.edu.br`)"
+      - "traefik.http.routers.copea-newsletter-api.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.copea-newsletter-api.entrypoints=websecure"
+      - "traefik.http.services.copea-newsletter-api.loadbalancer.server.port=8620"
+    restart: unless-stopped
     networks:
-      - newsletter-net    
-
-networks:
-  newsletter-net:
-    driver: bridge
+      - web
+      - database
