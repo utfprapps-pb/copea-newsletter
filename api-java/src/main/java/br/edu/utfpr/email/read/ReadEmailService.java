@@ -52,6 +52,7 @@ public class ReadEmailService {
             store.close();
         if (folder.isOpen())
             folder.close(false);
+
     }
 
 }
