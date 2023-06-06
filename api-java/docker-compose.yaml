@@ -20,7 +20,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.build
-    image: copea-newsletter-api
+    image: copea-newsletter-api:${BUILD_NUMBER}
     container_name: copea-newsletter-api
     environment:      
       - DB_JDBC_URL=${DB_JDBC_URL:-jdbc:postgresql://postgresql:5432/copea-newsletter}

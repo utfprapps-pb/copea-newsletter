@@ -4,7 +4,7 @@ version: '3.9'
 services:
 ########################### FRONT-END
   copea-newsletter:   
-    image: copea-newsletter
+    image: copea-newsletter:${BUILD_NUMBER}
     container_name: copea-newsletter
     build:
       context: ./
