@@ -1,6 +1,6 @@
 package br.edu.utfpr.user.recover_password;
 
-import br.edu.utfpr.utils.DateTimeUtil;
+import br.edu.utfpr.utils.DateTimeUtils;
 import io.quarkus.scheduler.Scheduled;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,7 @@ public class RecoverPasswordService {
     }
 
     public Boolean codeExpired(RecoverPassword recoverPassword) {
-        return (Duration.between(recoverPassword.getDateTime(), DateTimeUtil.getCurrentDateTime()).toMinutes() >= MAX_MINUTES_VALID_CODE);
+        return (Duration.between(recoverPassword.getDateTime(), DateTimeUtils.getCurrentDateTime()).toMinutes() >= MAX_MINUTES_VALID_CODE);
     }
 
 }

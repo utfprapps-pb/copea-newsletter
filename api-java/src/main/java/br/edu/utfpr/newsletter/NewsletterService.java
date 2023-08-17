@@ -9,12 +9,14 @@ import br.edu.utfpr.email.send.log.SendEmailLog;
 import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
+import br.edu.utfpr.newsletter.requests.NewsletterSearchRequest;
 import br.edu.utfpr.newsletter.responses.LastSentEmailNewsletter;
 import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
+import br.edu.utfpr.sql.SQLBuilder;
 import br.edu.utfpr.user.User;
-import br.edu.utfpr.utils.DateTimeUtil;
+import br.edu.utfpr.utils.DateTimeUtils;
 import com.sun.mail.imap.IMAPMessage;
 import org.jboss.resteasy.reactive.RestResponse;
 
@@ -25,9 +27,10 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.search.*;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RequestScoped
 public class NewsletterService extends GenericService<Newsletter, Long, NewsletterRepository> {
@@ -43,6 +46,9 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
     @Inject
     EmailService emailService;
+
+    @Inject
+    EntityManager entityManager;
 
     @Override
     public GenericResponse save(Newsletter entity) {
@@ -89,7 +95,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         List<Email> subscribedEmails =
                 newsletterEntity.getEmails().stream().filter(
                         (Email email) -> Objects.equals(email.getSubscribed(), NoYesEnum.YES)
-                ).collect(Collectors.toList());
+                ).toList();
 
         validateSubscribedEmails(subscribedEmails);
         checkAnswersInEmailToUnsubscribe(subscribedEmails);
@@ -125,7 +131,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
             searchTerms.add(new FromStringTerm(email.getEmail()));
             if (Objects.nonNull(email.getLastUnsubscribedDate()))
-                searchTerms.add(new ReceivedDateTerm(ComparisonTerm.GE, DateTimeUtil.localDateTimeToDate(email.getLastUnsubscribedDate())));
+                searchTerms.add(new ReceivedDateTerm(ComparisonTerm.GE, DateTimeUtils.localDateTimeToDate(email.getLastUnsubscribedDate())));
 
             AndTerm andTerm = new AndTerm(searchTerms.toArray(new SearchTerm[0]));
             andTermArrayList.add(andTerm);
@@ -146,14 +152,14 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     }
 
     private void unsubscribeEmails(List<Email> emails, List<Email> subscribedEmails, Message messageEmail) {
-        emails.forEach((email) -> {
+        emails.forEach(email -> {
             try {
                 Date dateEmail = messageEmail.getReceivedDate();
-                if ((Objects.isNull(email.getLastUnsubscribedDate())) || (dateEmail.after(DateTimeUtil.localDateTimeToDate(email.getLastUnsubscribedDate())))) {
+                if ((Objects.isNull(email.getLastUnsubscribedDate())) || (dateEmail.after(DateTimeUtils.localDateTimeToDate(email.getLastUnsubscribedDate())))) {
                     subscribedEmails.remove(email);
                     email.setSubscribed(NoYesEnum.NO);
                     email.setLastUnsubscribedDate(LocalDateTime.now());
-                    email.setLastEmailUnsubscribedDate(DateTimeUtil.dateToLocalDateTime(dateEmail));
+                    email.setLastEmailUnsubscribedDate(DateTimeUtils.dateToLocalDateTime(dateEmail));
                     email.setLastEmailUnsubscribedMessageID(((IMAPMessage) messageEmail).getMessageID());
                     emailService.save(email);
                 }
@@ -189,16 +195,43 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         return newsletterOptional.get();
     }
 
-    public List<Newsletter> getByFilters(Boolean newslettersSent, Boolean newslettersNotSent, Boolean newslettersTemplate, String description) {
+    public List<Newsletter> search(NewsletterSearchRequest newsletterSearchRequest) {
+        SQLBuilder sqlBuilder = new SQLBuilder("select newsletter.* from newsletter");
+        if ((Objects.nonNull(newsletterSearchRequest.getDescription())) && (!newsletterSearchRequest.getDescription().isEmpty()))
+            sqlBuilder.addAnd("(newsletter.description ilike '%' || :description || '%')", "description", newsletterSearchRequest.getDescription());
+        addFilterNewsletterSentOrNot(sqlBuilder, newsletterSearchRequest);
+        addFilterNewslettersTemplateMineOrShared(sqlBuilder, newsletterSearchRequest);
+        Query query = sqlBuilder.createNativeQuery(entityManager, Newsletter.class);
+        return query.getResultList();
+    }
+
+    private void addFilterNewsletterSentOrNot(SQLBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
+        if (newsletterSearchRequest.isNewslettersSent() == newsletterSearchRequest.isNewslettersNotSent())
+            return;
+
+        final String NEWSLETTER_SENT_FILTER = "(exists(select 1 from newsletter_send_email_log " +
+                "left join send_email_log on (send_email_log.id = newsletter_send_email_log.send_email_log_id) " +
+                "where (newsletter_send_email_log.newsletter_id = newsletter.id) and send_email_log.sentstatus = :sentStatusSent))";
+
+        if (newsletterSearchRequest.isNewslettersSent())
+            sqlBuilder.addAnd(NEWSLETTER_SENT_FILTER, "sentStatusSent", SendEmailLogStatusEnum.SENT.name());
+
+        if (newsletterSearchRequest.isNewslettersNotSent())
+            sqlBuilder.addAnd("(not " + NEWSLETTER_SENT_FILTER + ")", "sentStatusSent", SendEmailLogStatusEnum.SENT.name());
+    }
+
+    private void addFilterNewslettersTemplateMineOrShared(SQLBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
+//        TODO: validar regra
+//        if (newsletterSearchRequest.isNewslettersSent() == newsletterSearchRequest.isNewslettersNotSent())
+//            return;
+
         User loggedUser = getAuthSecurityFilter().getAuthUserContext().findByToken();
 
-        if (newslettersSent && newslettersNotSent)
-            return getRepository().findByNewsletterTemplateAndDescriptionContainsAndUser(newslettersTemplate, description, loggedUser);
+        if (!newsletterSearchRequest.isNewslettersTemplateMine())
+            sqlBuilder.addAnd("(newsletter.newsletter_template) and (newsletter.user_id <> :loggedUserId)", "loggedUserId", loggedUser.getId());
 
-        if (newslettersSent)
-            return getRepository().findBySentStatusAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description, loggedUser.getId());
-
-        return getRepository().findBySentStatusIsNotAndNewsletterTemplateAndDescription(SendEmailLogStatusEnum.SENT, newslettersTemplate, description, loggedUser.getId());
+        if (!newsletterSearchRequest.isNewslettersTemplateShared())
+            sqlBuilder.addAnd("(newsletter.newsletter_template) and (newsletter.user_id = :loggedUserId)", "loggedUserId", loggedUser.getId());
     }
 
     public LastSentEmailNewsletter getLastSentEmail(Long newsletterId) {
