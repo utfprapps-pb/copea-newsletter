@@ -16,7 +16,7 @@ quarkus:
       generation: update #drop-and-create
   http:
     cors: true
-    port: ${PORT:8080}
+    port: ${PORT:8082}
     test-port: 8083
     auth:
       policy:

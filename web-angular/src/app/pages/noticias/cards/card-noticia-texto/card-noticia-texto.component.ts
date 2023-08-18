@@ -1,4 +1,4 @@
-import { LastSentEmailNewsletter } from './../../models/lastSentEmailNewsletter';
+import { LastSentEmailNewsletter } from '../../models/last-sent-email-newsletter';
 import { DrawerService } from '../../../admin/drawer.service';
 import { Component, ViewChild, OnInit, ElementRef, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
