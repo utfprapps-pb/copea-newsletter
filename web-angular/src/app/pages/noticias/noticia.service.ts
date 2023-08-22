@@ -4,10 +4,11 @@ import { Observable, of } from 'rxjs';
 
 // shared
 import { CrudService } from 'src/app/shared/crud/crud.service';
-import { LastSentEmailNewsletter } from './models/lastSentEmailNewsletter';
+import { LastSentEmailNewsletter } from './models/last-sent-email-newsletter';
 
 // aplicação
 import { Noticia } from './models/noticia';
+import { NewsletterSearchRequest } from 'src/app/pages/noticias/models/newsletter-search-request';
 
 @Injectable()
 export class NoticiaService extends CrudService<Noticia> {
@@ -24,13 +25,8 @@ export class NoticiaService extends CrudService<Noticia> {
     return this.http.get<any>(this.baseUrl + '/v1/newsletter/' + id + '/send-email');
   }
 
-  public search(filtro): Observable<Noticia[]> {
-    let params = new HttpParams()
-      .append('newslettersSent', (filtro.filtros.indexOf('ENVIADAS') > -1))
-      .append('newslettersNotSent', (filtro.filtros.indexOf('NAO_ENVIADAS') > -1))
-      .append('newsletterTemplate', (filtro.filtros.indexOf('MODELO') > -1))
-      .append('description', filtro.descricao);
-    return this.http.get<Noticia[]>(`${this.baseUrl + this.url}/search`, { params: params });
+  public search(newsletterSearchRequest: NewsletterSearchRequest): Observable<Noticia[]> {
+    return this.http.post<Noticia[]>(`${this.baseUrl + this.url}/search`, newsletterSearchRequest);
   }
 
   public getLastSentEmail(newsletterId): Observable<LastSentEmailNewsletter> {

@@ -9,7 +9,7 @@ import br.edu.utfpr.user.recover_password.RecoverPassword;
 import br.edu.utfpr.user.recover_password.RecoverPasswordDTO;
 import br.edu.utfpr.user.recover_password.RecoverPasswordService;
 import br.edu.utfpr.user.responses.SendEmailCodeRecoverPassword;
-import br.edu.utfpr.utils.DateTimeUtil;
+import br.edu.utfpr.utils.DateTimeUtils;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import org.jboss.resteasy.reactive.RestResponse;
 
@@ -65,7 +65,7 @@ public class UserService extends GenericService<User, Long, UserRepository> {
             throwExceptionUserNotFound();
 
         Integer codigo = new Random().nextInt(1000000);
-        recoverPasswordService.addCode(username, new RecoverPassword(username, codigo, DateTimeUtil.getCurrentDateTime()));
+        recoverPasswordService.addCode(username, new RecoverPassword(username, codigo, DateTimeUtils.getCurrentDateTime()));
 
         sendEmailService.send(
                 "Recuperação de senha",

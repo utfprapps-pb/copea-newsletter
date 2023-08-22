@@ -12,7 +12,7 @@ import { errorTransform } from 'src/app/shared/pipes/error-transform';
 // aplicação
 import { Noticia } from './models/noticia';
 import { NoticiaService } from './noticia.service';
-import { LastSentEmailNewsletter } from './models/lastSentEmailNewsletter';
+import { LastSentEmailNewsletter } from './models/last-sent-email-newsletter';
 
 @Component({
   selector: 'app-noticia',

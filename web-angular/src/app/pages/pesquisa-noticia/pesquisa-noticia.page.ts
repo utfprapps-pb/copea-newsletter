@@ -1,6 +1,6 @@
 import { MensagemService } from './../../shared/services/mensagem.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, AbstractControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
@@ -10,6 +10,7 @@ import { errorTransform } from 'src/app/shared/pipes/error-transform';
 // aplicação
 import { NoticiaService } from '../noticias/noticia.service';
 import { Noticia } from '../noticias/models/noticia';
+import { NewsletterSearchRequest } from '../noticias/models/newsletter-search-request';
 
 @Component({
   selector: 'app-pesquisa-noticia',
@@ -75,7 +76,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
       return;
 
     this.form.patchValue({
-      filtros: ['ENVIADAS', 'NAO_ENVIADAS', 'MODELO']
+      filtros: ['ENVIADAS', 'NAO_ENVIADAS', 'MODELO', 'MODELOS_COMPARTILHADOS']
     });
     this.filtrarNoticias();
   }
@@ -101,16 +102,27 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
    */
   public filtrarNoticias() {
     this.loading = true;
-    this.noticiaService.search(this.form.value).subscribe(res => {
-      this.loading = false;
-      this.listaResultado = res;
+    let filtrosDisponiveis: Array<string> = this.filtros?.value;
+    let newsletterSearchRequest: NewsletterSearchRequest = {
+      newslettersSent: filtrosDisponiveis.includes('ENVIADAS'),
+      newslettersNotSent: filtrosDisponiveis.includes('NAO_ENVIADAS'),
+      newslettersTemplateMine: filtrosDisponiveis.includes('MODELO'),
+      newslettersTemplateShared: filtrosDisponiveis.includes('MODELOS_COMPARTILHADOS'),
+      description: this.description?.value,
+    }
+    this.noticiaService.search(newsletterSearchRequest).subscribe({
+      next: (res: Noticia[]) => {
+        this.loading = false;
+        this.listaResultado = res;
 
-      if (!res || res.length === 0) {
-        this.mensagemService.mostrarMensagem('Não foi possível encontrar nenhum registro correspondente aos filtros informados!');
+        if (!res || res.length === 0) {
+          this.mensagemService.mostrarMensagem('Não foi possível encontrar nenhum registro correspondente aos filtros informados!');
+        }
+      },
+      error: (error) => {
+        this.loading = false;
+        this.mensagemService.mostrarMensagem(errorTransform(error));
       }
-    }, error => {
-      this.loading = false;
-      this.mensagemService.mostrarMensagem(errorTransform(error));
     });
   }
 
@@ -135,6 +147,15 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
 
   public getStylePadding(): string {
     return ((this.pesquisaNoticiasModelos) ? "d-pad-top" : "d-pad-card-container");
+  }
+
+
+  private get description(): AbstractControl | null {
+    return this.form.get('description');
+  }
+
+  private get filtros(): AbstractControl | null {
+    return this.form.get('filtros');
   }
 
 }

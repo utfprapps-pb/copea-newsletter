@@ -5,7 +5,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-public class DateTimeUtil {
+public class DateTimeUtils {
 
     public static LocalDateTime getCurrentDateTime() {
         return LocalDateTime.now();
