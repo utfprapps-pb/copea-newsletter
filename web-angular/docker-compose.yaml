@@ -1,21 +1,33 @@
-version: "3.8"
+version: '3.9'
 
+########################### SERVICES
 services:
-  newsletter-web:    
-    image: angular/newsletter
-    container_name: newsletter-web
+########################### FRONT-END
+  copea-newsletter:   
+    image: copea-newsletter:${BUILD_NUMBER}
+    container_name: copea-newsletter
     build:
       context: ./
       dockerfile: Dockerfile.build
     ports:
-      - 80:80
+      - 8621:80
     networks:
-      - newsletter-net
+      - web
     environment:      
-      - API_URL=${API_URL:-http://localhost:8080/api}
+      - API_URL=${API_URL:-https://copea-newsletter-api.app.pb.utfpr.edu.br/api}
       - PORT=${PORT_WEB:-80}
       - TZ=${TZ_WEB:-America/Sao_Paulo}
-
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web
+      - traefik.http.routers.copea-newsletter.rule=Host(`copea-newsletter.app.pb.utfpr.edu.br`)
+      - traefik.http.routers.copea-newsletter.entrypoints=websecure
+      - traefik.http.routers.copea-newsletter.tls.certresolver=letsencrypt
+    restart: unless-stopped
+########################### NETWORKS
 networks:
-  newsletter-net:
+  web:
+    name: web
     driver: bridge
+    external: false
+    attachable: true

@@ -2,33 +2,48 @@ pipeline {
     agent any
 
     environment {
-    	// DB
-        POSTGRES_USER="postgres"     
-        POSTGRES_PASSWORD="admin"
-        POSTGRES_DB="newsletter"
-        TZ_DB="America/Sao_Paulo"
-        
+        // DB
+        POSTGRESQL_CRED = credentials('postgres-id')
+        DB_JDBC_USER = "${POSTGRESQL_CRED_USR}"
+        DB_JDBC_PASSWORD = "${POSTGRESQL_CRED_PSW}"
+        DB_JDBC_DATABASE = "copea-newsletter"       
+        DB_JDBC_URL="jdbc:postgresql://postgresql:5432/copea-newsletter"
         // API
-        DB_JDBC_URL="jdbc:postgresql://newsletter-db:5432/newsletter?ApplicationName=newsletter"
-        DB_JDBC_USER="postgres"
-        DB_JDBC_PASSWORD="admin"
-        PORT_API="8081"
+        PORT_API="8620"
         TZ_API="America/Sao_Paulo"
         
         // WEB
-        API_URL="http://localhost:8081/api"
+        API_URL="https://copea-newsletter-api.app.pb.utfpr.edu.br/api"
         PORT_WEB="80"
         TZ_WEB="America/Sao_Paulo"
     }
 
-    stages {   
-        stage('Docker Compose UP') {
+    stages {       
+        stage('API - Build') {    
             steps {
-                sh '''
-	          docker compose down
-	          docker compose up -d --build
-                '''
+                dir("api-java") {
+                    sh 'docker compose -f docker-compose.yaml up -d --build'
+                }
             }
+        }
+        stage('Client Web - Build') {    
+            steps {
+                dir("web-angular") {
+                    sh 'docker compose -f docker-compose.yaml up -d --build'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Build finished.'
+        }
+        success {
+            echo 'Build succeeded.'
+        }
+        failure {
+            echo 'Build failed.'
         }
     }
 }
