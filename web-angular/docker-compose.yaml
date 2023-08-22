@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.copea-newsletter.rule=Host(`copea-newsletter.app.pb.utfpr.edu.br`)
       - traefik.http.routers.copea-newsletter.entrypoints=websecure
       - traefik.http.routers.copea-newsletter.tls.certresolver=letsencrypt
-
+    restart: unless-stopped
 ########################### NETWORKS
 networks:
   web:
