@@ -19,7 +19,7 @@ public class User implements Serializable {
     @GeneratedValue(generator = "users_id_sequence")
     private Long id;
 
-    @Column
+    @Column(name = "full_name")
     @JsonProperty("fullname")
     @NotNull
     private String fullName;

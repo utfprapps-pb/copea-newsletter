@@ -32,11 +32,12 @@ public class Newsletter {
     @Column(length = 2000, nullable = false)
     private String subject;
 
-    @Column(updatable = false,  nullable = true)
+    @Column(name = "inclusion_date", updatable = false,  nullable = true)
     @JsonIgnore
     private LocalDateTime inclusionDate;
 
     @JsonIgnore
+    @Column(name = "alteration_date")
     private LocalDateTime alterationDate;
 
     @NotBlank(message = "Parameter newsletter is required.")

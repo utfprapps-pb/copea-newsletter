@@ -18,28 +18,35 @@ public class SendEmailLog implements Serializable {
     @GeneratedValue(generator = "send_email_log_id_sequence")
     private Long id;
 
+    @Column(name = "log_date")
     private LocalDateTime logDate;
 
+    @Column(name = "sent_host")
     private String sentHost;
 
+    @Column(name = "sent_port")
     private Integer sentPort;
 
+    @Column(name = "email_from")
     private String emailFrom;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "sent_emails", columnDefinition = "TEXT")
     private String sentEmails;
 
+    @Column(name = "sent_subject")
     private String sentSubject;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "sent_message", columnDefinition = "TEXT")
     private String sentMessage;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "sent_status")
     private SendEmailLogStatusEnum sentStatus;
 
     @Column(columnDefinition = "TEXT")
     private String error;
 
+    @Column(name = "message_id")
     private String messageID;
 
 }

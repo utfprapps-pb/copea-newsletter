@@ -211,7 +211,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
         final String NEWSLETTER_SENT_FILTER = "(exists(select 1 from newsletter_send_email_log " +
                 "left join send_email_log on (send_email_log.id = newsletter_send_email_log.send_email_log_id) " +
-                "where (newsletter_send_email_log.newsletter_id = newsletter.id) and send_email_log.sentstatus = :sentStatusSent))";
+                "where (newsletter_send_email_log.newsletter_id = newsletter.id) and send_email_log.sent_status = :sentStatusSent))";
 
         if (newsletterSearchRequest.isNewslettersSent())
             sqlBuilder.addAnd(NEWSLETTER_SENT_FILTER, "sentStatusSent", SendEmailLogStatusEnum.SENT.name());
