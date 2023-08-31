@@ -1,0 +1,1 @@
+# Pasta utilizada para guardar scripts de correções no banco que NÃO devem ser versionados no flyway.
