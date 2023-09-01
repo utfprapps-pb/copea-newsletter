@@ -2,21 +2,24 @@ package br.edu.utfpr.email.read;
 
 import br.edu.utfpr.email.config.ConfigEmail;
 import br.edu.utfpr.email.config.ConfigEmailService;
-import br.edu.utfpr.exception.validation.ValidationException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mail.*;
 import javax.mail.search.SearchTerm;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 @RequestScoped
 public class ReadEmailService {
 
     @Inject
     ConfigEmailService configEmailService;
+
+    private static final Logger LOGGER = Logger.getLogger(ReadEmailService.class.getName());
 
     private Store store;
     private Folder folder;
@@ -26,23 +29,27 @@ public class ReadEmailService {
         store = emailSession.getStore("imaps");
 
         ConfigEmail configEmail = configEmailService.getConfigEmailByLoggedUser();
-        store.connect(configEmail.getSendHost(), configEmail.getEmailFrom(), configEmail.getPasswordEmailFrom());
+        String emailFrom = configEmail.getEmailFrom();
+        store.connect(configEmail.getSendHost(), emailFrom, configEmail.getPasswordEmailFrom());
 
         List<Message> messages = new ArrayList<>();
-        addArrayMessageIntoList(readFolder("Inbox", searchTerm), messages);
-        addArrayMessageIntoList(readFolder("Spam", searchTerm), messages);
+        addArrayMessageIntoList(readFolder("Inbox", searchTerm, emailFrom), messages);
+        addArrayMessageIntoList(readFolder("Spam", searchTerm, emailFrom), messages);
+        addArrayMessageIntoList(readFolder("[Gmail]/Spam", searchTerm, emailFrom), messages);
         return messages;
     }
 
     private void addArrayMessageIntoList(Message[] arrayMessage, List<Message> list) {
-        for (Message message : arrayMessage)
-            list.add(message);
+        Collections.addAll(list, arrayMessage);
     }
 
-    private Message[] readFolder(String folderName, SearchTerm searchTerm) throws MessagingException {
+    private Message[] readFolder(String folderName, SearchTerm searchTerm, String emailFrom) throws MessagingException {
         folder = store.getFolder(folderName);
-        if (!folder.exists())
-            throw new ValidationException("Caixa " + folderName + " não existe na conta de e-mail configurada para o envio da newsletter.");
+        if (!folder.exists()) {
+            String message = String.format("Caixa %s não existe na conta de e-mail %s configurada para o envio da newsletter.", folderName, emailFrom);
+            LOGGER.info(message);
+            return new Message[0];
+        }
         folder.open(Folder.READ_WRITE);
         return folder.search(searchTerm);
     }

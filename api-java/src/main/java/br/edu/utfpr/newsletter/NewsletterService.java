@@ -31,6 +31,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequestScoped
 public class NewsletterService extends GenericService<Newsletter, Long, NewsletterRepository> {
@@ -95,7 +96,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         List<Email> subscribedEmails =
                 newsletterEntity.getEmails().stream().filter(
                         (Email email) -> Objects.equals(email.getSubscribed(), NoYesEnum.YES)
-                ).toList();
+                ).collect(Collectors.toList());
 
         validateSubscribedEmails(subscribedEmails);
         checkAnswersInEmailToUnsubscribe(subscribedEmails);
