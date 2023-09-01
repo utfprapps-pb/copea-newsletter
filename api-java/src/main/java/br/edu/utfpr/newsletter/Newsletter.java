@@ -1,6 +1,7 @@
 package br.edu.utfpr.newsletter;
 
 import br.edu.utfpr.email.Email;
+import br.edu.utfpr.email.send.automated.AutomatedSendEmail;
 import br.edu.utfpr.email.send.log.SendEmailLog;
 import br.edu.utfpr.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -59,6 +60,14 @@ public class Newsletter {
             inverseJoinColumns = @JoinColumn(name = "send_email_log_id")
     )
     private Set<SendEmailLog> sendEmailLogs = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "newsletter_automated_send_email",
+            joinColumns = @JoinColumn(name = "newsletter_id"),
+            inverseJoinColumns = @JoinColumn(name = "automated_send_email_id")
+    )
+    private Set<AutomatedSendEmail> automatedSendEmails = new HashSet<>();
 
     @ManyToOne(optional = false)
     private User user;
