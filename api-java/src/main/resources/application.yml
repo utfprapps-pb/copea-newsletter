@@ -56,6 +56,18 @@ quarkus:
     always-include: true
     path: ${quarkus.http.root-path}/swagger
     enable: true
+  quartz:
+    # jdbc-cmt é para deixar que quem esteja usando o quartz, no caso o ambiente que ele está rodando,
+    # gerencie as transações (por exemplo o quarkus).
+    # jdbc-tx faz com que o próprio quartz gerencie as transações, independente de qual ambiente está,
+    # ele que fará o commit, rollback, etc.
+    # Se utilizar o jdbc-tx, por exemplo ao tentar agendar a tarefa no service, ocorrerá erro porque o quartz tenta fazer
+    # commit fora da transação que já está rodando para gravar a entidade NewsletterQuartzTasks,
+    # já com o jdbc-cmt o quartz deixa que seja salvo na mesma transação que já está rodando para gravar o registro.
+    store-type: jdbc-cmt
+    clustered: false
+    misfire-policy:
+      task-job: ignore-misfire-policy
 
 #Informacoes locais do jwt
 jwt-newsletter:
