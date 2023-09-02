@@ -1,10 +1,10 @@
-package br.edu.utfpr.teste;
+package br.edu.utfpr.email.send.automated.schedule;
 
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class JobTest implements Job {
+public class AutomatedSendEmailJob implements Job {
 
     // Chama esse método toda vez que o Job é executado pelo scheduler
     @Override
