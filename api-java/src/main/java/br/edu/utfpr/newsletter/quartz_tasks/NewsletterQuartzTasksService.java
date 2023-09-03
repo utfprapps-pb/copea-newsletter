@@ -1,12 +1,13 @@
 package br.edu.utfpr.newsletter.quartz_tasks;
 
-import br.edu.utfpr.email.send.automated.AutomatedSendEmailScheduler;
-import br.edu.utfpr.email.send.automated.QuartzTasks;
-import br.edu.utfpr.email.send.automated.schedule.AutomatedSchedule;
-import br.edu.utfpr.email.send.automated.schedule.AutomatedScheduler;
-import br.edu.utfpr.email.send.automated.schedule.AutomatedSendEmailJob;
+import br.edu.utfpr.newsletter.quartz_tasks.schedule.NewsletterQuartzTasksSchedule;
+import br.edu.utfpr.quartz.tasks.schedule.QuartzTasksSchedule;
+import br.edu.utfpr.newsletter.quartz_tasks.schedule.NewsletterQuartzTasksScheduleJob;
+import br.edu.utfpr.quartz.tasks.schedule.IQuartzTasksSchedule;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
+import br.edu.utfpr.newsletter.Newsletter;
+import br.edu.utfpr.quartz.tasks.QuartzTasks;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -21,7 +22,7 @@ import java.util.List;
 public class NewsletterQuartzTasksService extends GenericService<NewsletterQuartzTasks, Long, NewsletterQuartzTasksRepository> {
 
     @Inject
-    AutomatedSchedule automatedSchedule;
+    QuartzTasksSchedule quartzTasksSchedule;
 
     @Override
     public void setDefaultValuesWhenNew(NewsletterQuartzTasks entity) {
@@ -35,15 +36,17 @@ public class NewsletterQuartzTasksService extends GenericService<NewsletterQuart
 
     private void configureJobAndTriggerOnQuartzTask(NewsletterQuartzTasks requestBody) {
         QuartzTasks quartzTask = requestBody.getQuartzTask();
+        Newsletter newsletter = requestBody.getNewsletter();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss");
-        String name = "newsletter_" + requestBody.getNewsletter().getId() + "_start_at_" + quartzTask.getStartAt().format(formatter);
+        String name = "newsletter_" + newsletter.getId() + "_start_at_" + quartzTask.getStartAt().format(formatter);
         quartzTask.setJobName("job_" + name);
         quartzTask.setJobGroup("newsletter_email_tasks");
         quartzTask.setTriggerName("trigger_" + name);
         quartzTask.setTriggerGroup("newsletter_email_tasks");
 
-        AutomatedSendEmailScheduler automatedScheduler = new AutomatedSendEmailScheduler();
-        automatedScheduler.setJobClass(AutomatedSendEmailJob.class);
+        NewsletterQuartzTasksSchedule automatedScheduler = new NewsletterQuartzTasksSchedule();
+        automatedScheduler.setNewsletterId(newsletter.getId());
+        automatedScheduler.setJobClass(NewsletterQuartzTasksScheduleJob.class);
         automatedScheduler.setJobIdentity(quartzTask.getJobName());
         automatedScheduler.setJobGroup(quartzTask.getJobGroup());
         automatedScheduler.setTriggerIdentity(quartzTask.getTriggerName());
@@ -57,11 +60,11 @@ public class NewsletterQuartzTasksService extends GenericService<NewsletterQuart
                     Date.from(quartzTask.getEndAt().atZone(ZoneId.systemDefault()).toInstant())
             );
         }
-        List<AutomatedScheduler> automatedSchedulers = new ArrayList<>();
-        automatedSchedulers.add(automatedScheduler);
+        List<IQuartzTasksSchedule> quartzTasksSchedules = new ArrayList<>();
+        quartzTasksSchedules.add(automatedScheduler);
 
         try {
-            automatedSchedule.schedule(automatedSchedulers);
+            quartzTasksSchedule.schedule(quartzTasksSchedules);
         } catch (Exception exception) {
             throw new ValidationException(
                     "Ocorreu um erro ao tentar agendar o envio da newsletter por e-mail." +

@@ -1,6 +1,6 @@
 package br.edu.utfpr.newsletter.quartz_tasks;
 
-import br.edu.utfpr.email.send.automated.QuartzTasks;
+import br.edu.utfpr.quartz.tasks.QuartzTasks;
 import br.edu.utfpr.newsletter.Newsletter;
 import lombok.Getter;
 import lombok.Setter;

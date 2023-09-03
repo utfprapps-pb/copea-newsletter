@@ -2,6 +2,7 @@ package br.edu.utfpr.newsletter;
 
 import br.edu.utfpr.email.Email;
 import br.edu.utfpr.email.EmailService;
+import br.edu.utfpr.email.config.ConfigEmail;
 import br.edu.utfpr.email.config.ConfigEmailService;
 import br.edu.utfpr.email.read.ReadEmailService;
 import br.edu.utfpr.email.send.SendEmailService;
@@ -83,31 +84,52 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
             entity.setNewsletterTemplate(false);
     }
 
+    /**
+     * Método utilizado pelo Job do Quartz para enviar a newsletter por e-mail
+     * sem utilizar o usuário logado, pois quando executa o job da tarefa
+     * agendada não encontra o usuário logado
+     * @param newsletterId
+     * @return
+     * @throws Exception
+     */
+    public DefaultResponse sendScheduledNewsletterByEmail(Long newsletterId) throws Exception {
+        Optional<Newsletter> optionalNewsletterEntity = getRepository().findById(newsletterId);
+        if (optionalNewsletterEntity.isEmpty())
+            return getResponseNewsletterNotFound();
+        Newsletter newsletter = optionalNewsletterEntity.get();
+        return sendNewsletterByEmail(newsletter, configEmailService.getOneConfigEmailByUser(newsletter.getUser()));
+    }
+
+    /**
+     * Método utilizado para enviar a newsletter por e-mail utilizando o usuário logado
+     * @param newsletterId
+     * @return
+     * @throws Exception
+     */
     public DefaultResponse sendNewsletterByEmail(Long newsletterId) throws Exception {
         Optional<Newsletter> optionalNewsletterEntity = getRepository().findByIdAndUser(newsletterId, getAuthSecurityFilter().getAuthUserContext().findByToken());
-        if (optionalNewsletterEntity.isEmpty())
-            return DefaultResponse.builder()
-                    .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
-                    .message("Nenhuma newsletter encontrada para o parâmetro informado.")
-                    .build();
+        return sendNewsletterByEmail(optionalNewsletterEntity.get(), configEmailService.getConfigEmailByLoggedUser());
+    }
 
-        Newsletter newsletterEntity = optionalNewsletterEntity.get();
+    private DefaultResponse sendNewsletterByEmail(Newsletter newsletter, ConfigEmail configEmail) throws Exception {
+        if (Objects.isNull(newsletter))
+            return getResponseNewsletterNotFound();
 
         List<Email> subscribedEmails =
-                newsletterEntity.getEmails().stream().filter(
+                newsletter.getEmails().stream().filter(
                         (Email email) -> Objects.equals(email.getSubscribed(), NoYesEnum.YES)
                 ).collect(Collectors.toList());
 
         validateSubscribedEmails(subscribedEmails);
-        checkAnswersInEmailToUnsubscribe(subscribedEmails);
+        checkAnswersInEmailToUnsubscribe(subscribedEmails, configEmail);
         SendEmailLog sendEmailLog = sendEmailService.send(
-                newsletterEntity.getSubject(),
-                newsletterEntity.getNewsletter(),
-                configEmailService.getConfigEmailByLoggedUser(),
+                newsletter.getSubject(),
+                newsletter.getNewsletter(),
+                configEmail,
                 sendEmailService.convertArrayEmailEntityToStringArray(subscribedEmails));
 
-        newsletterEntity.getSendEmailLogs().add(sendEmailLog);
-        getRepository().save(newsletterEntity);
+        newsletter.getSendEmailLogs().add(sendEmailLog);
+        getRepository().save(newsletter);
 
         if (SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus()))
             return DefaultResponse.builder()
@@ -119,10 +141,16 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
                 .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
                 .message(sendEmailLog.getError())
                 .build();
-
     }
 
-    private void checkAnswersInEmailToUnsubscribe(List<Email> subscribedEmails) throws MessagingException {
+    private DefaultResponse getResponseNewsletterNotFound() {
+        return DefaultResponse.builder()
+                .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
+                .message("Nenhuma newsletter encontrada para o parâmetro informado.")
+                .build();
+    }
+
+    private void checkAnswersInEmailToUnsubscribe(List<Email> subscribedEmails, ConfigEmail configEmail) throws MessagingException {
         List<SearchTerm> andTermArrayList = new ArrayList<>();
 
         for (Email email : subscribedEmails) {
@@ -139,7 +167,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         }
 
         OrTerm orTerm = new OrTerm(andTermArrayList.toArray(new SearchTerm[0]));
-        List<Message> messages = readEmailService.read(orTerm);
+        List<Message> messages = readEmailService.read(orTerm, configEmail);
         for (Message message : messages) {
             Address[] addresses = message.getFrom();
             if (addresses.length == 0)

@@ -1,4 +1,4 @@
-package br.edu.utfpr.email.send.automated;
+package br.edu.utfpr.quartz.tasks;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

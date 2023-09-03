@@ -1,10 +1,10 @@
-package br.edu.utfpr.email.send.automated.schedule;
+package br.edu.utfpr.quartz.tasks.schedule;
 
 import org.quartz.*;
 
 import java.util.Date;
 
-public interface AutomatedScheduler {
+public interface IQuartzTasksSchedule {
 
     Class<? extends Job> getJobClass();
     void setJobClass(Class<? extends Job> jobClass);
@@ -35,7 +35,7 @@ public interface AutomatedScheduler {
 
     default JobDetail getJobDetail() {
         return JobBuilder.newJob(getJobClass())
-                .withIdentity("job_" + getJobIdentity(), getJobGroup())
+                .withIdentity(getJobIdentity(), getJobGroup())
                 .build();
     }
 

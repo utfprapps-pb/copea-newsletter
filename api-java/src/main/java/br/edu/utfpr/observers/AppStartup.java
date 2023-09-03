@@ -1,6 +1,6 @@
 package br.edu.utfpr.observers;
 
-import br.edu.utfpr.email.send.automated.schedule.AutomatedSchedule;
+import br.edu.utfpr.quartz.tasks.schedule.QuartzTasksSchedule;
 import io.quarkus.runtime.StartupEvent;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -11,7 +11,7 @@ import javax.inject.Inject;
 public class AppStartup {
 
     @Inject
-    AutomatedSchedule automatedSchedule;
+    QuartzTasksSchedule quartzTasksSchedule;
 
     void onStart(@Observes StartupEvent startupEvent) {
 //        AutomatedSendEmailScheduler automatedScheduler = new AutomatedSendEmailScheduler();
