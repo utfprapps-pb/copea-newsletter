@@ -23,6 +23,7 @@ import { CardNoticiaCabecalhoComponent } from './cards/card-noticia-cabecalho/ca
 import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.interceptor';
 
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { CardNewsletterScheduleComponent } from './cards/card-newsletter-schedule/card-newsletter-schedule.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'manutencao', pathMatch: 'full' },
@@ -39,6 +40,7 @@ const routes: Routes = [
     CardNoticiaCabecalhoComponent,
     CardNoticiaTextoComponent,
     CardSelecionarNoticiaModeloComponent,
+    CardNewsletterScheduleComponent,
   ],
   imports: [
     CommonModule,

@@ -21,6 +21,22 @@ DROP TABLE IF EXISTS QRTZ_CALENDARS;
 --     PRIMARY KEY (id)
 -- );
 
+-- Criei uma tabela personalizada pelo Hibernate, por isso a que está acima está comentada(TASKS), segue abaixo a tabela personalizada, está comentada pois é criada pelo próprio hibernate
+-- DROP TABLE qrtz_tasks;
+-- CREATE TABLE qrtz_tasks (
+--    id int8 NOT NULL,
+--    created_at timestamp NULL,
+--    day_range int4 NULL,
+--    end_at timestamp NULL,
+--    job_group varchar(255) NULL,
+--    job_name varchar(255) NULL,
+--    recurrent bool NOT NULL,
+--    start_at timestamp NULL,
+--    trigger_group varchar(255) NULL,
+--    trigger_name varchar(255) NULL,
+--    CONSTRAINT qrtz_tasks_pkey PRIMARY KEY (id)
+-- );
+
 CREATE TABLE QRTZ_JOB_DETAILS
 (
     SCHED_NAME        VARCHAR(120) NOT NULL,

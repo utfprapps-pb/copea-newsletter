@@ -5,6 +5,7 @@ import br.edu.utfpr.email.send.log.SendEmailLog;
 import br.edu.utfpr.newsletter.quartz_tasks.NewsletterQuartzTasks;
 import br.edu.utfpr.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -62,6 +63,7 @@ public class Newsletter {
     private Set<SendEmailLog> sendEmailLogs = new HashSet<>();
 
     @OneToMany(mappedBy = "newsletter", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<NewsletterQuartzTasks> quartzTasks = new HashSet<>();
 
     @ManyToOne(optional = false)

@@ -355,3 +355,7 @@ body {
   visibility: visible;
   opacity: 1;
 }
+
+.width-300px {
+  width: 300px;
+}

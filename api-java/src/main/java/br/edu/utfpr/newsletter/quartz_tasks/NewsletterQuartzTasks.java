@@ -1,7 +1,8 @@
 package br.edu.utfpr.newsletter.quartz_tasks;
 
-import br.edu.utfpr.quartz.tasks.QuartzTasks;
 import br.edu.utfpr.newsletter.Newsletter;
+import br.edu.utfpr.quartz.tasks.QuartzTasks;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,7 @@ public class NewsletterQuartzTasks {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "newsletter_id")
+    @JsonBackReference
     @NotNull
     private Newsletter newsletter;
 

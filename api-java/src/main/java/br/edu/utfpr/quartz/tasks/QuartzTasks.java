@@ -22,14 +22,14 @@ public class QuartzTasks {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "start_at")
+    @NotNull
+    private LocalDateTime startAt;
+
     private boolean recurrent;
 
     @Column(name = "day_range")
     private Integer dayRange;
-
-    @Column(name = "start_at")
-    @NotNull
-    private LocalDateTime startAt;
 
     @Column(name = "end_at")
     private LocalDateTime endAt;

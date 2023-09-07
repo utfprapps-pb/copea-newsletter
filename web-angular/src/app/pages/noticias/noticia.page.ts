@@ -1,7 +1,7 @@
 import { MensagemService } from './../../shared/services/mensagem.service';
 import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // shared
@@ -11,8 +11,9 @@ import { errorTransform } from 'src/app/shared/pipes/error-transform';
 
 // aplicação
 import { Noticia } from './models/noticia';
-import { NoticiaService } from './noticia.service';
+import { NoticiaService } from './services/noticia.service';
 import { LastSentEmailNewsletter } from './models/last-sent-email-newsletter';
+import { CardNewsletterScheduleComponent } from 'src/app/pages/noticias/cards/card-newsletter-schedule/card-newsletter-schedule.component';
 
 @Component({
   selector: 'app-noticia',
@@ -33,6 +34,7 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
     public override mensagemService: MensagemService,
     public override route: ActivatedRoute,
     public dialog: MatDialog,
+    @Optional() public dialogNewsletterScheduleRef: MatDialogRef<CardNewsletterScheduleComponent>,
   ) {
     super(crudController, service, mensagemService, route);
   }
@@ -136,6 +138,12 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
         },
       }
     )
+  }
+
+  public onClickSchedule() {
+    this.dialogNewsletterScheduleRef = this.dialog.open(CardNewsletterScheduleComponent, {
+      data: { newsletter: this.registro },
+    });
   }
 
 }
