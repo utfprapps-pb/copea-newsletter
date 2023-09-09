@@ -3,9 +3,17 @@
   <form *ngIf="form" [formGroup]="form">
     <div class="d-flex">
       <div class="d-m-right">
+        <!-- Data de início -->
         <mat-card class="demo-inline-calendar-card">
           <mat-calendar [selected]="startAt?.value" (selectedChange)="dateChanged($event)"></mat-calendar>
         </mat-card>
+        <!-- Hora de início -->
+        <mat-form-field class="full-width d-m-top" appearance="fill">
+          <mat-label>Hora de início</mat-label>
+          <input matInput type="time" formControlName="timeStartAt"
+            placeholder="Digite a hora de início..." cdkFocusInitial>
+          <mat-error>{{dayRange.errors | erro}}</mat-error>
+        </mat-form-field>
       </div>
 
       <div class="width-300px">
@@ -27,6 +35,13 @@
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error>{{endAt.errors | erro}}</mat-error>
+        </mat-form-field>
+        <!-- Hora de encerramento -->
+        <mat-form-field class="full-width d-m-top" appearance="fill">
+          <mat-label>Hora de encerramento</mat-label>
+          <input matInput type="time" formControlName="timeEndAt"
+            placeholder="Digite a hora de encerramento..." cdkFocusInitial>
+          <mat-error>{{dayRange.errors | erro}}</mat-error>
         </mat-form-field>
       </div>
     </div>

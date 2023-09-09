@@ -1,7 +1,8 @@
 export interface QuartzTasks {
     id?: number;
-    createdAt: Date;
+    createdAt?: Date;
     startAt: Date;
+    recurrent: boolean,
     dayRange: number;
     endAt: Date;
 }
