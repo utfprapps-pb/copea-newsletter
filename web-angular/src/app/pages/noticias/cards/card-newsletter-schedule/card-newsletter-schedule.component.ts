@@ -192,6 +192,9 @@ export class CardNewsletterScheduleComponent implements OnInit {
   }
 
   private getFormatDateFromMoment(date: Date): Date {
+    if (!date)
+      return date;
+
     let formatDate = moment(date)?.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
     return new Date(formatDate);
   }
