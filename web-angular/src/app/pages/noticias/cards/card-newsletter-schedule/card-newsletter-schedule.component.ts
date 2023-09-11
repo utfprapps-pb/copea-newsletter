@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import * as moment from 'moment-timezone';
 import { NewsletterQuartzTasksService } from 'src/app/pages/noticias/services/newsletter-quartz-tasks.service';
 import { MensagemService } from 'src/app/shared/services/mensagem.service';
 
@@ -164,10 +165,10 @@ export class CardNewsletterScheduleComponent implements OnInit {
       this.newsletterQuartzTasksService.schedule({
         newsletter: this.dataDialog.newsletter,
         quartzTask: {
-          startAt: formValue?.startAt,
+          startAt: this.getFormatDateFromMoment(formValue?.startAt),
           recurrent: formValue?.recurrent,
           dayRange: formValue?.dayRange,
-          endAt: formValue?.endAt,
+          endAt: this.getFormatDateFromMoment(formValue?.endAt),
         }
       }).subscribe({
         next: (value) => {
@@ -188,6 +189,11 @@ export class CardNewsletterScheduleComponent implements OnInit {
 
   public onCancelarClick() {
     this.dialog.closeAll();
+  }
+
+  private getFormatDateFromMoment(date: Date): Date {
+    let formatDate = moment(date)?.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    return new Date(formatDate);
   }
 
 }
