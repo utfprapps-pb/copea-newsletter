@@ -71,8 +71,6 @@ export class CardNewsletterScheduleComponent implements OnInit {
 
       // Quando o valor da string vindo for exemplo 09:10 ou 19:10
       let parts = time.match(/(\d+)\:(\d+)/);
-
-      console.log(parts)
       if (parts) {
         // Quando o valor da string vindo for exemplo 01:10 AM ou 01:10 PM
         // const hours = /am/i.test(parts[3]) ? parseInt(parts[1], 10) : parseInt(parts[1], 10) + 12;
@@ -154,11 +152,8 @@ export class CardNewsletterScheduleComponent implements OnInit {
   }
 
   public onAgendarEnvioClick() {
-    console.log(this.form);
     if (this.form.invalid)
       return;
-
-    console.log(this.dataDialog);
 
     if (this.dataDialog?.newsletter) {
       let formValue = this.form.value;
@@ -174,6 +169,7 @@ export class CardNewsletterScheduleComponent implements OnInit {
         next: (value) => {
           console.log(value);
           this.mensagemService.mostrarMensagem('Agendamento efetuado com sucesso.');
+          this.closeDialog();
         },
         error: (error) => {
           console.log(error);
@@ -188,6 +184,10 @@ export class CardNewsletterScheduleComponent implements OnInit {
   }
 
   public onCancelarClick() {
+    this.closeDialog();
+  }
+
+  private closeDialog() {
     this.dialog.closeAll();
   }
 
