@@ -30,7 +30,7 @@ public class NewsletterQuartzTasksSchedule implements IQuartzTasksSchedule {
     public JobDetail getJobDetail() {
         return JobBuilder.newJob(getJobClass())
                 .withIdentity(getJobIdentity(), getJobGroup())
-                .usingJobData("newsletterId", String.valueOf(getNewsletterId()))
+                .usingJobData(JOB_DATA_NEWSLETTER_ID, String.valueOf(getNewsletterId()))
                 .build();
     }
 }
