@@ -363,3 +363,7 @@ body {
 .width-300px {
   width: 300px;
 }
+
+.multiline-tooltip {
+  white-space: pre-line;
+}
