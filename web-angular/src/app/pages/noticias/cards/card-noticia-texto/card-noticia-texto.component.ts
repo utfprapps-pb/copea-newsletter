@@ -11,6 +11,7 @@ import { AdvancedCrudController } from 'src/app/shared/crud/advanced-crud.contro
 
 // aplicação
 import { Noticia } from '../../models/noticia';
+import { QuartzTasks } from 'src/app/pages/noticias/cards/card-newsletter-schedule/models/quartz-tasks';
 
 @Component({
   selector: 'app-card-noticia-texto',
@@ -22,6 +23,8 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
   @ViewChild('editor', { static: true }) public editorComponent: ElementRef;
 
   @Input() public lastSentEmailNewsletter: LastSentEmailNewsletter;
+
+  @Input() public activeNewsletterQuartzTasksSchedules: Array<QuartzTasks>;
 
   public ngOnInit(): void {
   }

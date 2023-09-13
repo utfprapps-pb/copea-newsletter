@@ -1,28 +1,35 @@
 package br.edu.utfpr.newsletter.quartz_tasks;
 
-import br.edu.utfpr.newsletter.quartz_tasks.schedule.NewsletterQuartzTasksSchedule;
-import br.edu.utfpr.quartz.tasks.schedule.QuartzTasksSchedule;
-import br.edu.utfpr.newsletter.quartz_tasks.schedule.NewsletterQuartzTasksScheduleJob;
-import br.edu.utfpr.quartz.tasks.schedule.IQuartzTasksSchedule;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.newsletter.Newsletter;
+import br.edu.utfpr.newsletter.quartz_tasks.schedule.NewsletterQuartzTasksSchedule;
+import br.edu.utfpr.newsletter.quartz_tasks.schedule.NewsletterQuartzTasksScheduleJob;
 import br.edu.utfpr.quartz.tasks.QuartzTasks;
+import br.edu.utfpr.quartz.tasks.schedule.IQuartzTasksSchedule;
+import br.edu.utfpr.quartz.tasks.schedule.QuartzTasksSchedule;
+import br.edu.utfpr.sql.SQLBuilder;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RequestScoped
 public class NewsletterQuartzTasksService extends GenericService<NewsletterQuartzTasks, Long, NewsletterQuartzTasksRepository> {
 
     @Inject
     QuartzTasksSchedule quartzTasksSchedule;
+
+    @Inject
+    EntityManager entityManager;
 
     @Override
     public void setDefaultValuesWhenNew(NewsletterQuartzTasks entity) {
@@ -71,6 +78,28 @@ public class NewsletterQuartzTasksService extends GenericService<NewsletterQuart
                             System.lineSeparator() +
                             "Detalhes: " + exception.getMessage());
         }
+    }
+
+    public List<QuartzTasks> findQuartzTasksByNewsletter(Long newsletterId) {
+        /**
+         * TODO: Jogar execução desse SQL e os demais no repository, porém precisa encontrar
+         * uma forma de deixar o repository como uma classe e não interface,
+         * o repository do spring no quarkus não suporta @Query nativa
+         */
+        SQLBuilder sqlBuilder = new SQLBuilder(
+                """
+            select qrtz_tasks.* from newsletter
+            inner join newsletter_qrtz_tasks nqt on (nqt.newsletter_id = newsletter.id)
+            inner join qrtz_tasks on (qrtz_tasks.id = nqt.qrtz_tasks_id)
+            inner join qrtz_triggers on (qrtz_triggers.trigger_group = qrtz_tasks.trigger_group) and
+            (qrtz_triggers.trigger_name = qrtz_tasks.trigger_name)            
+            """
+        );
+        if (Objects.nonNull(newsletterId))
+            sqlBuilder.addAnd("(newsletter.id = :newsletterId)", "newsletterId", newsletterId);
+        Query query = sqlBuilder.createNativeQuery(entityManager, QuartzTasks.class);
+        return query.getResultList();
+
     }
 
 }

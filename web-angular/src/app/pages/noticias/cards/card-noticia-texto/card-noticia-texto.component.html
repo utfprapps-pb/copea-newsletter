@@ -22,6 +22,10 @@
           <span *ngIf="(id && (!lastSentEmailNewsletter || !lastSentEmailNewsletter.logDate))"
             class="font-size-14px">Nenhum envio registrado</span>
         </div>
+        <!-- Teste de como fica o layout com o próximo envio agendado -->
+        <div>
+          <span class="font-size-14px">Existe um envio agendado para {{activeNewsletterQuartzTasksSchedules | json}} <a href="">Clique aqui para cancelar</a></span>
+        </div>
 
         <!-- Exemplo de como usar o tooltip do angular material com quebra de linha -->
         <!-- <div class="d-flex">
@@ -31,11 +35,6 @@
                       Teste linha 2" matTooltipClass="multiline-tooltip" matTooltipPosition="above">info</mat-icon> -->
           <!-- <span class="font-size-14px">Existe um envio agendado para 11/09/2023 20:46:17</span> -->
         <!-- </div> -->
-
-        <!-- Teste de como fica o layout com o próximo envio agendado -->
-        <!-- <div>
-          <span class="font-size-14px">Existe um envio agendado para 11/09/2023 20:46:17</span>
-        </div> -->
       </div>
 
       <form [formGroup]="form">

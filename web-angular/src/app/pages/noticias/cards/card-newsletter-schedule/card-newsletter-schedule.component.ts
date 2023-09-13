@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as moment from 'moment-timezone';
 import { NewsletterQuartzTasksService } from 'src/app/pages/noticias/services/newsletter-quartz-tasks.service';
 import { MensagemService } from 'src/app/shared/services/mensagem.service';
@@ -9,9 +9,6 @@ import { MensagemService } from 'src/app/shared/services/mensagem.service';
   selector: 'app-card-newsletter-schedule',
   templateUrl: './card-newsletter-schedule.component.html',
   styleUrls: ['./card-newsletter-schedule.component.scss'],
-  providers: [
-    NewsletterQuartzTasksService,
-  ],
 })
 export class CardNewsletterScheduleComponent implements OnInit {
 
@@ -21,6 +18,7 @@ export class CardNewsletterScheduleComponent implements OnInit {
     public formBuilder: FormBuilder,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
+    @Optional() public dialogRef: MatDialogRef<CardNewsletterScheduleComponent>,
     private newsletterQuartzTasksService: NewsletterQuartzTasksService,
     private mensagemService: MensagemService,
   ) {
@@ -169,7 +167,9 @@ export class CardNewsletterScheduleComponent implements OnInit {
         next: (value) => {
           console.log(value);
           this.mensagemService.mostrarMensagem('Agendamento efetuado com sucesso.');
-          this.closeDialog();
+          // TODO: ajustar para retornar um objeto para controlar se fez o agendamento
+          // antes de fechar a dialog.
+          this.dialogRef.close(true);
         },
         error: (error) => {
           console.log(error);
