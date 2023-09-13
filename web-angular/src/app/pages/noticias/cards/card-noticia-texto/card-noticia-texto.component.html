@@ -24,7 +24,10 @@
         </div>
         <!-- Teste de como fica o layout com o próximo envio agendado -->
         <div>
-          <span class="font-size-14px">Existe um envio agendado para {{activeNewsletterQuartzTasksSchedules | json}} <a href="">Clique aqui para cancelar</a></span>
+          <span *ngIf="activeNewsletterQuartzTasksSchedulesText && activeNewsletterQuartzTasksSchedulesText != ''"
+            class="font-size-14px">
+            {{activeNewsletterQuartzTasksSchedulesText}} <a href="">Clique aqui para cancelar
+            </a></span>
         </div>
 
         <!-- Exemplo de como usar o tooltip do angular material com quebra de linha -->
@@ -33,7 +36,7 @@
           <mat-icon class="info-icon"
           matTooltip="Teste linha 1
                       Teste linha 2" matTooltipClass="multiline-tooltip" matTooltipPosition="above">info</mat-icon> -->
-          <!-- <span class="font-size-14px">Existe um envio agendado para 11/09/2023 20:46:17</span> -->
+        <!-- <span class="font-size-14px">Existe um envio agendado para 11/09/2023 20:46:17</span> -->
         <!-- </div> -->
       </div>
 

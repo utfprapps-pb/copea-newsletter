@@ -30,14 +30,18 @@
         <div class="d-flex" *ngIf="registro.id && !registro.newsletterTemplate">
           <button mat-button class="mat-button-accent button-send-email" (click)="onClickEnviar()"
             title="Enviar newsletter por e-mail">Enviar</button>
-          <button class="d-m-right color-primary button-schedule" [matMenuTriggerFor]="menu">
+          <button class="d-m-right color-primary button-schedule" [matMenuTriggerFor]="menu"
+            (click)="onClickSendButtonMenu()">
             <mat-icon class="color-white">arrow_drop_down</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item title="Agendar envio da newsletter por e-mail" (click)="onClickSchedule()">
-              <mat-icon>schedule</mat-icon>
-              <span>Agendar envio</span>
-            </button>
+            <div [matTooltip]="'Cancele o agendamento atual para incluir um novo.'"
+              [matTooltipDisabled]="buttonSendScheduleEnabled">
+              <button mat-menu-item (click)="onClickSchedule()" [disabled]="!buttonSendScheduleEnabled">
+                <mat-icon>schedule</mat-icon>
+                <span>Agendar envio</span>
+              </button>
+            </div>
           </mat-menu>
         </div>
 

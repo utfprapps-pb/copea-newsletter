@@ -1,6 +1,6 @@
 import { LastSentEmailNewsletter } from '../../models/last-sent-email-newsletter';
 import { DrawerService } from '../../../admin/drawer.service';
-import { Component, ViewChild, OnInit, ElementRef, Output, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { DomSanitizer } from '@angular/platform-browser';
@@ -12,21 +12,28 @@ import { AdvancedCrudController } from 'src/app/shared/crud/advanced-crud.contro
 // aplicação
 import { Noticia } from '../../models/noticia';
 import { QuartzTasks } from 'src/app/pages/noticias/cards/card-newsletter-schedule/models/quartz-tasks';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-card-noticia-texto',
   templateUrl: 'card-noticia-texto.component.html',
   styleUrls: ['./card-noticia-texto.component.scss']
 })
-export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> implements OnInit {
+export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> implements OnInit, OnChanges {
 
   @ViewChild('editor', { static: true }) public editorComponent: ElementRef;
 
   @Input() public lastSentEmailNewsletter: LastSentEmailNewsletter;
 
   @Input() public activeNewsletterQuartzTasksSchedules: Array<QuartzTasks>;
+  public activeNewsletterQuartzTasksSchedulesText: string = '';
 
   public ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['activeNewsletterQuartzTasksSchedules'])
+      this.setActiveNewsletterQuartzTasksSchedulesText();
   }
 
   constructor(
@@ -34,6 +41,7 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
     public override formBuilder: FormBuilder,
     public sanitizer: DomSanitizer,
     public drawerService: DrawerService,
+    private datePipe: DatePipe,
   ) {
     super(crudController, formBuilder);
   }
@@ -93,6 +101,26 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
     }
     //Usado pois ao fechar o menu, não atualiza sozinho
     this.drawerService.matDrawerContainer.updateContentMargins();
+  }
+
+  private setActiveNewsletterQuartzTasksSchedulesText() {
+    this.activeNewsletterQuartzTasksSchedulesText = '';
+    if (this.activeNewsletterQuartzTasksSchedules?.length == 0)
+      return;
+
+    let activeNewsletterQuartzTaskSchedule = this.activeNewsletterQuartzTasksSchedules[0];
+    let formatStartAtDate = this.datePipe.transform(activeNewsletterQuartzTaskSchedule.startAt, 'dd/MM/yyyy HH:mm:ss');
+    let formatEndAtDate = this.datePipe.transform(activeNewsletterQuartzTaskSchedule.endAt, 'dd/MM/yyyy HH:mm:ss');
+
+    if (activeNewsletterQuartzTaskSchedule.recurrent) {
+      this.activeNewsletterQuartzTasksSchedulesText =
+        `Existe um envio agendado para iniciar em
+        ${formatStartAtDate} com envio recorrente de
+        ${activeNewsletterQuartzTaskSchedule.dayRange} dias
+        e data de término em ${formatEndAtDate}`;
+      return;
+    }
+    this.activeNewsletterQuartzTasksSchedulesText = `Existe um envio agendado para ${formatStartAtDate}`;
   }
 
 }

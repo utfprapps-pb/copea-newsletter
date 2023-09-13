@@ -31,6 +31,7 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
   public lastSentEmailNewsletter: LastSentEmailNewsletter;
 
   public activeNewsletterQuartzTasksSchedules: Array<QuartzTasks>;
+  public buttonSendScheduleEnabled = true;
 
   constructor(
     public override crudController: AdvancedCrudController<Noticia>,
@@ -148,10 +149,12 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
 
   private getActiveNewsletterQuartzTasksSchedule(registroId) {
     this.activeNewsletterQuartzTasksSchedules = [];
+    this.buttonSendScheduleEnabled = true;
     this.newsletterQuartzTasksService.getActiveSchedules(registroId).subscribe(
       {
         next: (value) => {
           this.activeNewsletterQuartzTasksSchedules = value;
+          this.buttonSendScheduleEnabled = (!this.activeNewsletterQuartzTasksSchedules || this.activeNewsletterQuartzTasksSchedules.length == 0);
         },
       }
     )
@@ -167,6 +170,11 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
           this.getActiveNewsletterQuartzTasksSchedule(this.registro.id!);
       }
     })
+  }
+
+  public onClickSendButtonMenu() {
+    if (this.registro?.id)
+      this.getActiveNewsletterQuartzTasksSchedule(this.registro.id);
   }
 
 }

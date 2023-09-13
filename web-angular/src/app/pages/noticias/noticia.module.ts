@@ -4,7 +4,7 @@ import { PesquisaNoticiaModule } from './../pesquisa-noticia/pesquisa-noticia.mo
 import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -68,6 +68,7 @@ const routes: Routes = [
   providers: [
     TokenInterceptor,
     NewsletterQuartzTasksService,
+    DatePipe,
 
     // interceptors
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },
