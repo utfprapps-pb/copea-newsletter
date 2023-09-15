@@ -2,6 +2,8 @@ package br.edu.utfpr.newsletter.quartz_tasks.schedule;
 
 import br.edu.utfpr.email.read.ReadEmailService;
 import br.edu.utfpr.newsletter.NewsletterService;
+import br.edu.utfpr.newsletter.quartz_tasks.NewsletterQuartzTasks;
+import br.edu.utfpr.quartz.tasks.QuartzTasks;
 import br.edu.utfpr.reponses.DefaultResponse;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.quartz.Job;
@@ -24,12 +26,18 @@ public class NewsletterQuartzTasksScheduleJob implements Job {
     @ActivateRequestContext
     public void execute(JobExecutionContext context) {
         JobDataMap jobDataMap = context.getMergedJobDataMap();
-        String newsletterId = jobDataMap.getString(NewsletterQuartzTasksSchedule.JOB_DATA_NEWSLETTER_ID);
+        String newsletterId = jobDataMap.getString(NewsletterQuartzTasks.JOB_DATA_NEWSLETTER_ID);
         if (Objects.isNull(newsletterId) || newsletterId.isEmpty())
             return;
 
         try {
-            DefaultResponse defaultResponse = newsletterService.sendScheduledNewsletterByEmail(Long.valueOf(newsletterId));
+            DefaultResponse defaultResponse = newsletterService.sendScheduledNewsletterByEmail(
+                    Long.valueOf(newsletterId),
+                    jobDataMap.getString(QuartzTasks.JOB_DATA_JOB_NAME),
+                    jobDataMap.getString(QuartzTasks.JOB_DATA_JOB_GROUP),
+                    jobDataMap.getString(QuartzTasks.JOB_DATA_TRIGGER_NAME),
+                    jobDataMap.getString(QuartzTasks.JOB_DATA_TRIGGER_GROUP)
+            );
             if (Objects.equals(defaultResponse.getHttpStatus(), RestResponse.StatusCode.OK))
                 LOGGER.info("Tarefa agendada do envio de e-mail das newsletters pelo Quartz: " + defaultResponse.getMessage());
             else

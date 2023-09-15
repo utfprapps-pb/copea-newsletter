@@ -35,7 +35,7 @@
             <mat-icon class="color-white">arrow_drop_down</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <div [matTooltip]="'Cancele o agendamento atual para incluir um novo.'"
+            <div [matTooltip]="'Cancele o agendamento atual para incluir um novo'"
               [matTooltipDisabled]="buttonSendScheduleEnabled">
               <button mat-menu-item (click)="onClickSchedule()" [disabled]="!buttonSendScheduleEnabled">
                 <mat-icon>schedule</mat-icon>
@@ -57,6 +57,7 @@
     <!-- Card texto -->
     <app-card-noticia-texto [lastSentEmailNewsletter]="lastSentEmailNewsletter"
       [activeNewsletterQuartzTasksSchedules]="activeNewsletterQuartzTasksSchedules"
+      (cancelSchedule)="onCancelSchedule()"
       class="full-width"></app-card-noticia-texto>
 
   </div>

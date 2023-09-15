@@ -25,6 +25,7 @@ import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CardNewsletterScheduleComponent } from './cards/card-newsletter-schedule/card-newsletter-schedule.component';
 import { NewsletterQuartzTasksService } from 'src/app/pages/noticias/services/newsletter-quartz-tasks.service';
+import { QuartzTasksService } from 'src/app/pages/noticias/services/quartz-tasks.service';
 
 const routes: Routes = [
   { path: '', redirectTo: 'manutencao', pathMatch: 'full' },
@@ -68,6 +69,7 @@ const routes: Routes = [
   providers: [
     TokenInterceptor,
     NewsletterQuartzTasksService,
+    QuartzTasksService,
     DatePipe,
 
     // interceptors

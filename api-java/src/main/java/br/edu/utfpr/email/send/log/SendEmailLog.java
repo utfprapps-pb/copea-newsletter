@@ -49,4 +49,7 @@ public class SendEmailLog implements Serializable {
     @Column(name = "message_id")
     private String messageID;
 
+    @Column(name = "qrtz_tasks_id")
+    private Long quartzTaskId;
+
 }

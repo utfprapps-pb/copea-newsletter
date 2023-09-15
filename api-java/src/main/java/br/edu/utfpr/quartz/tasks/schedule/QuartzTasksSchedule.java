@@ -1,5 +1,6 @@
 package br.edu.utfpr.quartz.tasks.schedule;
 
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 
@@ -20,6 +21,10 @@ public class QuartzTasksSchedule {
         for (IQuartzTasksSchedule quartzTasksSchedule : quartzTasksSchedules) {
             scheduler.scheduleJob(quartzTasksSchedule.getJobDetail(), quartzTasksSchedule.getTrigger());
         }
+    }
+
+    public boolean deleteJob(String jobName, String jobGroup) throws SchedulerException {
+        return scheduler.deleteJob(new JobKey(jobName, jobGroup));
     }
 
 }

@@ -177,4 +177,9 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
       this.getActiveNewsletterQuartzTasksSchedule(this.registro.id);
   }
 
+  public onCancelSchedule() {
+    if (this.registro?.id)
+      this.getActiveNewsletterQuartzTasksSchedule(this.registro.id);
+  }
+
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 
 import java.util.Date;
@@ -12,8 +13,6 @@ import java.util.Date;
 @Getter
 @Setter
 public class NewsletterQuartzTasksSchedule implements IQuartzTasksSchedule {
-
-    public static final String JOB_DATA_NEWSLETTER_ID = "newsletterId";
 
     private Class<? extends Job> jobClass;
     private String jobIdentity;
@@ -24,13 +23,15 @@ public class NewsletterQuartzTasksSchedule implements IQuartzTasksSchedule {
     private Date dateStartAt;
     private Date dateEndAt;
     private boolean recurrent = false;
-    private Long newsletterId;
+//    private Long newsletterId;
+    private JobDataMap jobDataMap;
 
     @Override
     public JobDetail getJobDetail() {
         return JobBuilder.newJob(getJobClass())
                 .withIdentity(getJobIdentity(), getJobGroup())
-                .usingJobData(JOB_DATA_NEWSLETTER_ID, String.valueOf(getNewsletterId()))
+//                .usingJobData(JOB_DATA_NEWSLETTER_ID, String.valueOf(getNewsletterId()))
+                .usingJobData(getJobDataMap())
                 .build();
     }
 }

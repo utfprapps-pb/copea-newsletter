@@ -1,6 +1,6 @@
 import { LastSentEmailNewsletter } from '../../models/last-sent-email-newsletter';
 import { DrawerService } from '../../../admin/drawer.service';
-import { Component, ViewChild, OnInit, ElementRef, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ViewChild, OnInit, ElementRef, Output, Input, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { DomSanitizer } from '@angular/platform-browser';
@@ -13,6 +13,9 @@ import { AdvancedCrudController } from 'src/app/shared/crud/advanced-crud.contro
 import { Noticia } from '../../models/noticia';
 import { QuartzTasks } from 'src/app/pages/noticias/cards/card-newsletter-schedule/models/quartz-tasks';
 import { DatePipe } from '@angular/common';
+import { QuartzTasksService } from 'src/app/pages/noticias/services/quartz-tasks.service';
+import { MensagemService } from 'src/app/shared/services/mensagem.service';
+import { errorTransform } from 'src/app/shared/pipes/error-transform';
 
 @Component({
   selector: 'app-card-noticia-texto',
@@ -28,6 +31,8 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
   @Input() public activeNewsletterQuartzTasksSchedules: Array<QuartzTasks>;
   public activeNewsletterQuartzTasksSchedulesText: string = '';
 
+  @Output('cancelSchedule') public cancelScheduleEvent = new EventEmitter();
+
   public ngOnInit(): void {
   }
 
@@ -42,6 +47,8 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
     public sanitizer: DomSanitizer,
     public drawerService: DrawerService,
     private datePipe: DatePipe,
+    private quartzTasksService: QuartzTasksService,
+    private mensagemService: MensagemService,
   ) {
     super(crudController, formBuilder);
   }
@@ -121,6 +128,25 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
       return;
     }
     this.activeNewsletterQuartzTasksSchedulesText = `Existe um envio agendado para ${formatStartAtDate}`;
+  }
+
+  public onCancelSchedule() {
+    if (this.activeNewsletterQuartzTasksSchedules?.length == 0)
+      return;
+
+    let activeNewsletterQuartzTaskSchedule = this.activeNewsletterQuartzTasksSchedules[0];
+    if (activeNewsletterQuartzTaskSchedule.id)
+      this.quartzTasksService.cancel(activeNewsletterQuartzTaskSchedule.id).subscribe({
+        next: (response) => {
+          if (response.value) {
+            this.mensagemService.mostrarMensagem('Agendamento cancelado com sucesso.');
+            this.cancelScheduleEvent.emit();
+          }
+        },
+        error: (error) => {
+          this.mensagemService.mostrarMensagem(errorTransform(error) + '');
+        }
+      });
   }
 
 }

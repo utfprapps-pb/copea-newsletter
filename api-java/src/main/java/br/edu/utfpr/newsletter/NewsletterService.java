@@ -7,11 +7,14 @@ import br.edu.utfpr.email.config.ConfigEmailService;
 import br.edu.utfpr.email.read.ReadEmailService;
 import br.edu.utfpr.email.send.SendEmailService;
 import br.edu.utfpr.email.send.log.SendEmailLog;
+import br.edu.utfpr.email.send.log.SendEmailLogService;
 import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.newsletter.requests.NewsletterSearchRequest;
 import br.edu.utfpr.newsletter.responses.LastSentEmailNewsletter;
+import br.edu.utfpr.quartz.tasks.QuartzTasks;
+import br.edu.utfpr.quartz.tasks.QuartzTasksService;
 import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
@@ -41,6 +44,9 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     SendEmailService sendEmailService;
 
     @Inject
+    SendEmailLogService sendEmailLogService;
+
+    @Inject
     ConfigEmailService configEmailService;
 
     @Inject
@@ -51,6 +57,9 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
     @Inject
     EntityManager entityManager;
+
+    @Inject
+    QuartzTasksService quartzTasksService;
 
     @Override
     public GenericResponse save(Newsletter entity) {
@@ -92,12 +101,22 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
      * @return
      * @throws Exception
      */
-    public DefaultResponse sendScheduledNewsletterByEmail(Long newsletterId) throws Exception {
+    public DefaultResponse sendScheduledNewsletterByEmail(
+            Long newsletterId, String jobName, String jobGroup, String triggerName, String triggerGroup
+    ) throws Exception {
         Optional<Newsletter> optionalNewsletterEntity = getRepository().findById(newsletterId);
         if (optionalNewsletterEntity.isEmpty())
             return getResponseNewsletterNotFound();
         Newsletter newsletter = optionalNewsletterEntity.get();
-        return sendNewsletterByEmail(newsletter, configEmailService.getOneConfigEmailByUser(newsletter.getUser()));
+
+        Optional<QuartzTasks> quartzTasksOptional = quartzTasksService.findByJobNameAndJobGroupAndTriggerNameAndTriggerGroup(
+                jobName, jobGroup, triggerName, triggerGroup
+        );
+        Long quartzTaskId = null;
+        if (quartzTasksOptional.isPresent())
+            quartzTaskId = quartzTasksOptional.get().getId();
+
+        return sendNewsletterByEmail(newsletter, configEmailService.getOneConfigEmailByUser(newsletter.getUser()), quartzTaskId);
     }
 
     /**
@@ -108,10 +127,11 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
      */
     public DefaultResponse sendNewsletterByEmail(Long newsletterId) throws Exception {
         Optional<Newsletter> optionalNewsletterEntity = getRepository().findByIdAndUser(newsletterId, getAuthSecurityFilter().getAuthUserContext().findByToken());
-        return sendNewsletterByEmail(optionalNewsletterEntity.get(), configEmailService.getConfigEmailByLoggedUser());
+        return sendNewsletterByEmail(optionalNewsletterEntity.get(), configEmailService.getConfigEmailByLoggedUser(), null);
     }
 
-    private DefaultResponse sendNewsletterByEmail(Newsletter newsletter, ConfigEmail configEmail) throws Exception {
+    // TODO: SOMENTE TESTE: Ajustar depois para não passar o QuartzTaskId nesse método, pois só usa quando é por agendamento, normal não utiliza, deveria ser um método separado
+    private DefaultResponse sendNewsletterByEmail(Newsletter newsletter, ConfigEmail configEmail, Long quartzTaskId) throws Exception {
         if (Objects.isNull(newsletter))
             return getResponseNewsletterNotFound();
 
@@ -127,6 +147,12 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
                 newsletter.getNewsletter(),
                 configEmail,
                 sendEmailService.convertArrayEmailEntityToStringArray(subscribedEmails));
+
+        // TODO: Encontrar uma forma melhor de setar esse id, pois no método sendEmailService.send já é feito um save da entidade no banco
+        if ((Objects.nonNull(quartzTaskId)) && (quartzTaskId > 0)) {
+            sendEmailLog.setQuartzTaskId(quartzTaskId);
+            sendEmailLogService.update(sendEmailLog);
+        }
 
         newsletter.getSendEmailLogs().add(sendEmailLog);
         getRepository().save(newsletter);

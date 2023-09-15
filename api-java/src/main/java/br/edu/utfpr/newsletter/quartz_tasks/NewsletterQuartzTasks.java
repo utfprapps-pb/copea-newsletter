@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class NewsletterQuartzTasks {
 
+    public static final String JOB_DATA_NEWSLETTER_ID = "newsletterId";
+
     @Id
     @SequenceGenerator(name = "newsletter_qrtz_tasks_id_sequence", sequenceName = "newsletter_qrtz_tasks_id_sequence", allocationSize = 1, initialValue = 1)
     @GeneratedValue(generator = "newsletter_qrtz_tasks_id_sequence")
