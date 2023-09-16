@@ -39,7 +39,8 @@ public class QuartzTasksService extends GenericService<QuartzTasks, Long, Quartz
             automatedScheduler.setRecurrent(quartzTask.isRecurrent());
             if (automatedScheduler.isRecurrent()) {
 //            automatedScheduler.setIntervalInHours(quartzTask.getDayRange() * 24);
-                automatedScheduler.setIntervalInHours(quartzTask.getDayRange()); // teste pois por enquanto no AutomatedScheduler está por minuto para testar
+                // TODO: teste pois por enquanto no AutomatedScheduler está por minuto para testar, depois voltar para a linha de cima
+                automatedScheduler.setIntervalInHours(quartzTask.getDayRange());
                 automatedScheduler.setDateEndAt(
                         Date.from(quartzTask.getEndAt().atZone(ZoneId.systemDefault()).toInstant())
                 );
