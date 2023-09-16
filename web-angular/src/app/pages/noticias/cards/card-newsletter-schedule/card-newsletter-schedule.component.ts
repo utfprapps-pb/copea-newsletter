@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as moment from 'moment-timezone';
 import { NewsletterQuartzTasksService } from 'src/app/pages/noticias/services/newsletter-quartz-tasks.service';
@@ -28,6 +28,18 @@ export class CardNewsletterScheduleComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  public criarForm(): FormGroup {
+    return this.formBuilder.group({
+      id: [null],
+      startAt: [new Date(), Validators.required],
+      timeStartAt: [this.getTimeString(new Date()), Validators.required],
+      recurrent: [false],
+      dayRange: [null],
+      endAt: [null],
+      timeEndAt: [null],
+    })
   }
 
   private implementChanges() {
@@ -86,32 +98,34 @@ export class CardNewsletterScheduleComponent implements OnInit {
   private configRecurrentFields(enable) {
     if (enable) {
       this.dayRange.enable();
-      this.dayRange.setValidators([Validators.required]);
+      this.setValidators(this.dayRange, [Validators.required]);
+
       this.endAt.enable();
-      this.endAt.setValidators([Validators.required]);
+      this.setValidators(this.endAt, [Validators.required]);
+
       this.timeEndAt.enable();
-      this.timeEndAt.setValidators([Validators.required]);
+      this.setValidators(this.timeEndAt, [Validators.required]);
       return;
     }
 
     this.dayRange.disable();
-    this.dayRange.clearValidators();
+    this.clearValidators(this.dayRange);
+
     this.endAt.disable();
-    this.endAt.clearValidators();
+    this.clearValidators(this.endAt);
+
     this.timeEndAt.disable();
-    this.timeEndAt.clearValidators();
+    this.clearValidators(this.timeEndAt);
   }
 
-  public criarForm(): FormGroup {
-    return this.formBuilder.group({
-      id: [null],
-      startAt: [new Date(), Validators.required],
-      timeStartAt: [this.getTimeString(new Date())],
-      recurrent: [false],
-      dayRange: [null],
-      endAt: [null],
-      timeEndAt: [null],
-    })
+  private setValidators(formField: AbstractControl, validators: ValidatorFn[]) {
+    formField.setValidators(validators);
+    formField.updateValueAndValidity();
+  }
+
+  private clearValidators(formField: AbstractControl) {
+    formField.clearValidators();
+    formField.updateValueAndValidity();
   }
 
   private getTimeString(date: Date) {

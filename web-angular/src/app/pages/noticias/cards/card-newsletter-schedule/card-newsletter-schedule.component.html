@@ -14,7 +14,7 @@
           <mat-label>Hora de início</mat-label>
           <input matInput type="time" formControlName="timeStartAt"
             placeholder="Digite a hora de início..." cdkFocusInitial>
-          <mat-error>{{dayRange.errors | erro}}</mat-error>
+          <mat-error>{{timeStartAt.errors | erro}}</mat-error>
         </mat-form-field>
       </div>
 
@@ -31,7 +31,7 @@
         </mat-form-field>
 
         <!-- Data de encerramento -->
-        <mat-form-field class="full-width" appearance="fill">
+        <mat-form-field class="full-width d-m-top" appearance="fill">
           <mat-label>Data de encerramento</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="endAt">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -43,7 +43,7 @@
           <mat-label>Hora de encerramento</mat-label>
           <input matInput type="time" formControlName="timeEndAt"
             placeholder="Digite a hora de encerramento..." cdkFocusInitial>
-          <mat-error>{{dayRange.errors | erro}}</mat-error>
+          <mat-error>{{timeEndAt.errors | erro}}</mat-error>
         </mat-form-field>
       </div>
     </div>
