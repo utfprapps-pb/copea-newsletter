@@ -112,7 +112,8 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
 
   private setActiveNewsletterQuartzTasksSchedulesText() {
     this.activeNewsletterQuartzTasksSchedulesText = '';
-    if (this.activeNewsletterQuartzTasksSchedules?.length == 0)
+    if ((!this.activeNewsletterQuartzTasksSchedules) ||
+      (this.activeNewsletterQuartzTasksSchedules.length == 0))
       return;
 
     let activeNewsletterQuartzTaskSchedule = this.activeNewsletterQuartzTasksSchedules[0];
