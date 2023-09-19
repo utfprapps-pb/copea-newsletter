@@ -9,6 +9,7 @@ const routes: Routes = [
     { path: 'login', loadChildren: () => import('./pages/login/login.module').then(mod => mod.LoginModule) },
     { path: 'recuperacao-senha', loadChildren: () => import('./pages/recuperacao-senha/recuperacao-senha.module').then(mod => mod.RecuperacaoSenhaModule) },
     { path: 'cadastro', loadChildren: () => import('./pages/cadastro/cadastro.module').then(mod => mod.CadastroModule) },
+    { path: 'email-self-registration', loadChildren: () => import('./pages/email-self-registration/email-self-registration.module').then(mod => mod.EmailSelfRegistrationModule) },
     { path: 'admin', loadChildren: () => import('./pages/admin/admin.module').then(mod => mod.AdminModule), canActivate: [RoleGuard] },
 ];
 

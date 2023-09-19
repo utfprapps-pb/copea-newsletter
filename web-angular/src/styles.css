@@ -355,3 +355,11 @@ body {
   visibility: visible;
   opacity: 1;
 }
+
+.middle-align {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+}
