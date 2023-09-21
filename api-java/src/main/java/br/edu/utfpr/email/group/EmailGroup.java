@@ -1,4 +1,4 @@
-package br.edu.utfpr.emailgroup;
+package br.edu.utfpr.email.group;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +19,8 @@ public class EmailGroup {
     @NotBlank(message = "Parameter name is required.")
     @Column(nullable = false)
     private String name;
+
+    @Column(name = "uuid_to_self_registration")
+    private String uuidToSelfRegistration;
 
 }

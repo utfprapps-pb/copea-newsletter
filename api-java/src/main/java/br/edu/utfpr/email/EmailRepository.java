@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EmailRepository extends GenericRepository<Email, Long> {
@@ -18,9 +19,11 @@ public interface EmailRepository extends GenericRepository<Email, Long> {
     List<Email> findByEmailAndNewsletter(String email, Long newsletterId);
 
     @Query("SELECT e " +
-            "FROM email_group_email g " +
+            "FROM EmailGroupRelation g " +
             "LEFT JOIN g.email e " +
-            "WHERE g.email_group_id = :groupId")
-    List<Email> findByEmailGroupId(Long groupId);
+            "WHERE (e.email = :email) and (g.emailGroup.id = :groupId)")
+    Optional<Email> findByEmailAndGroupId(String email, Long groupId);
+
+    Optional<Email> findByEmail(String email);
 
 }

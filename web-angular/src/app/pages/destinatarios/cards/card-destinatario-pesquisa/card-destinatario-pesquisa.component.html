@@ -37,11 +37,11 @@
         </ng-container>
 
         <!-- Grupo Column -->
-        <ng-container matColumnDef="groups">
+        <ng-container matColumnDef="emailGroupRelations">
           <th mat-header-cell *matHeaderCellDef> Grupos </th>
           <td mat-cell *matCellDef="let destinatario">
-            <div class="tooltip">{{destinatario.groups | destinatariosGrupos}}
-              <span class="tooltiptext">{{destinatario.groups | destinatariosGrupos: true}}</span>
+            <div class="tooltip">{{destinatario.emailGroupRelations | destinatariosGrupos}}
+              <span class="tooltiptext">{{destinatario.emailGroupRelations | destinatariosGrupos: true}}</span>
             </div>
           </td>
         </ng-container>

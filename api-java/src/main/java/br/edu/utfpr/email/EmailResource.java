@@ -1,11 +1,12 @@
 package br.edu.utfpr.email;
 
+import br.edu.utfpr.email.self_registration.EmailSelfRegistration;
 import br.edu.utfpr.generic.crud.GenericResource;
+import br.edu.utfpr.reponses.DefaultResponse;
 
 import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
+import javax.transaction.Transactional;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -29,6 +30,19 @@ public class EmailResource extends GenericResource<Email, Email, Long, EmailServ
             @QueryParam("groupId") Long groupId
     ) {
         return getService().findEmailsByGroup(groupId);
+    }
+
+    @POST
+    @Path("self-registration")
+    @Transactional
+    public Response saveSelfEmailRegistration(EmailSelfRegistration emailSelfRegistration) {
+        getService().saveSelfEmailRegistration(emailSelfRegistration);
+        return Response.ok(
+                new DefaultResponse(
+                        Response.Status.OK.getStatusCode(),
+                        "E-mail cadastrado com sucesso."
+                )
+        ).build();
     }
 
 }

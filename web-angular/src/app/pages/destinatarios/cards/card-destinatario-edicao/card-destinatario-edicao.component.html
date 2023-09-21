@@ -25,9 +25,9 @@
 
           <!-- Chips -->
           <mat-chip-list #chipList aria-label="Grupos">
-            <mat-chip *ngFor="let grupo of gruposControl?.value; index as i" (removed)="removeGrupo(i)">
-              {{grupo.name}}
-              <button type="button" class="mat-chip-remove" (click)="abrirModalCadastroGrupo(grupo, i)">
+            <mat-chip *ngFor="let emailGroupRelation of emailGroupRelationsControl?.value; index as i" (removed)="removeGrupo(i)">
+              {{emailGroupRelation.emailGroup.name}}
+              <button type="button" class="mat-chip-remove" (click)="abrirModalCadastroGrupo(emailGroupRelation.emailGroup, i)">
                 <mat-icon>edit</mat-icon>
               </button>
               <button matChipRemove>

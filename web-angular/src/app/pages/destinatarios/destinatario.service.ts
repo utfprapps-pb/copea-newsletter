@@ -16,7 +16,7 @@ export class DestinatarioService extends CrudService<Destinatario> {
     }
 
     public get novoRegistro(): Observable<Destinatario> {
-        return of({ email: '', groups: [], subscribed: 'YES' });
+        return of({ email: '', emailGroupRelations: [], subscribed: 'YES' });
     }
 
     /**

@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { GrupoDestinatario } from '../../grupo-destinatarios/model/grupo-destinatario';
+import { EmailGroupRelation, GrupoDestinatario } from '../../grupo-destinatarios/model/grupo-destinatario';
 
 @Pipe({
   name: 'destinatariosGrupos'
 })
 export class DestinatariosGruposPipe implements PipeTransform {
 
-  transform(value: GrupoDestinatario[], showAll: boolean): any {
+  transform(value: EmailGroupRelation[], showAll: boolean): any {
     if (!value || !value.length)
       return '-';
 
@@ -14,13 +14,13 @@ export class DestinatariosGruposPipe implements PipeTransform {
       return this.getAllGroups(value);
 
     const firstItem = value[0];
-    return firstItem.id + ' - ' + firstItem.name + (value.length > 1 ? ', ... ' : '');
+    return firstItem.emailGroup!.id + ' - ' + firstItem.emailGroup?.name + (value.length > 1 ? ', ... ' : '');
   }
 
-  private getAllGroups(groups: GrupoDestinatario[]): string {
+  private getAllGroups(emailGroupRelations: EmailGroupRelation[]): string {
     let all: string = "";
-    groups.forEach((value) => {
-      all += (all !== "" ? ', ' : '') + value.id + ' - ' + value.name;
+    emailGroupRelations.forEach((emailGroupRelation) => {
+      all += (all !== "" ? ', ' : '') + emailGroupRelation.emailGroup?.id + ' - ' + emailGroupRelation.emailGroup?.name;
     })
     return all;
   }

@@ -36,7 +36,7 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
     /**
      * @description Armazena as colunas da tabela
      */
-    public columns: string[] = ['id', 'description', 'groups', 'acoes'];
+    public columns: string[] = ['id', 'description', 'emailGroupRelations', 'acoes'];
 
     /**
      * @description Filtro da tabela
@@ -101,7 +101,7 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
             this.listaRegistrosFiltro = this.listaRegistros.filter(item =>
                 item.id === +this.filtro ||
                 item.email?.includes(this.filtro) ||
-                item.groups?.find(grupo => grupo.name?.includes(this.filtro))
+                item.emailGroupRelations?.find(grupo => grupo.emailGroup?.name?.includes(this.filtro))
             );
         } else {
             this.listaRegistrosFiltro = this.listaRegistros;
