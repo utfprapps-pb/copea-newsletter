@@ -22,7 +22,7 @@ import { CardDestinatarioPesquisaComponent } from './cards/card-destinatario-pes
         CrudController,
         DestinatarioService,
         GrupoDestinatarioService,
-    ]
+    ],
 })
 export class DestinatarioComponent extends BasicCrudComponent<Destinatario> implements AfterViewInit, OnDestroy {
 
