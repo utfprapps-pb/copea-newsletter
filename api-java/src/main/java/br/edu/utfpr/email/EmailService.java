@@ -29,6 +29,38 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
     EmailGroupService emailGroupService;
 
     @Override
+    public GenericResponse save(Email entity) {
+        validJustOneEmailByEmail(entity);
+        return super.save(entity);
+    }
+
+    @Override
+    public GenericResponse update(Email entity) {
+        validJustOneEmailByEmail(entity);
+        return super.update(entity);
+    }
+
+    private void validJustOneEmailByEmail(Email entity) {
+        if (emailEqualsEmailDatabase(entity.getId(), entity.getEmail()))
+            return;
+
+        Optional<Email> emailOptional = findByEmail(entity.getEmail());
+        if (emailOptional.isPresent())
+            throw new ValidationException("Já existe um destinatário com o e-mail informado. Por favor, informe outro.");
+    }
+
+    public boolean existsByEmail(Long id, String email) {
+        return (!emailEqualsEmailDatabase(id, email)) && (findByEmail(email).isPresent());
+    }
+
+    private boolean emailEqualsEmailDatabase(Long id, String email) {
+        if (Objects.isNull(id))
+            return false;
+        Email emailDb = findById(id);
+        return (Objects.nonNull(emailDb) && Objects.equals(email, emailDb.getEmail()));
+    }
+
+    @Override
     public void setDefaultValuesWhenNew(Email entity) {
         entity.setCreatedAt(LocalDateTime.now());
     }
@@ -37,7 +69,7 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
         return getRepository().findAll();
     }
 
-    public List<Email> findEmail(String email) {
+    public List<Email> findEmailOrElseAll(String email) {
         List<Email> emails;
         if (Objects.isNull(email))
             emails = getRepository().findAll();
@@ -45,6 +77,10 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
             emails = getRepository().findAllByEmailContaining(email);
 
         return emails;
+    }
+
+    public Optional<Email> findByEmail(String email) {
+        return getRepository().findByEmail(email);
     }
 
     public List<Email> findByEmailAndNewsletter(String email, Long newsletterId) {

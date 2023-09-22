@@ -1,3 +1,64 @@
-<p>
-  card-email-group-pesquisa works!
-</p>
+<mat-card class="d-m">
+
+  <!-- Título -->
+  <mat-card-title>Pesquisa</mat-card-title>
+
+  <!-- Form -->
+  <mat-card-content>
+    <!-- Filtro -->
+    <div class="row align-center full-width">
+      <!-- Campo -->
+      <mat-form-field class="d-flex grow d-pad-top d-m-right" appearance="fill">
+        <mat-label>Filtro</mat-label>
+        <input matInput [(ngModel)]="filtro" placeholder="Pesquise por código ou nome..."
+          (keyup.enter)="filtrarTabela()">
+      </mat-form-field>
+
+      <!-- Botão pesquisa -->
+      <button class="d-flex button-outline d-m-bottom" mat-icon-button aria-label="pesquisar" (click)="filtrarTabela()">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+
+    <!-- Tabela -->
+    <div class="grupos-table">
+      <table mat-table [dataSource]="listaRegistrosFiltro" class="full-width">
+
+        <!-- Id Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> Identificador </th>
+          <td mat-cell *matCellDef="let grupo"> {{grupo.id}} </td>
+        </ng-container>
+
+        <!-- Email Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let grupo"> {{grupo.name}} </td>
+        </ng-container>
+
+        <!-- Ações -->
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef> Ações </th>
+          <td mat-cell *matCellDef="let grupo" style="width: 150px;">
+            <button mat-icon-button title="Editar" class="mat-button-hover-actions hover-button"
+              (click)="editarRegistro(grupo.id)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button title="Remover" class="mat-button-hover-actions hover-button text-error"
+              (click)="removerRegistro(grupo.id)">
+              <mat-icon>remove_circle_outline</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Header -->
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+
+        <!-- Rows -->
+        <tr mat-row (click)="editarRegistro(row.id)" *matRowDef="let row; columns: columns;"></tr>
+
+      </table>
+    </div>
+  </mat-card-content>
+
+</mat-card>

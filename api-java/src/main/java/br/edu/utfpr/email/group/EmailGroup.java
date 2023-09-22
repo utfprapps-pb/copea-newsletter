@@ -8,7 +8,13 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-@Entity(name = "email_group")
+@Entity
+@Table(
+        name = "email_group",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "unique_email_group", columnNames = "name")
+        }
+)
 public class EmailGroup {
 
     @Id

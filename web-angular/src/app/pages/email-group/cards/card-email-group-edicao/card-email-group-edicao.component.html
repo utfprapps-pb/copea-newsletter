@@ -10,7 +10,7 @@
       <!-- Email -->
       <mat-form-field class="full-width d-pad-top" appearance="fill">
         <mat-label>Nome</mat-label>
-        <input #emailInput matInput formControlName="name" required type="text"
+        <input #nameInput matInput formControlName="name" required type="text"
           (keyup.enter)="persistirEdicao()">
         <mat-error>{{name.errors | erro}}</mat-error>
       </mat-form-field>

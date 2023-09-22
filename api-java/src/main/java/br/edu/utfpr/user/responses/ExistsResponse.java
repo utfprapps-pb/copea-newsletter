@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserExists {
+public class ExistsResponse {
 
     private Boolean exists;
 

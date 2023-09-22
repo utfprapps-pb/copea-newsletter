@@ -2,7 +2,7 @@ import { MensagemService } from './../../../../shared/services/mensagem.service'
 
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, debounceTime } from 'rxjs';
 
 // material
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -15,6 +15,7 @@ import { SysAutocompleteControl } from 'src/app/shared/components/autocomplete/s
 import { GrupoDestinatarioDialogComponent } from 'src/app/pages/grupo-destinatarios/components/grupo-destinatario-dialog/grupo-destinatario-dialog.component';
 import { GrupoDestinatarioService } from 'src/app/pages/grupo-destinatarios/grupo-destinatario.service';
 import { EmailGroupRelation, GrupoDestinatario } from '../../../grupo-destinatarios/model/grupo-destinatario';
+import { DestinatarioService } from '../../destinatario.service';
 
 @Component({
   selector: 'app-card-destinatario-edicao',
@@ -53,10 +54,20 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
     private _grupoService: GrupoDestinatarioService,
     private _dialog: MatDialog,
     public mensagemService: MensagemService,
+    private destinatarioService: DestinatarioService,
   ) { }
 
   ngOnInit(): void {
+    this.implementEvents();
     this.registerControls();
+  }
+
+  private implementEvents() {
+    this.email.valueChanges.pipe(debounceTime(500)).subscribe(this.changeEmail.bind(this));
+  }
+
+  public get id(): AbstractControl {
+    return this.form.get('id')!;
   }
 
   public get email(): AbstractControl {
@@ -182,6 +193,22 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
 
   public resetFormNovo() {
     this._resetFormNovo.next();
+  }
+
+  public changeEmail(email: string) {
+    this.validarEmailExistente(this.email, 'e-mail');
+  }
+
+  private validarEmailExistente(campo: AbstractControl<any, any>, nome: string) {
+    this.destinatarioService.exists(this.id.value, campo.value).subscribe({
+      next: (response: any) => {
+        if (response.exists) {
+          campo.setErrors({ invalido: `Este ${nome} já existe, informe outro.` });
+          campo.markAllAsTouched();
+        }
+      },
+      error: (error) => console.log(`erro ao validar ${nome}: ${error}`),
+    });
   }
 
 }
