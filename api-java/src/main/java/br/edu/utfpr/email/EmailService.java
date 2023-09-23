@@ -127,7 +127,7 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
 
         Optional<Email> emailByGroup = getRepository().findByEmailAndGroupId(emailSelfRegistration.getEmail(), emailGroup.getId());
         if (emailByGroup.isPresent())
-            throw new ValidationException("O e-mail informado já está cadastrado.");
+            throw new ValidationException("O e-mail informado já está inscrito.");
 
         Optional<Email> emailOptional = getRepository().findByEmail(emailSelfRegistration.getEmail());
         if (emailOptional.isPresent()) {

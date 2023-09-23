@@ -7,6 +7,8 @@ import { CrudService } from 'src/app/shared/crud/crud.service';
 
 // aplicação
 import { Destinatario } from './model/destinatario';
+import { EmailSelfRegistration } from 'src/app/pages/email-self-registration/models/email-self-registration';
+import { DefaultResponse } from 'src/app/shared/models/default-response';
 
 @Injectable()
 export class DestinatarioService extends CrudService<Destinatario> {
@@ -34,6 +36,10 @@ export class DestinatarioService extends CrudService<Destinatario> {
     if (email)
       params = params.append('email', email);
     return this.http.get<any>(`${this.baseUrl}/${this.url}/exists`, { params: params });
+  }
+
+  public saveSelfEmailRegistration(emailSelfRegistration: EmailSelfRegistration): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}/${this.url}/self-registration`, emailSelfRegistration);
   }
 
 

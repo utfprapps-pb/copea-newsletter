@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { DestinatarioService } from 'src/app/pages/destinatarios/destinatario.service';
+import { errorTransform } from 'src/app/shared/pipes/error-transform';
+import { MensagemService } from 'src/app/shared/services/mensagem.service';
 
 @Component({
   selector: 'app-email-self-registration',
@@ -15,6 +18,8 @@ export class EmailSelfRegistrationComponent implements OnInit {
   constructor(
     public route: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private destinatarioService: DestinatarioService,
+    private mensagemService: MensagemService,
   ) {
     this.buildForm();
   }
@@ -24,7 +29,7 @@ export class EmailSelfRegistrationComponent implements OnInit {
 
   private buildForm() {
     this.form = this.formBuilder.group({
-      email: [null, [ Validators.required, Validators.email ]],
+      email: [null, [Validators.required, Validators.email]],
     });
   }
 
@@ -33,13 +38,30 @@ export class EmailSelfRegistrationComponent implements OnInit {
   }
 
   public onSubscribe() {
-    // TODO: Teste
-    this.pendingSubscribe = false;
+    this.subscribe();
   }
 
-  // getParam('uuid')
+  private subscribe() {
+    if (this.form.invalid)
+      return;
+
+    this.destinatarioService.saveSelfEmailRegistration({
+      email: this.email.value,
+      groupUuid: this.getParam('uuid') ?? '',
+    }).subscribe({
+      next: (response) => {
+        this.pendingSubscribe = false;
+        this.mensagemService.mostrarMensagem(response.message);
+      },
+      error: (error) => {
+        this.pendingSubscribe = true;
+        this.mensagemService.mostrarMensagem(errorTransform(error));
+      }
+    });
+  }
+
   public getParam(name: string): string | null {
-		return this.route.snapshot.paramMap.get(name);
-	}
+    return this.route.snapshot.paramMap.get(name);
+  }
 
 }
