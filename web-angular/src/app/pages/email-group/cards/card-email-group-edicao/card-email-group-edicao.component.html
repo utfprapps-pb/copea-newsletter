@@ -14,7 +14,7 @@
         <mat-error>{{name.errors | erro}}</mat-error>
       </mat-form-field>
 
-      <div>
+      <div *ngIf="id.value">
         <mat-card class="mat-card-link-autoinscricao">
           <mat-cart-content>
             <mat-card-title class="link-autoinscricao">Link para autoinscrição</mat-card-title>
@@ -23,8 +23,8 @@
           <mat-card-actions>
             <button mat-icon-button title="Gerar novo link"
               (click)="onGerarLinkClick()"><mat-icon>autorenew</mat-icon></button>
-            <button *ngIf="uuidToSelfRegistration.value" mat-icon-button
-              title="Remover link" (click)="onRemoveLinkClick()"><mat-icon>clear</mat-icon></button>
+            <button *ngIf="uuidToSelfRegistration.value" mat-icon-button title="Remover link"
+              (click)="onRemoveLinkClick()"><mat-icon>clear</mat-icon></button>
             <button *ngIf="uuidToSelfRegistration.value" mat-icon-button title="Copiar link"
               [cdkCopyToClipboard]="linkEmailSelfRegistration" (click)="onClickContentCopy()"><mat-icon
                 svgIcon="content-copy"></mat-icon></button>
