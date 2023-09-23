@@ -69,12 +69,20 @@ public class EmailGroupService extends GenericService<EmailGroup, Long, EmailGro
     }
 
     public EmailGroup uuidGenerate(Long id) {
-        Optional<EmailGroup> emailGroupOptional = getRepository().findById(id);
+        return configUuid(id, UUID.randomUUID().toString());
+    }
+
+    public void uuidRemove(Long id) {
+        configUuid(id, null);
+    }
+
+    private EmailGroup configUuid(Long groupId, String value) {
+        Optional<EmailGroup> emailGroupOptional = getRepository().findById(groupId);
         if (emailGroupOptional.isEmpty())
             throwNotFoundException();
 
         EmailGroup emailGroup = emailGroupOptional.get();
-        emailGroup.setUuidToSelfRegistration(UUID.randomUUID().toString());
+        emailGroup.setUuidToSelfRegistration(value);
         return getRepository().save(emailGroup);
     }
 

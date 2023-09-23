@@ -5,12 +5,8 @@ import br.edu.utfpr.user.responses.ExistsResponse;
 
 import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.Objects;
 
 @Path("v1/email-group")
 @RequestScoped
@@ -25,6 +21,14 @@ public class EmailGroupResource extends GenericResource<EmailGroup, EmailGroup, 
     @Transactional
     public Response uuidGenerate(@PathParam("id") Long id) {
         return Response.ok(getService().uuidGenerate(id)).build();
+    }
+
+    @DELETE
+    @Path("uuid/{id}")
+    @Transactional
+    public Response uuidRemove(@PathParam("id") Long id) {
+        getService().uuidRemove(id);
+        return Response.ok().build();
     }
 
     @Path("exists")
