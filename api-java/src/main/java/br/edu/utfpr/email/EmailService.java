@@ -120,34 +120,40 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
     }
 
     public void saveSelfEmailRegistration(EmailSelfRegistration emailSelfRegistration) {
-        Optional<EmailGroup> emailGroupOptional = emailGroupService.findByUuidToSelfRegistration(emailSelfRegistration.getGroupUuid());
-        if (emailGroupOptional.isEmpty())
-            throw new ValidationException("Não foi possível incluir o e-mail pois o código do grupo é inválido.");
-        EmailGroup emailGroup = emailGroupOptional.get();
-
-        Optional<Email> emailByGroup = getRepository().findByEmailAndGroupId(emailSelfRegistration.getEmail(), emailGroup.getId());
-        if (emailByGroup.isPresent())
-            throw new ValidationException("O e-mail informado já está inscrito.");
-
+        EmailGroup emailGroup =
+                emailGroupService.findByUuidToSelfRegistration(emailSelfRegistration.getGroupUuid())
+                        .orElseThrow(
+                                () -> new ValidationException("Não foi possível incluir o e-mail pois o código do grupo é inválido.")
+                        );
+        validEmailAlreadySubscribedInGroup(emailSelfRegistration, emailGroup.getId());
         Optional<Email> emailOptional = getRepository().findByEmail(emailSelfRegistration.getEmail());
-        if (emailOptional.isPresent()) {
-            // TODO: separar em método, adiciona o email adicionando o grupo informado
-            Email email = emailOptional.get();
-            List<EmailGroupRelation> emailGroups = email.getEmailGroupRelations();
-            if (Objects.isNull(emailGroups))
-                emailGroups = new ArrayList<>();
+        if (emailOptional.isPresent())
+            addGroupInEmail(emailSelfRegistration, emailOptional.get(), emailGroup);
+        else
+            createEmailAndAddGroup(emailSelfRegistration, emailGroup);
+    }
 
-            EmailGroupRelation emailGroupRelation = new EmailGroupRelation();
-            emailGroupRelation.setEmail(email);
-            emailGroupRelation.setEmailGroup(emailGroup);
-            emailGroupRelation.setUuidWasSelfRegistration(emailSelfRegistration.getGroupUuid());
+    private void validEmailAlreadySubscribedInGroup(EmailSelfRegistration emailSelfRegistration, Long emailGroupId) {
+        Optional<Email> emailByGroup = getRepository().findByEmailAndGroupId(emailSelfRegistration.getEmail(), emailGroupId);
+        if (emailByGroup.isEmpty())
+            throw new ValidationException("O e-mail informado já está inscrito.");
+    }
 
-            emailGroups.add(emailGroupRelation);
-            update(email);
-            return;
-        }
+    private void addGroupInEmail(EmailSelfRegistration emailSelfRegistration, Email email, EmailGroup emailGroup) {
+        List<EmailGroupRelation> emailGroups = email.getEmailGroupRelations();
+        if (Objects.isNull(emailGroups))
+            emailGroups = new ArrayList<>();
 
-        // TODO: separar em método, cria o email adicionando o grupo informado
+        EmailGroupRelation emailGroupRelation = new EmailGroupRelation();
+        emailGroupRelation.setEmail(email);
+        emailGroupRelation.setEmailGroup(emailGroup);
+        emailGroupRelation.setUuidWasSelfRegistration(emailSelfRegistration.getGroupUuid());
+
+        emailGroups.add(emailGroupRelation);
+        update(email);
+    }
+
+    private void createEmailAndAddGroup(EmailSelfRegistration emailSelfRegistration, EmailGroup emailGroup) {
         Email newEmail = new Email();
         newEmail.setSubscribed(NoYesEnum.YES);
         newEmail.setEmail(emailSelfRegistration.getEmail());
