@@ -135,7 +135,7 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
 
     private void validEmailAlreadySubscribedInGroup(EmailSelfRegistration emailSelfRegistration, Long emailGroupId) {
         Optional<Email> emailByGroup = getRepository().findByEmailAndGroupId(emailSelfRegistration.getEmail(), emailGroupId);
-        if (emailByGroup.isEmpty())
+        if (emailByGroup.isPresent())
             throw new ValidationException("O e-mail informado já está inscrito.");
     }
 
