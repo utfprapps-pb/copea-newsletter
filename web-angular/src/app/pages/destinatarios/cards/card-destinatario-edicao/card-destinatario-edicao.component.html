@@ -25,9 +25,11 @@
 
           <!-- Chips -->
           <mat-chip-list #chipList aria-label="Grupos">
-            <mat-chip *ngFor="let grupo of gruposControl?.value; index as i" (removed)="removeGrupo(i)">
-              {{grupo.name}}
-              <button type="button" class="mat-chip-remove" (click)="abrirModalCadastroGrupo(grupo, i)">
+            <mat-chip *ngFor="let emailGroupRelation of emailGroupRelationsControl?.value; index as i"
+              (removed)="removeGrupo(i)">
+              {{emailGroupRelation.emailGroup.name}}
+              <button type="button" class="mat-chip-remove"
+                (click)="abrirModalCadastroGrupo(emailGroupRelation.emailGroup, i)">
                 <mat-icon>edit</mat-icon>
               </button>
               <button matChipRemove>
@@ -41,7 +43,8 @@
 
           <!-- Autocomplete -->
           <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="addGrupo($event)">
-            <mat-option *ngFor="let option of grupoAutocomplete.optionsFiltradas | async" [value]="option" (click) = "this.adicionandoGrupo = false">
+            <mat-option *ngFor="let option of grupoAutocomplete.optionsFiltradas | async" [value]="option"
+              (click)="this.adicionandoGrupo = false">
               {{option | iddescription : '' : 'name'}}
             </mat-option>
           </mat-autocomplete>
@@ -49,8 +52,7 @@
 
         <!-- Botão incluir novo -->
         <div class="d-m-bottom-lg">
-          <button type="button" class="button-outline" mat-icon-button color="primary"
-            title="Incluir novo"
+          <button type="button" class="button-outline" mat-icon-button color="primary" title="Incluir novo"
             (click)="abrirModalCadastroGrupo()">
             <mat-icon>add</mat-icon>
           </button>
@@ -64,7 +66,8 @@
           Inscrito para receber as newsletters via e-mail
         </mat-checkbox>
 
-        <span *ngIf="(subscribed.value != 'YES' && lastEmailUnsubscribedDate.value)"> <b> | O destinatário cancelou sua inscrição
+        <span *ngIf="(subscribed.value != 'YES' && lastEmailUnsubscribedDate.value)"> <b> | O destinatário cancelou sua
+            inscrição
             pela última vez em {{lastEmailUnsubscribedDate.value | date: 'dd/MM/yyyy HH:mm:ss'}}</b></span>
       </div>
 

@@ -6,7 +6,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ErroPipe implements PipeTransform {
 
     transform(value: any): any {
-      console.log(value);
         if (value) {
             if (value['required']) {
                 return 'Campo obrigatório.';

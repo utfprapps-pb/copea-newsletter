@@ -1,4 +1,4 @@
-package br.edu.utfpr.emailgroup;
+package br.edu.utfpr.email.group;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,13 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-@Entity(name = "email_group")
+@Entity
+@Table(
+        name = "email_group",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "unique_email_group", columnNames = "name")
+        }
+)
 public class EmailGroup {
 
     @Id
@@ -19,5 +25,8 @@ public class EmailGroup {
     @NotBlank(message = "Parameter name is required.")
     @Column(nullable = false)
     private String name;
+
+    @Column(name = "uuid_to_self_registration")
+    private String uuidToSelfRegistration;
 
 }

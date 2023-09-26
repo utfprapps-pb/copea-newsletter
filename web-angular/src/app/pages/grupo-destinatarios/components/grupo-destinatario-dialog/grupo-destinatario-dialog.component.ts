@@ -57,6 +57,7 @@ export class GrupoDestinatarioDialogComponent extends BasicCrudComponent<GrupoDe
         return this.formBuilder.group({
             id: [null],
             name: [null, Validators.required],
+            uuidToSelfRegistration: [null],
         });
     }
 

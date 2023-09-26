@@ -367,3 +367,11 @@ body {
 .multiline-tooltip {
   white-space: pre-line;
 }
+
+.middle-align {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+}

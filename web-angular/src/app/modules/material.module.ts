@@ -18,6 +18,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 @NgModule({
     imports: [
@@ -39,6 +40,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatDatepickerModule,
         MatNativeDateModule,
         MatTooltipModule,
+        ClipboardModule,
     ],
     exports: [
         MatToolbarModule,
@@ -59,6 +61,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatDatepickerModule,
         MatNativeDateModule,
         MatTooltipModule,
+        ClipboardModule,
     ],
 })
 export class MaterialModule {

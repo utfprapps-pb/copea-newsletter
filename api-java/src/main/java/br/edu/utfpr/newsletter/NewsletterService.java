@@ -199,7 +199,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
             if (addresses.length == 0)
                 continue;
             String justEmail = ((InternetAddress) addresses[0]).getAddress();
-            List<Email> emailsByAddressEmail = emailService.findEmail(justEmail);
+            List<Email> emailsByAddressEmail = emailService.findEmailOrElseAll(justEmail);
             unsubscribeEmails(emailsByAddressEmail, subscribedEmails, message);
         }
 

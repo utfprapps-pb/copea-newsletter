@@ -4,9 +4,8 @@ import br.edu.utfpr.generic.crud.GenericResource;
 import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.user.dtos.UserDTO;
 import br.edu.utfpr.user.recover_password.RecoverPasswordDTO;
-import br.edu.utfpr.user.responses.UserExists;
+import br.edu.utfpr.user.responses.ExistsResponse;
 
-import javax.annotation.security.PermitAll;
 import javax.enterprise.context.RequestScoped;
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -26,7 +25,7 @@ public class UserResource extends GenericResource<User, UserDTO, Long, UserServi
     public Response userExists(@QueryParam("username") String username,
                                @QueryParam("email") String email) {
         return Response.ok(
-                new UserExists(
+                new ExistsResponse(
                         !Objects.isNull(getService().findByUsernameOrEmail(username, email))
                 )
         ).build();

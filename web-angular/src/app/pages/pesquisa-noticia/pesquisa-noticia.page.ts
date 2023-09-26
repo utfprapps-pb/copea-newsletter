@@ -116,7 +116,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
         this.listaResultado = res;
 
         if (!res || res.length === 0) {
-          this.mensagemService.mostrarMensagem('Não foi possível encontrar nenhum registro correspondente aos filtros informados!');
+          this.mensagemService.mostrarMensagem('Nenhum registro encontrado para os filtros informados.');
         }
       },
       error: (error) => {

@@ -2,7 +2,7 @@ import { MensagemService } from './../../../../shared/services/mensagem.service'
 
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, debounceTime } from 'rxjs';
 
 // material
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -14,7 +14,8 @@ import { SysAutocompleteControl } from 'src/app/shared/components/autocomplete/s
 // aplicação
 import { GrupoDestinatarioDialogComponent } from 'src/app/pages/grupo-destinatarios/components/grupo-destinatario-dialog/grupo-destinatario-dialog.component';
 import { GrupoDestinatarioService } from 'src/app/pages/grupo-destinatarios/grupo-destinatario.service';
-import { GrupoDestinatario } from '../../../grupo-destinatarios/model/grupo-destinatario';
+import { EmailGroupRelation, GrupoDestinatario } from '../../../grupo-destinatarios/model/grupo-destinatario';
+import { DestinatarioService } from '../../destinatario.service';
 
 @Component({
   selector: 'app-card-destinatario-edicao',
@@ -53,22 +54,32 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
     private _grupoService: GrupoDestinatarioService,
     private _dialog: MatDialog,
     public mensagemService: MensagemService,
+    private destinatarioService: DestinatarioService,
   ) { }
 
   ngOnInit(): void {
+    this.implementEvents();
     this.registerControls();
+  }
+
+  private implementEvents() {
+    this.email.valueChanges.pipe(debounceTime(500)).subscribe(this.changeEmail.bind(this));
+  }
+
+  public get id(): AbstractControl {
+    return this.form.get('id')!;
   }
 
   public get email(): AbstractControl {
     return this.form.get('email')!;
   }
 
-  public get gruposControl() {
-    return this.form.get('groups');
+  public get emailGroupRelationsControl() {
+    return this.form.get('emailGroupRelations');
   }
 
-  public get grupos(): GrupoDestinatario[] {
-    return this.form.get('groups')?.value || [];
+  public get emailGroupRelations(): EmailGroupRelation[] {
+    return this.form.get('emailGroupRelations')?.value || [];
   }
 
   public get subscribed(): AbstractControl {
@@ -127,15 +138,15 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
     if (this.findNameGrupoNoArray(event.option.value.name))
       return;
 
-    this.grupos.push(event.option.value);
-    this.gruposControl?.reset(this.grupos);
+    this.emailGroupRelations.push({ emailGroup: event.option.value });
+    this.emailGroupRelationsControl?.reset(this.emailGroupRelations);
     this.grupoInput.nativeElement.value = '';
 
     this.adicionandoGrupo = true;
   }
 
   private findNameGrupoNoArray(name) {
-    return this.grupos.find(element => element.name == name);
+    return this.emailGroupRelations.find(element => element.emailGroup?.name == name);
   }
 
   public set adicionandoGrupo(value: boolean) {
@@ -150,16 +161,16 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
    * @description Remove um grupo na lista
    */
   public removeGrupo(index: number): void {
-    this.grupos.splice(index, 1);
-    this.gruposControl?.reset(this.grupos);
+    this.emailGroupRelations.splice(index, 1);
+    this.emailGroupRelationsControl?.reset(this.emailGroupRelations);
   }
 
   public atualizarVizualizacaoNomeGrupoNoCampo(grupo: GrupoDestinatario): void {
-    this.grupos.forEach((value: GrupoDestinatario) => {
-      if (value.id == grupo.id)
-        value.name = grupo.name;
+    this.emailGroupRelations.forEach((value: EmailGroupRelation) => {
+      if (value.emailGroup!.id == grupo.id)
+        value.emailGroup!.name = grupo.name;
     });
-    this.gruposControl?.reset(this.grupos);
+    this.emailGroupRelationsControl?.reset(this.emailGroupRelations);
   }
 
   /**
@@ -172,8 +183,8 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
   /**
    * @description Abre o cadastro do grupo
    */
-  public abrirModalCadastroGrupo(registro?: GrupoDestinatario, indexGrupo?: number): void {
-    this._dialog.open(GrupoDestinatarioDialogComponent, { data: { registro: registro, indexGrupo: indexGrupo, parentComponent: this } });
+  public abrirModalCadastroGrupo(grupo?: GrupoDestinatario, indexGrupo?: number): void {
+    this._dialog.open(GrupoDestinatarioDialogComponent, { data: { registro: grupo, indexGrupo: indexGrupo, parentComponent: this } });
   }
 
   public changeEventCheckSubscribed(event) {
@@ -182,6 +193,22 @@ export class CardDestinatarioEdicaoComponent implements OnInit {
 
   public resetFormNovo() {
     this._resetFormNovo.next();
+  }
+
+  public changeEmail(email: string) {
+    this.validarEmailExistente(this.email, 'e-mail');
+  }
+
+  private validarEmailExistente(campo: AbstractControl<any, any>, nome: string) {
+    this.destinatarioService.exists(this.id.value, campo.value).subscribe({
+      next: (response: any) => {
+        if (response.exists) {
+          campo.setErrors({ invalido: `Este ${nome} já existe, informe outro.` });
+          campo.markAllAsTouched();
+        }
+      },
+      error: (error) => console.log(`erro ao validar ${nome}: ${error}`),
+    });
   }
 
 }

@@ -1,7 +1,8 @@
 package br.edu.utfpr.email;
 
-import br.edu.utfpr.emailgroup.EmailGroup;
+import br.edu.utfpr.email.group.relation.EmailGroupRelation;
 import br.edu.utfpr.shared.enums.NoYesEnum;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,13 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity(name = "email")
+@Entity
+@Table(
+        name = "email",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "unique_email", columnNames = "email")
+        }
+)
 public class Email {
 
     @Id
@@ -23,6 +30,9 @@ public class Email {
     @NotBlank(message = "Parameter email is required.")
     @Column(nullable = false)
     private String email;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     private NoYesEnum subscribed;
@@ -36,12 +46,8 @@ public class Email {
     @Column(name = "last_email_unsubscribed_message_id")
     private String lastEmailUnsubscribedMessageID;
 
-    @ManyToMany
-    @JoinTable(
-            name = "email_group_email",
-            joinColumns = { @JoinColumn(name = "email_id") },
-            inverseJoinColumns = { @JoinColumn(name = "email_group_id") }
-    )
-    private List<EmailGroup> groups;
+    @OneToMany(mappedBy = "email", cascade = { CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval = true)
+    @JsonManagedReference
+    private List<EmailGroupRelation> emailGroupRelations;
 
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -11,12 +11,29 @@ import { GrupoDestinatario } from './model/grupo-destinatario';
 @Injectable()
 export class GrupoDestinatarioService extends CrudService<GrupoDestinatario> {
 
-    constructor(public override http: HttpClient) {
-        super('/v1/email-group', http);
-    }
+  constructor(public override http: HttpClient) {
+    super('/v1/email-group', http);
+  }
 
-    public get novoRegistro(): Observable<GrupoDestinatario> {
-        return of({ name: '' });
-    }
+  public get novoRegistro(): Observable<GrupoDestinatario> {
+    return of({ name: '' });
+  }
+
+  public uuidGenerate(groupId: number): Observable<GrupoDestinatario> {
+    return this.http.get<any>(`${this.baseUrl}/${this.url}/uuid/generate/${groupId}`);
+  }
+
+  public uuidRemove(groupId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${this.url}/uuid/${groupId}`);
+  }
+
+  public exists(id: number, name: string): Observable<any> {
+    let params = new HttpParams();
+    if (id)
+      params = params.append('id', id);
+    if (name)
+      params = params.append('name', name);
+    return this.http.get<any>(`${this.baseUrl}/${this.url}/exists`, { params: params });
+  }
 
 }
