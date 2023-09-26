@@ -10,7 +10,13 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@Entity(name = "config_email")
+@Entity
+@Table(
+        name = "config_email",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "unique_config_email_user", columnNames = "user_id")
+        }
+)
 public class ConfigEmail {
 
     @Id
@@ -35,6 +41,7 @@ public class ConfigEmail {
     private Integer sendPort;
 
     @OneToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

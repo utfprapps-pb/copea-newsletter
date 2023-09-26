@@ -31,11 +31,11 @@ public class User implements Serializable {
     @NotNull
     private String fullName;
 
-    @Column(unique = true)
+    @Column
     @NotNull
     private String username;
 
-    @Column(unique = true)
+    @Column
     @NotNull
     private String email;
 
