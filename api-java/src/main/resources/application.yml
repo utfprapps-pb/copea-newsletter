@@ -38,6 +38,7 @@ quarkus:
                  ${quarkus.http.root-path}/user/recover-password,
                  ${quarkus.http.root-path}/swagger/*,
                  ${quarkus.http.root-path}/q/openapi/*,
+                 ${quarkus.http.root-path}/v1/email/self-registration,
           policy: permit
     resteasy:
       gzip:
