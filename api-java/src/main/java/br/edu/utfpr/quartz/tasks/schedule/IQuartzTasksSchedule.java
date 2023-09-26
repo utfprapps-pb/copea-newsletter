@@ -46,9 +46,7 @@ public interface IQuartzTasksSchedule {
                     .startAt(getDateStartAt())
                     .withSchedule(
                             SimpleScheduleBuilder.simpleSchedule()
-    //                                .withIntervalInHours(1 * 24)  // dia * 24 hrs
-    //                            .withIntervalInMinutes(1)  // teste
-                                    .withIntervalInMinutes(getIntervalInHours()) // teste
+                                    .withIntervalInHours(getIntervalInHours())
                                     .repeatForever()
                     )
                     .endAt(getDateEndAt())
