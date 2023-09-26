@@ -24,11 +24,11 @@ public class ReadEmailService {
     private Store store;
     private Folder folder;
 
-    public List<Message> read(SearchTerm searchTerm) throws MessagingException {
+    public List<Message> read(SearchTerm searchTerm, ConfigEmail configEmail) throws MessagingException {
         Session emailSession = Session.getDefaultInstance(new Properties());
         store = emailSession.getStore("imaps");
 
-        ConfigEmail configEmail = configEmailService.getConfigEmailByLoggedUser();
+//        ConfigEmail configEmail = configEmailService.getConfigEmailByLoggedUser();
         String emailFrom = configEmail.getEmailFrom();
         store.connect(configEmail.getSendHost(), emailFrom, configEmail.getPasswordEmailFrom());
 

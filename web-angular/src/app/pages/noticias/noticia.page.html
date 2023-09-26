@@ -27,8 +27,23 @@
         <button mat-stroked-button class="d-m-right" [routerLink]="['/admin/noticia/manutencao']"
           (click)="resetFormNovo()">Novo registro</button>
 
-        <button *ngIf="registro.id && !registro.newsletterTemplate" mat-button class="mat-button-accent d-m-right"
-          (click)="onClickEnviar()" title="Enviar newsletter para os destinatários">Enviar e-mail</button>
+        <div class="d-flex" *ngIf="registro.id && !registro.newsletterTemplate">
+          <button mat-button class="mat-button-accent button-send-email" (click)="onClickEnviar()"
+            title="Enviar newsletter por e-mail">Enviar</button>
+          <button class="d-m-right color-primary button-schedule" [matMenuTriggerFor]="menu"
+            (click)="onClickSendButtonMenu()">
+            <mat-icon class="color-white">arrow_drop_down</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <div [matTooltip]="'Cancele o agendamento atual para incluir um novo'"
+              [matTooltipDisabled]="buttonSendScheduleEnabled">
+              <button mat-menu-item (click)="onClickSchedule()" [disabled]="!buttonSendScheduleEnabled">
+                <mat-icon>schedule</mat-icon>
+                <span>Agendar envio</span>
+              </button>
+            </div>
+          </mat-menu>
+        </div>
 
         <button mat-button class="mat-button-sucess d-m-right" (click)="onClickSalvar()">Gravar</button>
 
@@ -40,7 +55,10 @@
     </div>
 
     <!-- Card texto -->
-    <app-card-noticia-texto [lastSentEmailNewsletter]="lastSentEmailNewsletter" class="full-width"></app-card-noticia-texto>
+    <app-card-noticia-texto [lastSentEmailNewsletter]="lastSentEmailNewsletter"
+      [activeNewsletterQuartzTasksSchedules]="activeNewsletterQuartzTasksSchedules"
+      (cancelSchedule)="onCancelSchedule()"
+      class="full-width"></app-card-noticia-texto>
 
   </div>
 

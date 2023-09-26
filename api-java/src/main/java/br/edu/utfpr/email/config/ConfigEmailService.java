@@ -1,7 +1,6 @@
 package br.edu.utfpr.email.config;
 
 import br.edu.utfpr.generic.crud.GenericService;
-import br.edu.utfpr.newsletter.Newsletter;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.user.User;
 import br.edu.utfpr.user.UserService;
@@ -48,7 +47,7 @@ public class ConfigEmailService extends GenericService<ConfigEmail, Long, Config
         return findByUser(userService.findByUsername(username));
     }
 
-    private List<ConfigEmail> findByUser(User user) {
+    public List<ConfigEmail> findByUser(User user) {
         List<ConfigEmail> configEmailList =
                 getRepository().findByUser(user);
 
@@ -81,6 +80,10 @@ public class ConfigEmailService extends GenericService<ConfigEmail, Long, Config
             throwConfigEmailNotFoundException();
 
         return configEmails.get(0);
+    }
+
+    public ConfigEmail getOneConfigEmailByUser(User user) {
+        return getConfigEmail(findByUser(user));
     }
 
     private void throwConfigEmailNotFoundException() {

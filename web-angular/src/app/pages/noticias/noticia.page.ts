@@ -1,7 +1,7 @@
 import { MensagemService } from './../../shared/services/mensagem.service';
 import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // shared
@@ -11,8 +11,11 @@ import { errorTransform } from 'src/app/shared/pipes/error-transform';
 
 // aplicação
 import { Noticia } from './models/noticia';
-import { NoticiaService } from './noticia.service';
+import { NoticiaService } from './services/noticia.service';
 import { LastSentEmailNewsletter } from './models/last-sent-email-newsletter';
+import { CardNewsletterScheduleComponent } from 'src/app/pages/noticias/cards/card-newsletter-schedule/card-newsletter-schedule.component';
+import { QuartzTasks } from 'src/app/pages/noticias/cards/card-newsletter-schedule/models/quartz-tasks';
+import { NewsletterQuartzTasksService } from 'src/app/pages/noticias/services/newsletter-quartz-tasks.service';
 
 @Component({
   selector: 'app-noticia',
@@ -27,12 +30,17 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
 
   public lastSentEmailNewsletter: LastSentEmailNewsletter;
 
+  public activeNewsletterQuartzTasksSchedules: Array<QuartzTasks>;
+  public buttonSendScheduleEnabled = true;
+
   constructor(
     public override crudController: AdvancedCrudController<Noticia>,
     public override service: NoticiaService,
     public override mensagemService: MensagemService,
     public override route: ActivatedRoute,
     public dialog: MatDialog,
+    @Optional() public dialogNewsletterScheduleRef: MatDialogRef<CardNewsletterScheduleComponent>,
+    private newsletterQuartzTasksService: NewsletterQuartzTasksService,
   ) {
     super(crudController, service, mensagemService, route);
   }
@@ -125,6 +133,7 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
   public override carregar(registroId: number): void {
     super.carregar(registroId);
     this.getLastSentEmail(registroId);
+    this.getActiveNewsletterQuartzTasksSchedule(registroId);
   }
 
   public getLastSentEmail(registroId) {
@@ -136,6 +145,41 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
         },
       }
     )
+  }
+
+  private getActiveNewsletterQuartzTasksSchedule(registroId) {
+    this.activeNewsletterQuartzTasksSchedules = [];
+    this.buttonSendScheduleEnabled = true;
+    this.newsletterQuartzTasksService.getActiveSchedules(registroId).subscribe(
+      {
+        next: (value) => {
+          this.activeNewsletterQuartzTasksSchedules = value;
+          this.buttonSendScheduleEnabled = (!this.activeNewsletterQuartzTasksSchedules || this.activeNewsletterQuartzTasksSchedules.length == 0);
+        },
+      }
+    )
+  }
+
+  public onClickSchedule() {
+    this.dialogNewsletterScheduleRef = this.dialog.open(CardNewsletterScheduleComponent, {
+      data: { newsletter: this.registro },
+    });
+    this.dialogNewsletterScheduleRef.afterClosed().subscribe({
+      next: (value) => {
+        if (value)
+          this.getActiveNewsletterQuartzTasksSchedule(this.registro.id!);
+      }
+    })
+  }
+
+  public onClickSendButtonMenu() {
+    if (this.registro?.id)
+      this.getActiveNewsletterQuartzTasksSchedule(this.registro.id);
+  }
+
+  public onCancelSchedule() {
+    if (this.registro?.id)
+      this.getActiveNewsletterQuartzTasksSchedule(this.registro.id);
   }
 
 }

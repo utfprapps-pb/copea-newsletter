@@ -2,8 +2,10 @@ package br.edu.utfpr.newsletter;
 
 import br.edu.utfpr.email.Email;
 import br.edu.utfpr.email.send.log.SendEmailLog;
+import br.edu.utfpr.newsletter.quartz_tasks.NewsletterQuartzTasks;
 import br.edu.utfpr.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,6 +61,10 @@ public class Newsletter {
             inverseJoinColumns = @JoinColumn(name = "send_email_log_id")
     )
     private Set<SendEmailLog> sendEmailLogs = new HashSet<>();
+
+    @OneToMany(mappedBy = "newsletter", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Set<NewsletterQuartzTasks> quartzTasks = new HashSet<>();
 
     @ManyToOne(optional = false)
     private User user;
