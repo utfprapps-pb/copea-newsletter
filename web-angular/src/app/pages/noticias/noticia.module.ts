@@ -4,7 +4,7 @@ import { PesquisaNoticiaModule } from './../pesquisa-noticia/pesquisa-noticia.mo
 import { CardSelecionarNoticiaModeloComponent } from './cards/card-selecionar-noticia-modelo/card-selecionar-noticia-modelo.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -23,6 +23,9 @@ import { CardNoticiaCabecalhoComponent } from './cards/card-noticia-cabecalho/ca
 import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.interceptor';
 
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { CardNewsletterScheduleComponent } from './cards/card-newsletter-schedule/card-newsletter-schedule.component';
+import { NewsletterQuartzTasksService } from 'src/app/pages/noticias/services/newsletter-quartz-tasks.service';
+import { QuartzTasksService } from 'src/app/pages/noticias/services/quartz-tasks.service';
 
 const routes: Routes = [
   { path: '', redirectTo: 'manutencao', pathMatch: 'full' },
@@ -39,6 +42,7 @@ const routes: Routes = [
     CardNoticiaCabecalhoComponent,
     CardNoticiaTextoComponent,
     CardSelecionarNoticiaModeloComponent,
+    CardNewsletterScheduleComponent,
   ],
   imports: [
     CommonModule,
@@ -64,6 +68,9 @@ const routes: Routes = [
   exports: [],
   providers: [
     TokenInterceptor,
+    NewsletterQuartzTasksService,
+    QuartzTasksService,
+    DatePipe,
 
     // interceptors
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true, },

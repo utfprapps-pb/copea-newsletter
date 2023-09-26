@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { errorTransform } from 'src/app/shared/pipes/error-transform';
 
 // aplicação
-import { NoticiaService } from '../noticias/noticia.service';
+import { NoticiaService } from '../noticias/services/noticia.service';
 import { Noticia } from '../noticias/models/noticia';
 import { NewsletterSearchRequest } from '../noticias/models/newsletter-search-request';
 

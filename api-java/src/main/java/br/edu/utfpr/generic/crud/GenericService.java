@@ -38,7 +38,7 @@ public abstract class GenericService<T, ID, R extends GenericRepository> {
     }
 
     public void setDefaultValuesWhenNew(T entity) {
-    };
+    }
 
     public GenericResponse update(T entity) {
         repository.save(entity);

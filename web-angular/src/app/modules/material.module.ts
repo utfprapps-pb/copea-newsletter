@@ -15,6 +15,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 
 @NgModule({
@@ -34,6 +37,9 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
         MatAutocompleteModule,
         MatSlideToggleModule,
         MatChipsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatTooltipModule,
         ClipboardModule,
     ],
     exports: [
@@ -52,6 +58,9 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
         MatAutocompleteModule,
         MatSlideToggleModule,
         MatChipsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatTooltipModule,
         ClipboardModule,
     ],
 })

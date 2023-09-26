@@ -137,6 +137,10 @@ body {
   margin-left: 8px !important;
 }
 
+.d-m-top {
+  margin-top: 8px !important;
+}
+
 .d-m-bottom {
   margin-bottom: 8px !important;
 }
@@ -354,6 +358,14 @@ body {
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
+}
+
+.width-300px {
+  width: 300px;
+}
+
+.multiline-tooltip {
+  white-space: pre-line;
 }
 
 .middle-align {

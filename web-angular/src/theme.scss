@@ -1,6 +1,6 @@
 @import "./variables";
 
-@import '~quill/dist/quill.bubble.css'; 
+@import '~quill/dist/quill.bubble.css';
 
 $primary: map-get($theme, primary);
 $accent: map-get($theme, accent);
@@ -19,8 +19,8 @@ $soft-primary: map-get($soft-theme, primary);
 .text-sucess { color: mat-color($sucess); }
 .text-error { color: mat-color($warn); }
 
-.mat-row:hover .mat-cell { 
-    background-color: mat-color($soft-primary); 
+.mat-row:hover .mat-cell {
+    background-color: mat-color($soft-primary);
 
     .mat-button-hover-actions {
         display: inherit !important;
@@ -29,7 +29,7 @@ $soft-primary: map-get($soft-theme, primary);
 
 .mat-button-hover-actions { display: none !important; }
 
-.accent-hover:hover { 
-    background-color: mat-color($primary); 
+.accent-hover:hover {
+    background-color: mat-color($primary);
     transition: 200ms;
 }

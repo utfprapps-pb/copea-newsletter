@@ -1,0 +1,58 @@
+<mat-dialog-content class="dialog-content">
+
+  <h3><b>Escolha a data e hora do agendamento</b></h3>
+
+  <form *ngIf="form" [formGroup]="form">
+    <div class="d-flex">
+      <div class="d-m-right">
+        <!-- Data de início -->
+        <mat-card class="demo-inline-calendar-card">
+          <mat-calendar [selected]="startAt?.value" (selectedChange)="dateChanged($event)"></mat-calendar>
+        </mat-card>
+        <!-- Hora de início -->
+        <mat-form-field class="full-width d-m-top" appearance="fill">
+          <mat-label>Hora de início</mat-label>
+          <input matInput type="time" formControlName="timeStartAt"
+            placeholder="Digite a hora de início..." cdkFocusInitial>
+          <mat-error>{{timeStartAt.errors | erro}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="width-300px">
+        <!-- Recorrente -->
+        <mat-checkbox class="d-m-bottom" formControlName="recurrent" color="primary">Recorrente</mat-checkbox>
+
+        <!-- Intervalo (Dias) -->
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Intervalo (Dias)</mat-label>
+          <input type="number" matInput formControlName="dayRange"
+            placeholder="Digite os dias de intervalo para enviar a newsletter..." cdkFocusInitial>
+          <mat-error>{{dayRange.errors | erro}}</mat-error>
+        </mat-form-field>
+
+        <!-- Data de encerramento -->
+        <mat-form-field class="full-width d-m-top" appearance="fill">
+          <mat-label>Data de encerramento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="endAt">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>{{endAt.errors | erro}}</mat-error>
+        </mat-form-field>
+        <!-- Hora de encerramento -->
+        <mat-form-field class="full-width d-m-top" appearance="fill">
+          <mat-label>Hora de encerramento</mat-label>
+          <input matInput type="time" formControlName="timeEndAt"
+            placeholder="Digite a hora de encerramento..." cdkFocusInitial>
+          <mat-error>{{timeEndAt.errors | erro}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="d-flex justify-end">
+      <button mat-button (click)="onCancelarClick()" class="d-m-right">Cancelar</button>
+      <button mat-button (click)="onAgendarEnvioClick()">Agendar envio</button>
+    </div>
+
+  </form>
+
+</mat-dialog-content>

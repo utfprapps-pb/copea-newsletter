@@ -4,10 +4,10 @@ import { Observable, of } from 'rxjs';
 
 // shared
 import { CrudService } from 'src/app/shared/crud/crud.service';
-import { LastSentEmailNewsletter } from './models/last-sent-email-newsletter';
+import { LastSentEmailNewsletter } from '../models/last-sent-email-newsletter';
 
 // aplicação
-import { Noticia } from './models/noticia';
+import { Noticia } from '../models/noticia';
 import { NewsletterSearchRequest } from 'src/app/pages/noticias/models/newsletter-search-request';
 
 @Injectable()

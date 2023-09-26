@@ -15,7 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 // aplicação
 import { PesquisaNoticiaResultadoComponent } from './components/pesquisa-noticia-resultado/pesquisa-noticia-resultado.component';
 import { PesquisaNoticiaComponent } from './pesquisa-noticia.page';
-import { NoticiaService } from '../noticias/noticia.service';
+import { NoticiaService } from '../noticias/services/noticia.service';
 import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [

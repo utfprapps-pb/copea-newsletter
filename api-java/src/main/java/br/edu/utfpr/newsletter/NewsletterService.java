@@ -2,15 +2,19 @@ package br.edu.utfpr.newsletter;
 
 import br.edu.utfpr.email.Email;
 import br.edu.utfpr.email.EmailService;
+import br.edu.utfpr.email.config.ConfigEmail;
 import br.edu.utfpr.email.config.ConfigEmailService;
 import br.edu.utfpr.email.read.ReadEmailService;
 import br.edu.utfpr.email.send.SendEmailService;
 import br.edu.utfpr.email.send.log.SendEmailLog;
+import br.edu.utfpr.email.send.log.SendEmailLogService;
 import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.newsletter.requests.NewsletterSearchRequest;
 import br.edu.utfpr.newsletter.responses.LastSentEmailNewsletter;
+import br.edu.utfpr.quartz.tasks.QuartzTasks;
+import br.edu.utfpr.quartz.tasks.QuartzTasksService;
 import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
@@ -40,6 +44,9 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     SendEmailService sendEmailService;
 
     @Inject
+    SendEmailLogService sendEmailLogService;
+
+    @Inject
     ConfigEmailService configEmailService;
 
     @Inject
@@ -50,6 +57,9 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
     @Inject
     EntityManager entityManager;
+
+    @Inject
+    QuartzTasksService quartzTasksService;
 
     @Override
     public GenericResponse save(Newsletter entity) {
@@ -83,31 +93,69 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
             entity.setNewsletterTemplate(false);
     }
 
+    /**
+     * Método utilizado pelo Job do Quartz para enviar a newsletter por e-mail
+     * sem utilizar o usuário logado, pois quando executa o job da tarefa
+     * agendada não encontra o usuário logado
+     * @param newsletterId
+     * @return
+     * @throws Exception
+     */
+    public DefaultResponse sendScheduledNewsletterByEmail(
+            Long newsletterId, String jobName, String jobGroup, String triggerName, String triggerGroup
+    ) throws Exception {
+        Optional<Newsletter> optionalNewsletterEntity = getRepository().findById(newsletterId);
+        if (optionalNewsletterEntity.isEmpty())
+            return getResponseNewsletterNotFound();
+        Newsletter newsletter = optionalNewsletterEntity.get();
+
+        Optional<QuartzTasks> quartzTasksOptional = quartzTasksService.findByJobNameAndJobGroupAndTriggerNameAndTriggerGroup(
+                jobName, jobGroup, triggerName, triggerGroup
+        );
+        Long quartzTaskId = null;
+        if (quartzTasksOptional.isPresent())
+            quartzTaskId = quartzTasksOptional.get().getId();
+
+        return sendNewsletterByEmail(newsletter, configEmailService.getOneConfigEmailByUser(newsletter.getUser()), quartzTaskId);
+    }
+
+    /**
+     * Método utilizado para enviar a newsletter por e-mail utilizando o usuário logado
+     * @param newsletterId
+     * @return
+     * @throws Exception
+     */
     public DefaultResponse sendNewsletterByEmail(Long newsletterId) throws Exception {
         Optional<Newsletter> optionalNewsletterEntity = getRepository().findByIdAndUser(newsletterId, getAuthSecurityFilter().getAuthUserContext().findByToken());
-        if (optionalNewsletterEntity.isEmpty())
-            return DefaultResponse.builder()
-                    .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
-                    .message("Nenhuma newsletter encontrada para o parâmetro informado.")
-                    .build();
+        return sendNewsletterByEmail(optionalNewsletterEntity.get(), configEmailService.getConfigEmailByLoggedUser(), null);
+    }
 
-        Newsletter newsletterEntity = optionalNewsletterEntity.get();
+    // TODO: SOMENTE TESTE: Ajustar depois para não passar o QuartzTaskId nesse método, pois só usa quando é por agendamento, normal não utiliza, deveria ser um método separado
+    private DefaultResponse sendNewsletterByEmail(Newsletter newsletter, ConfigEmail configEmail, Long quartzTaskId) throws Exception {
+        if (Objects.isNull(newsletter))
+            return getResponseNewsletterNotFound();
 
         List<Email> subscribedEmails =
-                newsletterEntity.getEmails().stream().filter(
+                newsletter.getEmails().stream().filter(
                         (Email email) -> Objects.equals(email.getSubscribed(), NoYesEnum.YES)
                 ).collect(Collectors.toList());
 
         validateSubscribedEmails(subscribedEmails);
-        checkAnswersInEmailToUnsubscribe(subscribedEmails);
+        checkAnswersInEmailToUnsubscribe(subscribedEmails, configEmail);
         SendEmailLog sendEmailLog = sendEmailService.send(
-                newsletterEntity.getSubject(),
-                newsletterEntity.getNewsletter(),
-                configEmailService.getConfigEmailByLoggedUser(),
+                newsletter.getSubject(),
+                newsletter.getNewsletter(),
+                configEmail,
                 sendEmailService.convertArrayEmailEntityToStringArray(subscribedEmails));
 
-        newsletterEntity.getSendEmailLogs().add(sendEmailLog);
-        getRepository().save(newsletterEntity);
+        // TODO: Encontrar uma forma melhor de setar esse id, pois no método sendEmailService.send já é feito um save da entidade no banco
+        if ((Objects.nonNull(quartzTaskId)) && (quartzTaskId > 0)) {
+            sendEmailLog.setQuartzTaskId(quartzTaskId);
+            sendEmailLogService.update(sendEmailLog);
+        }
+
+        newsletter.getSendEmailLogs().add(sendEmailLog);
+        getRepository().save(newsletter);
 
         if (SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus()))
             return DefaultResponse.builder()
@@ -119,10 +167,16 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
                 .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
                 .message(sendEmailLog.getError())
                 .build();
-
     }
 
-    private void checkAnswersInEmailToUnsubscribe(List<Email> subscribedEmails) throws MessagingException {
+    private DefaultResponse getResponseNewsletterNotFound() {
+        return DefaultResponse.builder()
+                .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
+                .message("Nenhuma newsletter encontrada para o parâmetro informado.")
+                .build();
+    }
+
+    private void checkAnswersInEmailToUnsubscribe(List<Email> subscribedEmails, ConfigEmail configEmail) throws MessagingException {
         List<SearchTerm> andTermArrayList = new ArrayList<>();
 
         for (Email email : subscribedEmails) {
@@ -139,7 +193,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         }
 
         OrTerm orTerm = new OrTerm(andTermArrayList.toArray(new SearchTerm[0]));
-        List<Message> messages = readEmailService.read(orTerm);
+        List<Message> messages = readEmailService.read(orTerm, configEmail);
         for (Message message : messages) {
             Address[] addresses = message.getFrom();
             if (addresses.length == 0)

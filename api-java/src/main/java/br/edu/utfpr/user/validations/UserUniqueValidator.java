@@ -19,7 +19,6 @@ public class UserUniqueValidator implements ConstraintValidator<UserUniqueConstr
 
     @Override
     public boolean isValid(UserDTO userDTO, ConstraintValidatorContext constraintValidatorContext) {
-
         constraintValidatorContext.disableDefaultConstraintViolation();
 
         Boolean usernameValid = userValid(userDTO,
@@ -39,7 +38,6 @@ public class UserUniqueValidator implements ConstraintValidator<UserUniqueConstr
 
 
         return (usernameValid && emailValid);
-
     }
 
     private Boolean userValid(UserDTO userDTO, Optional<User> user, ConstraintValidatorContext constraintValidatorContext, String messageConstraint, String fieldName) {

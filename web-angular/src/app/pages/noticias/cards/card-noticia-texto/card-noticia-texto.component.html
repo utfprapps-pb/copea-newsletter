@@ -9,16 +9,42 @@
 
       <!-- Slide toggle -->
       <!-- [checked]="slideChecked" (toggleChange)="onSlideChange() -->
+
+
+      <div class="">
+        <div>
+          <span class="font-size-14px">Palavra chave para cancelar a inscrição via e-mail: <b>unsubscribe</b></span>
+        </div>
+        <div>
+          <span *ngIf="(lastSentEmailNewsletter && lastSentEmailNewsletter.logDate)" class="font-size-14px">O último
+            envio registrado foi em {{((lastSentEmailNewsletter) ? lastSentEmailNewsletter.logDate : null) | date:
+            'dd/MM/yyyy HH:mm:ss'}}</span>
+          <span *ngIf="(id && (!lastSentEmailNewsletter || !lastSentEmailNewsletter.logDate))"
+            class="font-size-14px">Nenhum envio registrado</span>
+        </div>
+        <!-- Teste de como fica o layout com o próximo envio agendado -->
+        <div>
+          <span *ngIf="activeNewsletterQuartzTasksSchedulesText && activeNewsletterQuartzTasksSchedulesText != ''"
+            class="font-size-14px">
+            {{activeNewsletterQuartzTasksSchedulesText}} <a routerLink="javascript:void(0)" (click)="onCancelSchedule()">Clique aqui para cancelar
+            </a></span>
+        </div>
+
+        <!-- Exemplo de como usar o tooltip do angular material com quebra de linha -->
+        <!-- <div class="d-flex">
+          <span class="info-envio">Informações sobre o envio: </span>
+          <mat-icon class="info-icon"
+          matTooltip="Teste linha 1
+                      Teste linha 2" matTooltipClass="multiline-tooltip" matTooltipPosition="above">info</mat-icon> -->
+        <!-- <span class="font-size-14px">Existe um envio agendado para 11/09/2023 20:46:17</span> -->
+        <!-- </div> -->
+      </div>
+
       <form [formGroup]="form">
         <mat-slide-toggle class="title-slide-toggle" formControlName="newsletterTemplate">
           Newsletter modelo
         </mat-slide-toggle>
       </form>
-
-      <span class="font-size-14px">Palavra chave para cancelar a inscrição via e-mail: <b>unsubscribe</b></span>
-
-      <span *ngIf="(lastSentEmailNewsletter && lastSentEmailNewsletter.logDate)" class="font-size-14px">O último envio registrado foi em {{((lastSentEmailNewsletter) ? lastSentEmailNewsletter.logDate : null) | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
-      <span *ngIf="(id && (!lastSentEmailNewsletter || !lastSentEmailNewsletter.logDate))" class="font-size-14px">Nenhum envio registrado</span>
     </div>
   </mat-card-title>
 
