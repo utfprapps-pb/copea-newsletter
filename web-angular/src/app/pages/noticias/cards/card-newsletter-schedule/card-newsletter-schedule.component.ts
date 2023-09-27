@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -187,14 +188,20 @@ export class CardNewsletterScheduleComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
-          let messageError = '';
-          if (error?.error?.message)
-            messageError = ` Detalhes: ${error.error.message}`;
-
-          this.mensagemService.mostrarMensagem(`Erro ao agendar envio da newsletter por email.${messageError}`);
+          if ((error.status == HttpStatusCode.BadRequest) && error?.error?.message)
+            this.mensagemService.mostrarMensagem(error.error.message);
+          else
+            this.showMessageWhenError(error);
         }
       })
     }
+  }
+
+  private showMessageWhenError(error) {
+    let messageError = '';
+    if (error?.error?.message)
+      messageError = ` Detalhes: ${error.error.message}`;
+    this.mensagemService.mostrarMensagem(`Erro ao agendar envio da newsletter por email.${messageError}`);
   }
 
   public onCancelarClick() {

@@ -43,6 +43,7 @@ public class NewsletterQuartzTasksService extends GenericService<NewsletterQuart
         Newsletter newsletter = requestBody.getNewsletter();
 
         validJustOneActiveQuartzTasksByNewsletter(newsletter.getId());
+        validScheduleDates(quartzTask);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss");
         String name = "newsletter_" + newsletter.getId() + "_start_at_" + quartzTask.getStartAt().format(formatter);
@@ -69,6 +70,13 @@ public class NewsletterQuartzTasksService extends GenericService<NewsletterQuart
             );
     }
 
+    private void validScheduleDates(QuartzTasks quartzTask) {
+        if (Objects.nonNull(quartzTask.getStartAt()) && quartzTask.getStartAt().isBefore(LocalDateTime.now()))
+            throw new ValidationException("A data e hora de início não pode ser inferior à data e hora atual.");
+
+        if (Objects.nonNull(quartzTask.getEndAt()) && quartzTask.getEndAt().isBefore(quartzTask.getStartAt()))
+            throw new ValidationException("A data e hora de encerramento não pode ser inferior à data e hora de início.");
+    }
 
     public List<QuartzTasks> findActiveQuartzTasksByNewsletter(Long newsletterId) {
         /**
