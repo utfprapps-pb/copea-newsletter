@@ -19,21 +19,33 @@ import { Destinatario } from 'src/app/pages/destinatarios/model/destinatario';
 // aplicação
 import { Noticia } from '../../models/noticia';
 import { GrupoDestinatarioPesquisaDialogComponent } from 'src/app/pages/grupo-destinatarios/components/grupo-destinatario-pesquisa-dialog/grupo-destinatario-pesquisa-dialog.component';
+import { GrupoDestinatarioService } from 'src/app/pages/grupo-destinatarios/grupo-destinatario.service';
+import { NewsletterEmailGroup } from 'src/app/pages/noticias/models/newsletter-email-group';
 
 @Component({
   selector: 'app-card-noticia-cabecalho',
   templateUrl: 'card-noticia-cabecalho.component.html',
   styleUrls: ['./card-noticia-cabecalho.component.scss'],
-  providers: [DestinatarioService],
+  providers: [
+    DestinatarioService,
+    GrupoDestinatarioService,
+  ],
 })
 export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> implements OnInit {
 
   @ViewChild('destinatarioInput') public destinatarioInput!: ElementRef<HTMLInputElement>;
 
+  @ViewChild('grupoInput') public grupoInput!: ElementRef<HTMLInputElement>;
+
   /**
    * @description Classe de controle do auto-complete de destinatários
    */
   public destinatarioAutocomplete!: SysAutocompleteControl;
+
+  /**
+   * @description Classe de controle do auto-complete de grupos
+   */
+  public grupoAutocomplete!: SysAutocompleteControl;
 
   constructor(
     public override crudController: AdvancedCrudController<Noticia>,
@@ -41,6 +53,7 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
     public destinatarioService: DestinatarioService,
     public mensagemService: MensagemService,
     public dialog: MatDialog,
+    public grupoDestinatarioService: GrupoDestinatarioService,
   ) {
     super(crudController, formBuilder);
   }
@@ -61,6 +74,14 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
     return this.form.get('emails')?.value || [];
   }
 
+  public get emailGroupsControl() {
+    return this.form.get('emailGroups');
+  }
+
+  public get emailGroups(): NewsletterEmailGroup[] {
+    return this.form.get('emailGroups')?.value || [];
+  }
+
   ngOnInit(): void {
     this.registerControls();
   }
@@ -71,6 +92,10 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
     if (!registro.emails) {
       this.form.get('emails')?.reset([]);
     }
+
+    if (!registro.emailGroups) {
+      this.form.get('emailGroups')?.reset([]);
+    }
   }
 
   private registerControls() {
@@ -79,13 +104,20 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
       this.mensagemService,
       'email'
     );
+
+    this.grupoAutocomplete = new SysAutocompleteControl(
+      this.grupoDestinatarioService.pesquisarTodos.bind(this.grupoDestinatarioService),
+      this.mensagemService,
+      'name'
+    );
   }
 
   criarForm(): FormGroup {
     return this.formBuilder.group({
       description: [null, [Validators.required, MaxLenghtValidator(80)]],
       subject: [null, [Validators.required, MaxLenghtValidator(100)]],
-      emails: [null]
+      emails: [null],
+      emailGroups: [null],
     })
   }
 
@@ -135,6 +167,37 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
 
   private findDestinatarioNoArray(email) {
     return this.destinatarios.find(element => element.email == email);
+  }
+
+  /**
+   * @description Inclui um grupo na lista e limpa o input
+   */
+  public addGrupo(event: MatAutocompleteSelectedEvent): void {
+    if (this.findGrupoNoArray(event.option.value.name))
+      return;
+
+    this.emailGroups.push({ emailGroup: event.option.value });
+    this.emailGroupsControl?.reset(this.emailGroups);
+    this.grupoInput.nativeElement.value = '';
+  }
+
+  /**
+   * @description Remove um grupo na lista
+   */
+  public removeGrupo(index: number): void {
+    this.emailGroups.splice(index, 1);
+    this.emailGroupsControl?.reset(this.emailGroups);
+  }
+
+  /**
+   * @description Filtra o auto-complete de grupos
+   */
+  public filtrarGrupos() {
+    this.grupoAutocomplete.filtrar(this.grupoInput.nativeElement.value);
+  }
+
+  private findGrupoNoArray(name) {
+    return this.emailGroups.find(element => element.emailGroup?.name == name);
   }
 
 }

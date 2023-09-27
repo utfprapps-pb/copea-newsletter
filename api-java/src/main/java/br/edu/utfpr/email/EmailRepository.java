@@ -26,4 +26,10 @@ public interface EmailRepository extends GenericRepository<Email, Long> {
 
     Optional<Email> findByEmail(String email);
 
+    @Query("SELECT e " +
+            "FROM EmailGroupRelation g " +
+            "LEFT JOIN g.email e " +
+            "WHERE (g.emailGroup.id = :groupId)")
+    List<Email> findByGroupId(Long groupId);
+
 }

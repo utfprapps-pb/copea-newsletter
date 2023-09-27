@@ -2,6 +2,7 @@ package br.edu.utfpr.newsletter;
 
 import br.edu.utfpr.email.Email;
 import br.edu.utfpr.email.send.log.SendEmailLog;
+import br.edu.utfpr.newsletter.email_group.NewsletterEmailGroup;
 import br.edu.utfpr.newsletter.quartz_tasks.NewsletterQuartzTasks;
 import br.edu.utfpr.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -53,6 +54,10 @@ public class Newsletter {
             inverseJoinColumns = @JoinColumn(name = "email_id")
     )
     private Set<Email> emails = new HashSet<>();
+
+    @OneToMany(mappedBy = "newsletter", cascade = { CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<NewsletterEmailGroup> emailGroups = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

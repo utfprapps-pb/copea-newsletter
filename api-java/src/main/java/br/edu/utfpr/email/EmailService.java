@@ -170,4 +170,8 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
         save(newEmail);
     }
 
+    public List<Email> findByGroupId(Long groupId) {
+        return getRepository().findByGroupId(groupId);
+    }
+
 }
