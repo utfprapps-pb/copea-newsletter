@@ -4,6 +4,7 @@ import br.edu.utfpr.email.Email;
 import br.edu.utfpr.email.EmailService;
 import br.edu.utfpr.email.config.ConfigEmail;
 import br.edu.utfpr.email.config.ConfigEmailService;
+import br.edu.utfpr.email.group.EmailGroup;
 import br.edu.utfpr.email.read.ReadEmailService;
 import br.edu.utfpr.email.send.SendEmailService;
 import br.edu.utfpr.email.send.log.SendEmailLog;
@@ -11,6 +12,7 @@ import br.edu.utfpr.email.send.log.SendEmailLogService;
 import br.edu.utfpr.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
+import br.edu.utfpr.newsletter.email_group.NewsletterEmailGroup;
 import br.edu.utfpr.newsletter.requests.NewsletterSearchRequest;
 import br.edu.utfpr.newsletter.responses.LastSentEmailNewsletter;
 import br.edu.utfpr.quartz.tasks.QuartzTasks;
@@ -139,6 +141,8 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
                 newsletter.getEmails().stream().filter(
                         (Email email) -> Objects.equals(email.getSubscribed(), NoYesEnum.YES)
                 ).collect(Collectors.toList());
+
+        addEmailsOfGroupsInListEmailsToSendNewsletter(newsletter, subscribedEmails);
 
         validateSubscribedEmails(subscribedEmails);
         checkAnswersInEmailToUnsubscribe(subscribedEmails, configEmail);
@@ -293,6 +297,30 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
     public LastSentEmailNewsletter getLastSentEmail(Long newsletterId) {
         return new LastSentEmailNewsletter(getRepository().findLastSentEmail(newsletterId));
+    }
+
+    // TODO: Melhorar e deixar mais limpo esse método, não é boa prática deixar for dentro de for
+    private void addEmailsOfGroupsInListEmailsToSendNewsletter(Newsletter newsletter, List<Email> listEmailsToSend) {
+        if ((Objects.isNull(newsletter.getEmailGroups())) || (newsletter.getEmailGroups().isEmpty()))
+            return;
+
+        for (NewsletterEmailGroup newsletterEmailGroup : newsletter.getEmailGroups()) {
+            EmailGroup emailGroup = newsletterEmailGroup.getEmailGroup();
+            if (Objects.isNull(emailGroup))
+                continue;
+
+            List<Email> emailsByGroup = emailService.findByGroupId(emailGroup.getId());
+            if (emailsByGroup.isEmpty())
+                continue;
+
+            for (Email emailByGroup : emailsByGroup) {
+                if (!listEmailsToSend.stream().anyMatch(
+                        (Email email) -> Objects.equals(email.getEmail(), emailByGroup.getEmail())
+                )) {
+                    listEmailsToSend.add(emailByGroup);
+                }
+            }
+        }
     }
 
 }
