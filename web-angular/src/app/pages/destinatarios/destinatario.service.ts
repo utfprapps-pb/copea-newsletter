@@ -35,11 +35,11 @@ export class DestinatarioService extends CrudService<Destinatario> {
       params = params.append('id', id);
     if (email)
       params = params.append('email', email);
-    return this.http.get<any>(`${this.baseUrl}/${this.url}/exists`, { params: params });
+    return this.http.get<any>(`${this.baseUrl}${this.url}/exists`, { params: params });
   }
 
   public saveSelfEmailRegistration(emailSelfRegistration: EmailSelfRegistration): Observable<DefaultResponse> {
-    return this.http.post<DefaultResponse>(`${this.baseUrl}/${this.url}/self-registration`, emailSelfRegistration);
+    return this.http.post<DefaultResponse>(`${this.baseUrl}${this.url}/self-registration`, emailSelfRegistration);
   }
 
 

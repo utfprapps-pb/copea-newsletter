@@ -20,14 +20,14 @@ export class NewsletterQuartzTasksService extends CrudService<NewsletterQuartzTa
   }
 
   public schedule(newsletterQuartzTasks: NewsletterQuartzTasks): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/${this.url}`, newsletterQuartzTasks);
+    return this.http.post<any>(`${this.baseUrl}${this.url}`, newsletterQuartzTasks);
   }
 
   public getActiveSchedules(newsletterId: number): Observable<Array<QuartzTasks>> {
     let params = new HttpParams();
     if (newsletterId)
       params.append('newsletter-id', newsletterId);
-    return this.http.get<Array<QuartzTasks>>(`${this.baseUrl}/${this.url}/active-schedules`, { params: params });
+    return this.http.get<Array<QuartzTasks>>(`${this.baseUrl}${this.url}/active-schedules`, { params: params });
   }
 
 }

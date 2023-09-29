@@ -32,7 +32,7 @@ export class NoticiaService extends CrudService<Noticia> {
   public getLastSentEmail(newsletterId): Observable<LastSentEmailNewsletter> {
     if (!newsletterId)
       return new Observable<LastSentEmailNewsletter>;
-    return this.http.get<LastSentEmailNewsletter>(`${this.baseUrl}/${this.url}/last-sent-email/newsletter/${newsletterId}`);
+    return this.http.get<LastSentEmailNewsletter>(`${this.baseUrl}${this.url}/last-sent-email/newsletter/${newsletterId}`);
   }
 
 }

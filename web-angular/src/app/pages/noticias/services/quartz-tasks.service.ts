@@ -16,7 +16,7 @@ export class QuartzTasksService extends CrudService<QuartzTasks> {
   }
 
   public cancel(quartzTasksId: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${this.url}/cancel/${quartzTasksId}`);
+    return this.http.delete(`${this.baseUrl}${this.url}/cancel/${quartzTasksId}`);
   }
 
 }

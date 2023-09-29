@@ -20,11 +20,11 @@ export class GrupoDestinatarioService extends CrudService<GrupoDestinatario> {
   }
 
   public uuidGenerate(groupId: number): Observable<GrupoDestinatario> {
-    return this.http.get<any>(`${this.baseUrl}/${this.url}/uuid/generate/${groupId}`);
+    return this.http.get<any>(`${this.baseUrl}${this.url}/uuid/generate/${groupId}`);
   }
 
   public uuidRemove(groupId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${this.url}/uuid/${groupId}`);
+    return this.http.delete<void>(`${this.baseUrl}${this.url}/uuid/${groupId}`);
   }
 
   public exists(id: number, name: string): Observable<any> {
@@ -33,7 +33,7 @@ export class GrupoDestinatarioService extends CrudService<GrupoDestinatario> {
       params = params.append('id', id);
     if (name)
       params = params.append('name', name);
-    return this.http.get<any>(`${this.baseUrl}/${this.url}/exists`, { params: params });
+    return this.http.get<any>(`${this.baseUrl}${this.url}/exists`, { params: params });
   }
 
 }
