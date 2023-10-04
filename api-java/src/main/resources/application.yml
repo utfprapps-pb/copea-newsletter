@@ -91,7 +91,7 @@ mp:
       publickey:
         location: ${jwt-newsletter.publickey-location}
 
-#propriedades para desenvolvimento
+# Propriedades para desenvolvimento
 "%dev":
   quarkus:
     datasource:
@@ -108,3 +108,12 @@ mp:
         sql: true
     http:
       port: 8082
+
+# Propriedades para quando rodar os testes
+"%test":
+  quarkus:
+    datasource:
+      jdbc:
+        url: jdbc:postgresql://localhost:5432/newsletter?ApplicationName=${postgreSQL-app-name}
+      username: postgres
+      password: admin
