@@ -2,6 +2,7 @@ package br.edu.utfpr.user;
 
 import br.edu.utfpr.email.config.ConfigEmailService;
 import br.edu.utfpr.email.send.SendEmailService;
+import br.edu.utfpr.user.recover_password.RecoverPasswordDTO;
 import br.edu.utfpr.user.recover_password.RecoverPasswordService;
 import br.edu.utfpr.user.responses.SendEmailCodeRecoverPassword;
 import io.quarkus.test.junit.QuarkusTest;
@@ -43,17 +44,18 @@ public class UserServiceTest {
     }
 
     @Test
-    public void test_Return_NotFoundException_When_findByUsername_NotExists() {
+    public void test_Return_NotFoundException_When_Username_To_SendEmailCodeRecoverPassword_NotExists() {
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
         Assertions.assertThrows(
                 NotFoundException.class,
                 () -> userService.sendEmailCodeRecoverPassword("usernameInexistente"),
-                "Quando passar um usuário inexistente deve retornar a exception 'NotFoundException'."
+                "Quando passar um usuário inexistente no método sendEmailCodeRecoverPassword " +
+                        "deve retornar a exception 'NotFoundException'."
         );
     }
 
     @Test
-    public void test_Return_Object_When_findByUsername_Exists() throws Exception {
+    public void test_Return_Object_When_Username_To_SendEmailCodeRecoverPassword_Exists() throws Exception {
         User user = new User();
         String username = "teste";
         user.setUsername(username);
@@ -66,7 +68,21 @@ public class UserServiceTest {
         Assertions.assertTrue(
                 Objects.equals(sendEmailCodeRecoverPassword.getMessage(), "Código enviado com sucesso para o e-mail " + email + ".") &&
                         Objects.equals(sendEmailCodeRecoverPassword.getEmail(), email),
-                "Quando passado um usuário existente, deve retornar o objeto com a mensagem e o e-mail do usuário."
+                "Quando passado um usuário existente no método sendEmailCodeRecoverPassword, " +
+                        "deve retornar o objeto com a mensagem e o e-mail do usuário."
+        );
+    }
+
+    @Test
+    public void test_Return_NotFoundException_When_Username_To_RecoverPassword_NotExists() {
+        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
+        RecoverPasswordDTO recoverPasswordDTO = new RecoverPasswordDTO();
+        recoverPasswordDTO.setUsername("inexistente");
+        Assertions.assertThrows(
+                NotFoundException.class,
+                () -> userService.recoverPassword(recoverPasswordDTO),
+                "Quando passar um usuário inexistente no método recoverPassword " +
+                        "deve retornar a exception 'NotFoundException'."
         );
     }
 
