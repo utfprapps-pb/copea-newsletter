@@ -33,6 +33,9 @@ public interface IQuartzTasksSchedule {
     boolean isRecurrent();
     void setRecurrent(boolean recurrent);
 
+    JobDataMap getJobDataMap();
+    void setJobDataMap(JobDataMap jobDataMap);
+
     default JobDetail getJobDetail() {
         return JobBuilder.newJob(getJobClass())
                 .withIdentity(getJobIdentity(), getJobGroup())

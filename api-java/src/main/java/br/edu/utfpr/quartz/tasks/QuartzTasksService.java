@@ -2,9 +2,9 @@ package br.edu.utfpr.quartz.tasks;
 
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
-import br.edu.utfpr.newsletter.quartz_tasks.schedule.NewsletterQuartzTasksSchedule;
-import br.edu.utfpr.quartz.tasks.schedule.IQuartzTasksSchedule;
 import br.edu.utfpr.quartz.tasks.schedule.QuartzTasksSchedule;
+import br.edu.utfpr.quartz.tasks.schedule.IQuartzTasksSchedule;
+import br.edu.utfpr.quartz.tasks.schedule.QuartzTasksScheduleHandle;
 import org.quartz.JobDataMap;
 import org.quartz.SchedulerException;
 
@@ -19,7 +19,7 @@ import java.util.*;
 public class QuartzTasksService extends GenericService<QuartzTasks, Long, QuartzTasksRepository> {
 
     @Inject
-    QuartzTasksSchedule quartzTasksSchedule;
+    QuartzTasksScheduleHandle quartzTasksScheduleHandle;
 
     public void scheduleJob(List<QuartzTasks> quartzTasks) {
         if (quartzTasks.isEmpty())
@@ -27,7 +27,7 @@ public class QuartzTasksService extends GenericService<QuartzTasks, Long, Quartz
 
         List<IQuartzTasksSchedule> quartzTasksSchedules = new ArrayList<>();
         for (QuartzTasks quartzTask : quartzTasks) {
-            NewsletterQuartzTasksSchedule automatedScheduler = new NewsletterQuartzTasksSchedule();
+            QuartzTasksSchedule automatedScheduler = new QuartzTasksSchedule();
             setIdentityJobTriggerOnJobDataMap(quartzTask);
             automatedScheduler.setJobDataMap(quartzTask.getJobDataMap());
             automatedScheduler.setJobClass(quartzTask.getJobClass());
@@ -52,7 +52,7 @@ public class QuartzTasksService extends GenericService<QuartzTasks, Long, Quartz
             return;
 
         try {
-            quartzTasksSchedule.schedule(quartzTasksSchedules);
+            quartzTasksScheduleHandle.schedule(quartzTasksSchedules);
         } catch (Exception exception) {
             throw new ValidationException(
                     "Ocorreu um erro ao agendar as tarefas " +
@@ -80,7 +80,7 @@ public class QuartzTasksService extends GenericService<QuartzTasks, Long, Quartz
         if (Objects.isNull(quartzTasks))
             throw new NotFoundException("Nenhum agendamento encontrado para o id informado.");
 
-        boolean canceled = quartzTasksSchedule.deleteJob(quartzTasks.getJobName(), quartzTasks.getJobGroup());
+        boolean canceled = quartzTasksScheduleHandle.deleteJob(quartzTasks.getJobName(), quartzTasks.getJobGroup());
         if (!canceled)
             throw new ValidationException("O Job de nome " + quartzTasks.getJobName() + " pertencente ao id do agendamento informado não foi encontrado.");
 
