@@ -32,7 +32,7 @@ public class RecoverPasswordService {
         }
     }
 
-    public Boolean codeExpired(RecoverPassword recoverPassword) {
+    public boolean codeExpired(RecoverPassword recoverPassword) {
         return (Duration.between(recoverPassword.getDateTime(), DateTimeUtils.getCurrentDateTime()).toMinutes() >= MAX_MINUTES_VALID_CODE);
     }
 

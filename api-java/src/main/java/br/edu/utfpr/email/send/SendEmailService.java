@@ -34,10 +34,10 @@ public class SendEmailService {
 
     public SendEmailLog send(String title, String body, ConfigEmail configEmail, String ...emailsList) throws Exception {
         HtmlEmail htmlEmail = new HtmlEmail();
-        try {
-            if (emailsList.length == 0)
-                throw new ValidationException("Nenhum e-mail inscrito encontrado para a newsletter.");
+        if (emailsList.length == 0)
+            throw new ValidationException("Nenhum e-mail inscrito encontrado para a newsletter.");
 
+        try {
             this.configEmail = configEmail;
 
             htmlEmail = buildEmail();
