@@ -314,9 +314,10 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
                 continue;
 
             for (Email emailByGroup : emailsByGroup) {
-                if (!listEmailsToSend.stream().anyMatch(
-                        (Email email) -> Objects.equals(email.getEmail(), emailByGroup.getEmail())
-                )) {
+                if ((Objects.equals(emailByGroup.getSubscribed(), NoYesEnum.YES)) &&
+                        (!listEmailsToSend.stream().anyMatch(
+                                (Email email) -> Objects.equals(email.getEmail(), emailByGroup.getEmail())
+                        ))) {
                     listEmailsToSend.add(emailByGroup);
                 }
             }
