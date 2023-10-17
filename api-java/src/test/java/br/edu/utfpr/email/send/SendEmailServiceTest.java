@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @QuarkusTest
 @ExtendWith(MockitoExtension.class)
-public class SendEmailServiceTest {
+class SendEmailServiceTest {
 
     @InjectMocks
     SendEmailService sendEmailService;
@@ -33,7 +33,7 @@ public class SendEmailServiceTest {
     }
 
     @Test
-    public void test_Return_ValidationException_When_ListEmailsEmpty() throws Exception {
+    void test_Return_ValidationException_When_ListEmailsEmpty() throws Exception {
         ConfigEmail configEmail = new ConfigEmail();
         Assertions.assertThrows(
                 ValidationException.class,
@@ -48,7 +48,7 @@ public class SendEmailServiceTest {
      * de verdade o email, e da exception pois são dados somente pra teste
      */
 //    @Test
-//    public void test_Return_SendEmailLog_When_DataSendEmail_Valid() throws Exception {
+//    void test_Return_SendEmailLog_When_DataSendEmail_Valid() throws Exception {
 //        SendEmailLog sendEmailLog = new SendEmailLog();
 //        sendEmailLog.setSentStatus(SendEmailLogStatusEnum.SENT);
 //        Mockito.when(sendEmailLogService.saveLog(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(sendEmailLog);

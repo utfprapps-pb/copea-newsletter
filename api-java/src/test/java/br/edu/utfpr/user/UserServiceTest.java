@@ -27,7 +27,7 @@ import java.util.Objects;
 
 @QuarkusTest
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @InjectMocks
     UserService userService;
@@ -52,7 +52,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void test_Return_NotFoundException_When_Username_To_SendEmailCodeRecoverPassword_NotExists() {
+    void test_Return_NotFoundException_When_Username_To_SendEmailCodeRecoverPassword_NotExists() {
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
         Assertions.assertThrows(
                 NotFoundException.class,
@@ -63,7 +63,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void test_Return_Object_When_Username_To_SendEmailCodeRecoverPassword_Exists() throws Exception {
+    void test_Return_Object_When_Username_To_SendEmailCodeRecoverPassword_Exists() throws Exception {
         String username = "teste";
         String email = "teste@teste.com";
         User user = userServiceTestScenario.getUser(username, email);
@@ -79,7 +79,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void test_Return_NotFoundException_When_Username_To_RecoverPassword_NotExists() {
+    void test_Return_NotFoundException_When_Username_To_RecoverPassword_NotExists() {
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
         RecoverPasswordDTO recoverPasswordDTO = userServiceTestScenario.getRecoverPasswordDTO(
                 "inexistente",
@@ -94,7 +94,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void test_Return_Status_OK_WhenCode_To_RecoverPassword_Is_Valid() {
+    void test_Return_Status_OK_WhenCode_To_RecoverPassword_Is_Valid() {
         String username = "teste";
         User user = userServiceTestScenario.getUser(username, "");
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(user);
@@ -119,7 +119,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void test_Return_Status_BAD_REQUEST_WhenCode_To_RecoverPassword_Is_Invalid() {
+    void test_Return_Status_BAD_REQUEST_WhenCode_To_RecoverPassword_Is_Invalid() {
         String username = "teste";
         User user = userServiceTestScenario.getUser(username, "");
         Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(user);
@@ -144,7 +144,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void test_If_UpdateUserNewPasswordByUsername_SetDataCorrect() {
+    void test_If_UpdateUserNewPasswordByUsername_SetDataCorrect() {
         String username = "teste";
         User user = userServiceTestScenario.getUser(username, "");
         user.setPassword("senhaAntiga");

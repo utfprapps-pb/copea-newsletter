@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @QuarkusTest
 @ExtendWith(MockitoExtension.class)
-public class EmailGroupServiceTest {
+class EmailGroupServiceTest {
 
     private EmailGroupServiceTestScenario emailGroupServiceTestScenario = new EmailGroupServiceTestScenario();
 
@@ -33,20 +33,21 @@ public class EmailGroupServiceTest {
     }
 
     @Test
-    public void test_Return_ValidationException_When_Save_EmailGroup_Already_Exists() {
+    void test_Return_ValidationException_When_Save_EmailGroup_Already_Exists() {
         Mockito.when(emailGroupRepository.findByName("teste")).thenReturn(
                 Optional.of(emailGroupServiceTestScenario.getEmailGroup())
         );
+        EmailGroup emailGroup = emailGroupServiceTestScenario.getEmailGroup();
         Assertions.assertThrows(
                 ValidationException.class,
-                () -> emailGroupService.save(emailGroupServiceTestScenario.getEmailGroup()),
+                () -> emailGroupService.save(emailGroup),
                 "Quando gravar um grupo de e-mail que já existe deve " +
                         "retornar a exception do tipo 'ValidationException'."
         );
     }
 
     @Test
-    public void test_Call_MethodSave_When_Save_EmailGroup_Valid() {
+    void test_Call_MethodSave_When_Save_EmailGroup_Valid() {
         Mockito.when(emailGroupRepository.findByName("teste")).thenReturn(Optional.empty());
         emailGroupService.save(emailGroupServiceTestScenario.getEmailGroup());
         Mockito.verify(emailGroupRepository, Mockito.atLeastOnce())
@@ -54,20 +55,21 @@ public class EmailGroupServiceTest {
     }
 
     @Test
-    public void test_Return_ValidationException_When_Update_EmailGroup_Already_Exists() {
+    void test_Return_ValidationException_When_Update_EmailGroup_Already_Exists() {
         Mockito.when(emailGroupRepository.findByName("teste")).thenReturn(
                 Optional.of(emailGroupServiceTestScenario.getEmailGroup())
         );
+        EmailGroup emailGroup = emailGroupServiceTestScenario.getEmailGroup();
         Assertions.assertThrows(
                 ValidationException.class,
-                () -> emailGroupService.update(emailGroupServiceTestScenario.getEmailGroup()),
+                () -> emailGroupService.update(emailGroup),
                 "Quando atualizar um grupo de e-mail que já existe deve " +
                         "retornar a exception do tipo 'ValidationException'."
         );
     }
 
     @Test
-    public void test_Call_MethodSave_When_Update_EmailGroup_Valid() {
+    void test_Call_MethodSave_When_Update_EmailGroup_Valid() {
         Mockito.when(emailGroupRepository.findByName("teste")).thenReturn(Optional.empty());
         emailGroupService.update(emailGroupServiceTestScenario.getEmailGroup());
         Mockito.verify(emailGroupRepository, Mockito.atLeastOnce())

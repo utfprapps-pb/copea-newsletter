@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @QuarkusTest
 @ExtendWith(MockitoExtension.class)
-public class RecoverPasswordServiceTest {
+class RecoverPasswordServiceTest {
 
     @InjectMocks
     RecoverPasswordService recoverPasswordService;
@@ -27,7 +27,7 @@ public class RecoverPasswordServiceTest {
     }
 
     @Test
-    public void test_Return_True_If_Code_Is_Expired_After_30_minutes() {
+    void test_Return_True_If_Code_Is_Expired_After_30_minutes() {
         RecoverPassword recoverPassword = recoverPasswordServiceTestScenario.getRecoverPassword(
                 "teste",
                 123,
@@ -42,7 +42,7 @@ public class RecoverPasswordServiceTest {
     }
 
     @Test
-    public void test_Return_False_If_Code_Is_Valid_Before_30_minutes() {
+    void test_Return_False_If_Code_Is_Valid_Before_30_minutes() {
         RecoverPassword recoverPassword = recoverPasswordServiceTestScenario.getRecoverPassword(
                 "teste",
                 123,
@@ -57,7 +57,7 @@ public class RecoverPasswordServiceTest {
     }
 
     @Test
-    public void test_If_ClearExpiredCodesSentByEmail_After_30_minutes() {
+    void test_If_ClearExpiredCodesSentByEmail_After_30_minutes() {
         RecoverPassword recoverPassword = recoverPasswordServiceTestScenario.getRecoverPassword(
                 "teste",
                 123,
@@ -75,7 +75,7 @@ public class RecoverPasswordServiceTest {
     }
 
     @Test
-    public void test_If_Not_ClearExpiredCodesSentByEmail_Before_30_minutes() {
+    void test_If_Not_ClearExpiredCodesSentByEmail_Before_30_minutes() {
         RecoverPassword recoverPassword = recoverPasswordServiceTestScenario.getRecoverPassword(
                 "teste",
                 123,
