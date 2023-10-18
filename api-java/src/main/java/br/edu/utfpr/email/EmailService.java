@@ -117,7 +117,6 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
         queryNewsletter.setParameter("emailId", aLong);
         queryNewsletter.executeUpdate();
 
-        // remove entidade
         return super.deleteById(aLong);
     }
 
