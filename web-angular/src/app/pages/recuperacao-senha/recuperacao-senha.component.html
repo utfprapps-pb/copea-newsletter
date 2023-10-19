@@ -7,16 +7,17 @@
 
       <!-- Nome de usuário -->
       <mat-form-field [appearance]="'outline'">
-        <mat-label>Usuário</mat-label>
-        <input matInput formControlName="username" type="text">
+        <mat-label>Usuário ou e-mail</mat-label>
+        <input matInput formControlName="username" placeholder="Informe seu usuário ou e-mail" type="text">
         <mat-error>{{username.errors | erro}}</mat-error>
       </mat-form-field>
 
-      <span><button class="button-link link-receber-codigo-email" (click)="enviarCodigoPorEmail()">Receber código por e-mail</button></span>
+      <span><button class="button-link link-receber-codigo-email" (click)="enviarCodigoPorEmail()">Receber código por
+          e-mail</button></span>
       <!-- Código enviado pelo email -->
       <mat-form-field [appearance]="'outline'">
         <mat-label>Código enviado por e-mail</mat-label>
-        <input matInput formControlName="codigo" type="text">
+        <input matInput formControlName="codigo" type="text" placeholder="Informe o código enviado no seu e-mail">
         <mat-error>{{codigo.errors | erro}}</mat-error>
       </mat-form-field>
 

@@ -36,7 +36,6 @@ public class UserUniqueValidator implements ConstraintValidator<UserUniqueConstr
                 "email"
         );
 
-
         return (usernameValid && emailValid);
     }
 

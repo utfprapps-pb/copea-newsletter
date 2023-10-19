@@ -61,7 +61,11 @@ public class SendEmailService {
             if (mimeMultipart.getCount() > 0)
                 htmlEmail.addPart(mimeMultipart);
 
-            htmlEmail.setBcc(getEmailsForSend(emailsList));
+            Collection<InternetAddress> emails = getEmailsForSend(emailsList);
+            if (emails.size() == 1)
+                htmlEmail.setTo(emails);
+            else
+                htmlEmail.setBcc(emails);
 
             htmlEmail.setHtmlMsg(body);
 

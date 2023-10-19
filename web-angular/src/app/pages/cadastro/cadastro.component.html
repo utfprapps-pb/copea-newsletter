@@ -7,20 +7,20 @@
       <!-- Nome completo -->
       <mat-form-field [appearance]="'outline'">
         <mat-label>Nome completo</mat-label>
-        <input matInput formControlName="fullname" type="text">
+        <input matInput formControlName="fullname" type="text" placeholder="Informe seu nome completo">
         <mat-error>{{nome.errors | erro}}</mat-error>
       </mat-form-field>
 
       <!-- Nome de usuário -->
       <mat-form-field [appearance]="'outline'">
         <mat-label>Nome de usuário</mat-label>
-        <input matInput formControlName="username" type="text" (ngModelChange)="changeUsername()">
+        <input matInput formControlName="username" type="text" (ngModelChange)="changeUsername()" placeholder="Informe seu nome de usuário">
         <mat-error>{{username.errors | erro}}</mat-error>
       </mat-form-field>
 
       <!-- Email -->
       <mat-form-field [appearance]="'outline'">
-        <mat-label>E-mail para recuperar senha</mat-label>
+        <mat-label>E-mail pessoal</mat-label>
         <input matInput formControlName="email" required placeholder="seunome@exemplo.com" type="email" (ngModelChange)="changeEmail()">
         <mat-error>{{email.errors | erro}}</mat-error>
       </mat-form-field>

@@ -7,8 +7,8 @@
 
       <!-- Nome de usuário -->
       <mat-form-field [appearance]="'outline'">
-        <mat-label>Usuário</mat-label>
-        <input matInput formControlName="username" placeholder="Informe seu usuário" type="text">
+        <mat-label>Usuário ou e-mail</mat-label>
+        <input matInput formControlName="username" placeholder="Informe seu usuário ou e-mail" type="text">
         <mat-error>{{username.errors | erro}}</mat-error>
       </mat-form-field>
 

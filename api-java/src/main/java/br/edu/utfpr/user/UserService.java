@@ -60,7 +60,7 @@ public class UserService extends GenericService<User, Long, UserRepository> {
     }
 
     public SendEmailCodeRecoverPassword sendEmailCodeRecoverPassword(String username) throws Exception {
-        User user = getRepository().findByUsername(username);
+        User user = findByUsernameOrEmail(username, username);
         if (Objects.isNull(user))
             throwExceptionUserNotFound();
 
@@ -70,14 +70,15 @@ public class UserService extends GenericService<User, Long, UserRepository> {
         sendEmailService.send(
                 "Recuperação de senha",
                 "O código para recuperação da sua senha no sistema de Newsletter é <b>"+codigo+"</b>.",
-                configEmailService.getConfigEmailByUsernameUser(username),
+                configEmailService.getConfigEmailByUsernameOrEmailUser(username),
                 user.getEmail());
 
         return new SendEmailCodeRecoverPassword("Código enviado com sucesso para o e-mail " + user.getEmail() + ".", user.getEmail());
     }
 
     public DefaultResponse recoverPassword(RecoverPasswordDTO recoverPasswordDTO) {
-        User user = getRepository().findByUsername(recoverPasswordDTO.getUsername());
+        String usernameOrEmail = recoverPasswordDTO.getUsername();
+        User user = getRepository().findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
         if (Objects.isNull(user))
             throwExceptionUserNotFound();
 

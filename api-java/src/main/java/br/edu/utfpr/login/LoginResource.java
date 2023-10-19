@@ -19,7 +19,6 @@ public class LoginResource {
 
     @POST
     public Response logar(@Valid LoginRequest loginRequest) throws Exception {
-
         Optional<TokenResponse> tokenResponse = loginResource.logar(loginRequest);
         if (tokenResponse.isPresent())
             return Response.status(Response.Status.OK).entity(tokenResponse.get()).build();
@@ -28,7 +27,6 @@ public class LoginResource {
                     .status(Response.Status.UNAUTHORIZED)
                     .entity(GenericResponse.getGenericResponse("Usuário ou senha inválidos.", Response.Status.UNAUTHORIZED.getStatusCode()))
                     .build();
-
     }
 
 }

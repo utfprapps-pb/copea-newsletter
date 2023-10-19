@@ -280,15 +280,19 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     }
 
     private void addFilterNewslettersTemplateMineOrShared(SQLBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
+        User loggedUser = getAuthSecurityFilter().getAuthUserContext().findByToken();
+
         if (Objects.equals(newsletterSearchRequest.isNewslettersTemplateMine(), newsletterSearchRequest.isNewslettersTemplateShared())) {
-            if (newsletterSearchRequest.isNewslettersTemplateMine())
+            boolean bothChecked = newsletterSearchRequest.isNewslettersTemplateMine();
+            if (bothChecked)
                 sqlBuilder.addAnd("(newsletter.newsletter_template)");
-            else
+            else {
                 sqlBuilder.addAnd("(not (newsletter.newsletter_template))");
+                sqlBuilder.addAnd("(newsletter.user_id = :loggedUserId)", "loggedUserId", loggedUser.getId());
+            }
             return;
         }
 
-        User loggedUser = getAuthSecurityFilter().getAuthUserContext().findByToken();
         if (!newsletterSearchRequest.isNewslettersTemplateMine())
             sqlBuilder.addAnd("(newsletter.newsletter_template) and (newsletter.user_id <> :loggedUserId)", "loggedUserId", loggedUser.getId());
         if (!newsletterSearchRequest.isNewslettersTemplateShared())

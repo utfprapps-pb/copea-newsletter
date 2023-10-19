@@ -43,8 +43,8 @@ public class ConfigEmailService extends GenericService<ConfigEmail, Long, Config
         return findByUser(getAuthSecurityFilter().getAuthUserContext().findByToken());
     }
 
-    public List<ConfigEmail> findByUsernameUser(String username) {
-        return findByUser(userService.findByUsername(username));
+    public List<ConfigEmail> findByUsernameOrEmailUser(String username) {
+        return findByUser(userService.findByUsernameOrEmail(username, username));
     }
 
     public List<ConfigEmail> findByUser(User user) {
@@ -67,8 +67,8 @@ public class ConfigEmailService extends GenericService<ConfigEmail, Long, Config
         return configEmailOptional.get();
     }
 
-    public ConfigEmail getConfigEmailByUsernameUser(String usernameUser) {
-        return getConfigEmail(findByUsernameUser(usernameUser));
+    public ConfigEmail getConfigEmailByUsernameOrEmailUser(String usernameUser) {
+        return getConfigEmail(findByUsernameOrEmailUser(usernameUser));
     }
 
     public ConfigEmail getConfigEmailByLoggedUser() {
