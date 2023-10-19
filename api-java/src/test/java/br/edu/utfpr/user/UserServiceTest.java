@@ -53,7 +53,7 @@ class UserServiceTest {
 
     @Test
     void test_Return_NotFoundException_When_Username_To_SendEmailCodeRecoverPassword_NotExists() {
-        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
+        Mockito.when(userRepository.findByUsernameOrEmail(Mockito.any(), Mockito.any())).thenReturn(null);
         Assertions.assertThrows(
                 NotFoundException.class,
                 () -> userService.sendEmailCodeRecoverPassword("usernameInexistente"),
@@ -67,7 +67,7 @@ class UserServiceTest {
         String username = "teste";
         String email = "teste@teste.com";
         User user = userServiceTestScenario.getUser(username, email);
-        Mockito.when(userRepository.findByUsername(username)).thenReturn(user);
+        Mockito.when(userRepository.findByUsernameOrEmail(username, username)).thenReturn(user);
         SendEmailCodeRecoverPassword sendEmailCodeRecoverPassword =
                 userService.sendEmailCodeRecoverPassword(username);
         Assertions.assertTrue(
@@ -80,7 +80,7 @@ class UserServiceTest {
 
     @Test
     void test_Return_NotFoundException_When_Username_To_RecoverPassword_NotExists() {
-        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(null);
+        Mockito.when(userRepository.findByUsernameOrEmail(Mockito.any(), Mockito.any())).thenReturn(null);
         RecoverPasswordDTO recoverPasswordDTO = userServiceTestScenario.getRecoverPasswordDTO(
                 "inexistente",
                 null,
@@ -97,7 +97,7 @@ class UserServiceTest {
     void test_Return_Status_OK_WhenCode_To_RecoverPassword_Is_Valid() {
         String username = "teste";
         User user = userServiceTestScenario.getUser(username, "");
-        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(user);
+        Mockito.when(userRepository.findByUsernameOrEmail(Mockito.any(), Mockito.any())).thenReturn(user);
 
         Map<String, RecoverPassword> codeValid = new HashMap<>();
         codeValid.put(username, userServiceTestScenario.getRecoverPassworCode(username, 123));
@@ -122,7 +122,7 @@ class UserServiceTest {
     void test_Return_Status_BAD_REQUEST_WhenCode_To_RecoverPassword_Is_Invalid() {
         String username = "teste";
         User user = userServiceTestScenario.getUser(username, "");
-        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(user);
+        Mockito.when(userRepository.findByUsernameOrEmail(Mockito.any(), Mockito.any())).thenReturn(user);
 
         Map<String, RecoverPassword> codeValid = new HashMap<>();
         codeValid.put(username, userServiceTestScenario.getRecoverPassworCode(username, 123));
@@ -148,7 +148,7 @@ class UserServiceTest {
         String username = "teste";
         User user = userServiceTestScenario.getUser(username, "");
         user.setPassword("senhaAntiga");
-        Mockito.when(userRepository.findByUsername(Mockito.any())).thenReturn(user);
+        Mockito.when(userRepository.findByUsernameOrEmail(Mockito.any(), Mockito.any())).thenReturn(user);
 
         Map<String, RecoverPassword> codeValid = new HashMap<>();
         codeValid.put(username, userServiceTestScenario.getRecoverPassworCode(username, 123));
