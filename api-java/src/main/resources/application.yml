@@ -73,7 +73,9 @@ quarkus:
 
 #Informacoes locais do jwt
 jwt-newsletter:
-  duration: 900 # 15 minutos
+# TODO: Para deixar o access token com 15 minutos de expiração é necessário implementar um refresh token para o usuário não precisar toda vez fazer login
+#  duration: 900 # 15 minutos
+  duration: 604800 # 7 dias
   password:
     iteration: 33
     keylength: 256

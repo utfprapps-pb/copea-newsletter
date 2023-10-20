@@ -26,15 +26,16 @@ public class LoginResource {
             return getUnauthorized();
     }
 
-    @GET
-    @Path("token/refresh")
-    public Response refreshToken() throws Exception {
-        Optional<TokenResponse> tokenResponse = loginResource.refreshToken();
-        if (tokenResponse.isPresent())
-            return Response.ok(tokenResponse.get()).build();
-        else
-            return getUnauthorized();
-    }
+//    TODO: necessário implementar um fluxo de refresh token ao invés de dar refresh toda vez no access token
+//    @GET
+//    @Path("token/refresh")
+//    public Response refreshToken() throws Exception {
+//        Optional<TokenResponse> tokenResponse = loginResource.refreshToken();
+//        if (tokenResponse.isPresent())
+//            return Response.ok(tokenResponse.get()).build();
+//        else
+//            return getUnauthorized();
+//    }
 
     private Response getUnauthorized() {
         return Response

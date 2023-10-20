@@ -81,10 +81,11 @@ export abstract class LoginService {
         next: (response) => {
           this.storeToken(response);
 
-          if (this.isAuthenticated) {
-            const fiveMinutes = 300000;
-            this.startRefreshInterval((response.durationMillisecs - fiveMinutes));
-          }
+          // TODO: necessário implementar um fluxo de refresh token ao invés de dar refresh no access token
+          // if (this.isAuthenticated) {
+          //   const fiveMinutes = 300000;
+          //   this.startRefreshInterval((response.durationMillisecs - fiveMinutes));
+          // }
 
           observer.next(this.isAuthenticated);
           observer.complete();
