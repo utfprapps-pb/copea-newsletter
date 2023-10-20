@@ -33,7 +33,7 @@ public class LoginService {
         String username = loginRequest.getUsername();
         Optional<User> userOptional = Optional.ofNullable(userRepository.findByUsernameOrEmail(username, username));
 
-        Boolean gerarToken = ((userOptional.isPresent()) && (verifyPassword(loginRequest.getPassword(), userOptional.get().getPassword())));
+        boolean gerarToken = ((userOptional.isPresent()) && (verifyPassword(loginRequest.getPassword(), userOptional.get().getPassword())));
         if (gerarToken)
             token = Optional.of(tokenUtils.generateToken(userOptional.get().getId().toString(), RoleNewsletterType.ADMIN));
 
@@ -55,7 +55,7 @@ public class LoginService {
     }
 
     public Optional<TokenResponse> refreshToken() throws Exception {
-        Optional<User> userOptional = Optional.of(authSecurityFilter.getAuthUserContext().findByToken());
+        Optional<User> userOptional = Optional.ofNullable(authSecurityFilter.getAuthUserContext().findByToken());
         if (userOptional.isEmpty())
             return Optional.empty();
 
