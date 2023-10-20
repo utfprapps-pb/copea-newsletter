@@ -12,5 +12,6 @@ public class TokenResponse {
     private String token;
     private Long issuedAt;
     private Long expiresAt;
+    private Long durationMillisecs;
 
 }

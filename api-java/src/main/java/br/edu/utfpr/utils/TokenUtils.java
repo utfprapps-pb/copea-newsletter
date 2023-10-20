@@ -1,7 +1,7 @@
 package br.edu.utfpr.utils;
 
-import br.edu.utfpr.configmapping.NewsletterConfigMapping;
 import br.edu.utfpr.configmapping.JwtNewsletterConfigMapping;
+import br.edu.utfpr.configmapping.NewsletterConfigMapping;
 import br.edu.utfpr.reponses.TokenResponse;
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.jwt.build.JwtClaimsBuilder;
@@ -48,7 +48,9 @@ public class TokenUtils {
         return new TokenResponse().builder()
                     .token((claimsBuilder.jws().sign(privateKey)))
                     .issuedAt(currentTimeInSecs)
-                    .expiresAt(expiresAt).build();
+                    .expiresAt(expiresAt)
+                    .durationMillisecs((jwtNewsletterConfigMapping.duration() * 1000))
+                .build();
     }
 
     public String getUserPrincipalFromToken(SecurityContext securityContext) {

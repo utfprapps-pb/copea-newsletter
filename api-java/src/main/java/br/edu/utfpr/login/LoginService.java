@@ -1,5 +1,6 @@
 package br.edu.utfpr.login;
 
+import br.edu.utfpr.auth.AuthSecurityFilter;
 import br.edu.utfpr.reponses.TokenResponse;
 import br.edu.utfpr.roles.RoleNewsletterType;
 import br.edu.utfpr.user.User;
@@ -22,6 +23,9 @@ public class LoginService {
 
     @Inject
     TokenUtils tokenUtils;
+
+    @Inject
+    AuthSecurityFilter authSecurityFilter;
 
     public Optional<TokenResponse> logar(LoginRequest loginRequest) throws Exception {
         Optional<TokenResponse> token = Optional.empty();
@@ -48,6 +52,14 @@ public class LoginService {
 
         // verify restored password against original
         return factory.verify(restored, originalPwd.toCharArray());
+    }
+
+    public Optional<TokenResponse> refreshToken() throws Exception {
+        Optional<User> userOptional = Optional.of(authSecurityFilter.getAuthUserContext().findByToken());
+        if (userOptional.isEmpty())
+            return Optional.empty();
+
+        return Optional.of(tokenUtils.generateToken(userOptional.get().getId().toString(), RoleNewsletterType.ADMIN));
     }
 
 }

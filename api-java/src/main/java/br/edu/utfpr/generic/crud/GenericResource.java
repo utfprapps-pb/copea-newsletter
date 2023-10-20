@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 public abstract class GenericResource<T, DTO, ID, S extends GenericService> {
 
+    @Getter
     private final ModelMapperUtils<T, DTO> modelMapperUtils;
 
     public GenericResource(Class<T> entityClass, Class<DTO> dtoClass) {
