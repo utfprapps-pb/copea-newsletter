@@ -81,7 +81,8 @@ export abstract class LoginService {
         next: (response) => {
           this.storeToken(response);
 
-          // TODO: necessário implementar um fluxo de refresh token ao invés de dar refresh toda vez no access token
+          // TODO: necessário implementar um fluxo de refresh token que vence em um tempo maior que o access token
+          // ao invés de dar refresh toda vez no access token, pois assim nunca vai forçar o usuário a autenticar de novo
           // if (this.isAuthenticated) {
           //   const fiveMinutes = 300000;
           //   this.startRefreshInterval((response.durationMillisecs - fiveMinutes));

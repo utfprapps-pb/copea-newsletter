@@ -26,7 +26,9 @@ public class LoginResource {
             return getUnauthorized();
     }
 
-//    TODO: necessário implementar um fluxo de refresh token ao invés de dar refresh toda vez no access token
+    /** TODO: necessário implementar um fluxo de refresh token que vence em um tempo maior que o access token
+     * ao invés de dar refresh toda vez no access token, pois assim nunca vai forçar o usuário a autenticar de novo
+     */
 //    @GET
 //    @Path("token/refresh")
 //    public Response refreshToken() throws Exception {
