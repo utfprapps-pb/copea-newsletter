@@ -1,5 +1,6 @@
 package br.edu.utfpr.features.newsletter;
 
+import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.email.Email;
 import br.edu.utfpr.features.email.EmailService;
 import br.edu.utfpr.features.email.config.ConfigEmail;
@@ -10,18 +11,15 @@ import br.edu.utfpr.features.email.send.SendEmailService;
 import br.edu.utfpr.features.email.send.log.SendEmailLog;
 import br.edu.utfpr.features.email.send.log.SendEmailLogService;
 import br.edu.utfpr.features.email.send.log.enums.SendEmailLogStatusEnum;
-import br.edu.utfpr.exception.validation.ValidationException;
-import br.edu.utfpr.features.newsletter.requests.NewsletterSearchRequest;
-import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.features.newsletter.email_group.NewsletterEmailGroup;
+import br.edu.utfpr.features.newsletter.requests.NewsletterSearchRequest;
 import br.edu.utfpr.features.newsletter.responses.LastSentEmailNewsletter;
 import br.edu.utfpr.features.quartz.tasks.QuartzTasks;
 import br.edu.utfpr.features.quartz.tasks.QuartzTasksService;
+import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
-import br.edu.utfpr.sql.SQLBuilder;
-import br.edu.utfpr.features.user.User;
 import br.edu.utfpr.utils.DateTimeUtils;
 import com.sun.mail.imap.IMAPMessage;
 import org.jboss.resteasy.reactive.RestResponse;
@@ -33,8 +31,6 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.search.*;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -58,10 +54,10 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     EmailService emailService;
 
     @Inject
-    EntityManager entityManager;
+    QuartzTasksService quartzTasksService;
 
     @Inject
-    QuartzTasksService quartzTasksService;
+    NewsletterSearchQuery newsletterSearchQuery;
 
     @Override
     public GenericResponse save(Newsletter entity) {
@@ -255,48 +251,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     }
 
     public List<Newsletter> search(NewsletterSearchRequest newsletterSearchRequest) {
-        SQLBuilder sqlBuilder = new SQLBuilder("select newsletter.* from newsletter");
-        if ((Objects.nonNull(newsletterSearchRequest.getDescription())) && (!newsletterSearchRequest.getDescription().isEmpty()))
-            sqlBuilder.addAnd("(newsletter.description ilike '%' || :description || '%')", "description", newsletterSearchRequest.getDescription());
-        addFilterNewsletterSentOrNot(sqlBuilder, newsletterSearchRequest);
-        addFilterNewslettersTemplateMineOrShared(sqlBuilder, newsletterSearchRequest);
-        Query query = sqlBuilder.createNativeQuery(entityManager, Newsletter.class);
-        return query.getResultList();
-    }
-
-    private void addFilterNewsletterSentOrNot(SQLBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
-        if (newsletterSearchRequest.isNewslettersSent() == newsletterSearchRequest.isNewslettersNotSent())
-            return;
-
-        final String NEWSLETTER_SENT_FILTER = "(exists(select 1 from newsletter_send_email_log " +
-                "left join send_email_log on (send_email_log.id = newsletter_send_email_log.send_email_log_id) " +
-                "where (newsletter_send_email_log.newsletter_id = newsletter.id) and send_email_log.sent_status = :sentStatusSent))";
-
-        if (newsletterSearchRequest.isNewslettersSent())
-            sqlBuilder.addAnd(NEWSLETTER_SENT_FILTER, "sentStatusSent", SendEmailLogStatusEnum.SENT.name());
-
-        if (newsletterSearchRequest.isNewslettersNotSent())
-            sqlBuilder.addAnd("(not " + NEWSLETTER_SENT_FILTER + ")", "sentStatusSent", SendEmailLogStatusEnum.SENT.name());
-    }
-
-    private void addFilterNewslettersTemplateMineOrShared(SQLBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
-        User loggedUser = getAuthSecurityFilter().getAuthUserContext().findByToken();
-
-        if (Objects.equals(newsletterSearchRequest.isNewslettersTemplateMine(), newsletterSearchRequest.isNewslettersTemplateShared())) {
-            boolean bothChecked = newsletterSearchRequest.isNewslettersTemplateMine();
-            if (bothChecked)
-                sqlBuilder.addAnd("(newsletter.newsletter_template)");
-            else {
-                sqlBuilder.addAnd("(not (newsletter.newsletter_template))");
-                sqlBuilder.addAnd("(newsletter.user_id = :loggedUserId)", "loggedUserId", loggedUser.getId());
-            }
-            return;
-        }
-
-        if (!newsletterSearchRequest.isNewslettersTemplateMine())
-            sqlBuilder.addAnd("(newsletter.newsletter_template) and (newsletter.user_id <> :loggedUserId)", "loggedUserId", loggedUser.getId());
-        if (!newsletterSearchRequest.isNewslettersTemplateShared())
-            sqlBuilder.addAnd("(newsletter.newsletter_template) and (newsletter.user_id = :loggedUserId)", "loggedUserId", loggedUser.getId());
+        return newsletterSearchQuery.search(newsletterSearchRequest);
     }
 
     public LastSentEmailNewsletter getLastSentEmail(Long newsletterId) {
