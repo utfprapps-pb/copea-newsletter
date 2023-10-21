@@ -1,13 +1,14 @@
 package br.edu.utfpr.features.newsletter;
 
 import br.edu.utfpr.generic.mapstruct.GenericMapper;
+import br.edu.utfpr.generic.mapstruct.GenericMapperConfig;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 import java.util.Optional;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = GenericMapperConfig.COMPONENT_MODEL_CDI)
 public interface NewsletterMapper extends GenericMapper<Newsletter, NewsletterDTO> {
 
     @AfterMapping
