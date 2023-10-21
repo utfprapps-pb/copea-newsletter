@@ -66,7 +66,6 @@ public class NewsletterSearchQuery {
             }
             return;
         }
-
         if (!newsletterSearchRequest.isNewslettersTemplateMine())
             sqlBuilder.addAnd(
                     "(newsletter.newsletter_template) and (newsletter.user_id <> :" + PARAM_LOGGED_USER_ID + ")",
