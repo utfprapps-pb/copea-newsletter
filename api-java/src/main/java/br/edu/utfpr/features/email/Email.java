@@ -51,15 +51,4 @@ public class Email implements EntityId<Long> {
     @JsonManagedReference
     private List<EmailGroupRelation> emailGroupRelations;
 
-//    public void setEmailGroupRelations(List<EmailGroupRelation> emailGroupRelations) {
-//        if (this.emailGroupRelations == null) {
-//            this.emailGroupRelations = emailGroupRelations;
-//        } else if(this.emailGroupRelations != emailGroupRelations) { // not the same instance, in other case we can get ConcurrentModificationException from hibernate AbstractPersistentCollection
-//            this.emailGroupRelations.clear();
-//            if (emailGroupRelations != null){
-//                this.emailGroupRelations.addAll(emailGroupRelations);
-//            }
-//        }
-//    }
-
 }

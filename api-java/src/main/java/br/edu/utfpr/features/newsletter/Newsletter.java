@@ -2,10 +2,10 @@ package br.edu.utfpr.features.newsletter;
 
 import br.edu.utfpr.features.email.Email;
 import br.edu.utfpr.features.email.send.log.SendEmailLog;
-import br.edu.utfpr.features.newsletter.quartz_tasks.NewsletterQuartzTasks;
-import br.edu.utfpr.generic.crud.EntityId;
 import br.edu.utfpr.features.newsletter.email_group.NewsletterEmailGroup;
+import br.edu.utfpr.features.newsletter.quartz_tasks.NewsletterQuartzTasks;
 import br.edu.utfpr.features.user.User;
+import br.edu.utfpr.generic.crud.EntityId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -77,16 +77,5 @@ public class Newsletter implements EntityId<Long> {
 
     @Column(name = "newsletter_template")
     private Boolean newsletterTemplate;
-
-//    public void setEmailGroups(Set<NewsletterEmailGroup> emailGroups) {
-//        if (this.emailGroups == null) {
-//            this.emailGroups = emailGroups;
-//        } else if(this.emailGroups != emailGroups) { // not the same instance, in other case we can get ConcurrentModificationException from hibernate AbstractPersistentCollection
-//            this.emailGroups.clear();
-//            if (emailGroups != null){
-//                this.emailGroups.addAll(emailGroups);
-//            }
-//        }
-//    }
 
 }
