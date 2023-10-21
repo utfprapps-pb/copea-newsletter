@@ -43,7 +43,7 @@
               <mat-option value="MODELO">
                 Meus modelos
               </mat-option>
-              <mat-option value="MODELOS_COMPARTILHADOS">
+              <mat-option *ngIf="pesquisaNoticiasModelos" value="MODELOS_COMPARTILHADOS">
                 Modelos compartilhados
               </mat-option>
             </mat-select>
