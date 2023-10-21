@@ -24,7 +24,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
    */
   public form = this.formBuilder.group({
     descricao: [''],
-    filtros: [ ['ENVIADAS', 'NAO_ENVIADAS'] ]
+    filtros: [['ENVIADAS', 'NAO_ENVIADAS']]
   });
 
   /**
@@ -47,7 +47,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
    */
   private subscription?: Subscription;
 
-  @Input() public pesquisaNoticiasModelos: Boolean = false;
+  @Input() public pesquisaNoticiasModelos: boolean = false;
 
   constructor(
     private noticiaService: NoticiaService,
@@ -76,7 +76,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
       return;
 
     this.form.patchValue({
-      filtros: ['ENVIADAS', 'NAO_ENVIADAS', 'MODELO', 'MODELOS_COMPARTILHADOS']
+      filtros: ['MODELO', 'MODELOS_COMPARTILHADOS']
     });
     this.filtrarNoticias();
   }

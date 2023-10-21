@@ -50,21 +50,35 @@ public class NewsletterSearchQuery {
     private void addFilterNewslettersTemplateMineOrShared(SQLBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
         User loggedUser = authSecurityFilter.getAuthUserContext().findByToken();
 
+        final String PARAM_LOGGED_USER_ID = "loggedUserId";
+
         if (Objects.equals(newsletterSearchRequest.isNewslettersTemplateMine(), newsletterSearchRequest.isNewslettersTemplateShared())) {
             boolean bothChecked = newsletterSearchRequest.isNewslettersTemplateMine();
             if (bothChecked)
                 sqlBuilder.addAnd("(newsletter.newsletter_template)");
             else {
                 sqlBuilder.addAnd("(not (newsletter.newsletter_template))");
-                sqlBuilder.addAnd("(newsletter.user_id = :loggedUserId)", "loggedUserId", loggedUser.getId());
+                sqlBuilder.addAnd(
+                        "(newsletter.user_id = :" + PARAM_LOGGED_USER_ID + ")",
+                        PARAM_LOGGED_USER_ID,
+                        loggedUser.getId()
+                );
             }
             return;
         }
 
         if (!newsletterSearchRequest.isNewslettersTemplateMine())
-            sqlBuilder.addAnd("(newsletter.newsletter_template) and (newsletter.user_id <> :loggedUserId)", "loggedUserId", loggedUser.getId());
+            sqlBuilder.addAnd(
+                    "(newsletter.newsletter_template) and (newsletter.user_id <> :" + PARAM_LOGGED_USER_ID + ")",
+                    PARAM_LOGGED_USER_ID,
+                    loggedUser.getId()
+            );
         if (!newsletterSearchRequest.isNewslettersTemplateShared())
-            sqlBuilder.addAnd("(newsletter.newsletter_template) and (newsletter.user_id = :loggedUserId)", "loggedUserId", loggedUser.getId());
+            sqlBuilder.addAnd(
+                    "(newsletter.newsletter_template) and (newsletter.user_id = :" + PARAM_LOGGED_USER_ID + ")",
+                    PARAM_LOGGED_USER_ID,
+                    loggedUser.getId()
+            );
     }
 
 }
