@@ -1,9 +1,10 @@
 package br.edu.utfpr.features.user;
 
-import br.edu.utfpr.generic.crud.resource.GenericResource;
-import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.features.user.recover_password.RecoverPasswordDTO;
 import br.edu.utfpr.features.user.responses.ExistsResponse;
+import br.edu.utfpr.features.user.responses.SendEmailCodeRecoverPassword;
+import br.edu.utfpr.generic.crud.resource.mapstruct.GenericResourceDto;
+import br.edu.utfpr.reponses.DefaultResponse;
 
 import javax.enterprise.context.RequestScoped;
 import javax.validation.Valid;
@@ -13,23 +14,26 @@ import java.util.Objects;
 
 @RequestScoped
 @Path("user")
-public class UserResource extends GenericResource<User, Long, UserService> {
+public class UserResource extends GenericResourceDto<
+        User,
+        UserDTO,
+        UserMapper,
+        Long,
+        UserService> {
 
     @Path("exists")
     @GET
-    public Response userExists(@QueryParam("username") String username,
-                               @QueryParam("email") String email) {
-        return Response.ok(
-                new ExistsResponse(
-                        !Objects.isNull(getService().findByUsernameOrEmail(username, email))
-                )
-        ).build();
+    public ExistsResponse userExists(@QueryParam("username") String username,
+                                     @QueryParam("email") String email) {
+        return new ExistsResponse(
+                !Objects.isNull(getService().findByUsernameOrEmail(username, email))
+        );
     }
 
     @POST
     @Path("/send-code-recover-password/username/{username}")
-    public Response sendEmailCodeRecoverPassword(@PathParam("username") String username) throws Exception {
-        return Response.ok(getService().sendEmailCodeRecoverPassword(username)).build();
+    public SendEmailCodeRecoverPassword sendEmailCodeRecoverPassword(@PathParam("username") String username) throws Exception {
+        return getService().sendEmailCodeRecoverPassword(username);
     }
 
     @POST
