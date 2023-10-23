@@ -6,7 +6,7 @@ import br.edu.utfpr.features.newsletter.quartz_tasks.schedule.NewsletterQuartzTa
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.features.quartz.tasks.QuartzTasks;
 import br.edu.utfpr.features.quartz.tasks.QuartzTasksService;
-import br.edu.utfpr.sql.SQLBuilder;
+import br.edu.utfpr.sql.builder.SqlBuilder;
 import org.quartz.JobDataMap;
 
 import javax.enterprise.context.RequestScoped;
@@ -84,7 +84,7 @@ public class NewsletterQuartzTasksService extends GenericService<NewsletterQuart
          * uma forma de deixar o repository como uma classe e não interface,
          * o repository do spring no quarkus não suporta @Query nativa
          */
-        SQLBuilder sqlBuilder = new SQLBuilder(
+        SqlBuilder sqlBuilder = new SqlBuilder(
                 """
             select qrtz_tasks.* from newsletter
             inner join newsletter_qrtz_tasks nqt on (nqt.newsletter_id = newsletter.id)

@@ -1,4 +1,4 @@
-package br.edu.utfpr.sql;
+package br.edu.utfpr.sql.builder;
 
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.utils.SQLUtils;
@@ -14,7 +14,7 @@ import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SQLBuilder {
+public class SqlBuilder {
 
     private int condicoes = 0;
 
@@ -23,27 +23,46 @@ public class SQLBuilder {
     @Getter
     private Map<String, Object> parameters = new HashMap<>();
 
-    public SQLBuilder() {
-        criarSQL();
+    public SqlBuilder() {
+        criarSql();
     }
 
-    public SQLBuilder(String sql) {
-        criarSQL(sql);
+    public SqlBuilder(String sql) {
+        criarSql(sql);
     }
 
-    public SQLBuilder(String sql, boolean existeWhere) {
+    public SqlBuilder(String sql, boolean existeWhere) {
         if (existeWhere)
             this.condicoes = 1;
-        criarSQL(sql);
+        criarSql(sql);
     }
 
-    private void criarSQL(String sql) {
-        criarSQL();
+    private void criarSql(String sql) {
+        criarSql();
         this.sql.append(sql);
     }
 
-    private void criarSQL() {
+    private void criarSql() {
         this.sql = new StringBuilder();
+    }
+
+    public void add(String value) {
+        sql.append(value);
+    }
+
+    public void addAnd(String condicao, String parameter, Object value) {
+        addParameter(parameter, value);
+        addAnd(condicao);
+    }
+
+    public void addAnd(String condicao, Map<String, Object> parameters) {
+        addParameters(parameters);
+        addAnd(condicao);
+    }
+
+    public void addAnd(SqlBuilderBlocoWhere blocoWhere) {
+        this.addAnd(blocoWhere.toString());
+        this.copyParameters(blocoWhere.getParameters());
     }
 
     public void addAnd(String condicao) {
@@ -56,9 +75,24 @@ public class SQLBuilder {
         condicoes++;
     }
 
-    public void addAnd(String condicao, String parameter, Object value) {
+    public void addOr(String condicao, String parameter, Object value) {
         addParameter(parameter, value);
-        addAnd(condicao);
+        addOr(condicao);
+    }
+
+    public void addOr(SqlBuilderBlocoWhere blocoWhere) {
+        this.addOr(blocoWhere.toString());
+        this.copyParameters(blocoWhere.getParameters());
+    }
+
+    public void addOr(String condicao) {
+        if (condicoes == 0) {
+            sql.append("\n where ");
+        } else {
+            sql.append("\n or ");
+        }
+        sql.append(condicao);
+        condicoes++;
     }
 
     public void addParameter(String parameter, Object value) {
@@ -79,11 +113,6 @@ public class SQLBuilder {
         }
     }
 
-    public void add(String value) {
-        sql.append(value);
-    }
-
-
     public String toString() {
         return sql.toString();
     }
@@ -98,26 +127,25 @@ public class SQLBuilder {
         return q;
     }
 
-    public <T> Query createQuery(EntityManager entityManager, Class<T> tClass) {
-        Query query = entityManager.createQuery(sql.toString(), tClass);
+    public Query createQuery(EntityManager em) {
+        Query q = em.createNativeQuery(sql.toString());
+        for (Map.Entry<String,Object> entry : parameters.entrySet()) {
+            q.setParameter(entry.getKey(), entry.getValue());
+        }
+        return q;
+    }
+
+    public Query createNativeQuery(EntityManager em, Class aClass) {
+        Query query = em.createNativeQuery(sql.toString(), aClass);
         setParameters(query);
         return query;
     }
 
-    public <T> Query createQuery(EntityManager entityManager) {
-        Query query = entityManager.createQuery(sql.toString());
-        setParameters(query);
-        return query;
-    }
+    public <T> Query createQuery(EntityManager em, Boolean nativeQuery) {
+        if (nativeQuery)
+            return createQuery(em);
 
-    public Query createNativeQuery(EntityManager entityManager, Class aClass) {
-        Query query = entityManager.createNativeQuery(sql.toString(), aClass);
-        setParameters(query);
-        return query;
-    }
-
-    public Query createNativeQuery(EntityManager entityManager) {
-        Query query = entityManager.createNativeQuery(sql.toString());
+        Query query = em.createQuery(sql.toString());
         setParameters(query);
         return query;
     }
@@ -161,7 +189,7 @@ public class SQLBuilder {
         sql.append(" offset ").append(limit);
     }
 
-    public SQLBuilder append(String value) {
+    public SqlBuilder append(String value) {
         sql.append(value);
         return this;
     }
@@ -170,25 +198,24 @@ public class SQLBuilder {
         this.parameters.putAll(parameters);
     }
 
-    public void copyParameters(SQLBuilder sqlBuilderOrigem) {
-        addParameters(sqlBuilderOrigem.getParameters());
+    public void copyParameters(Map<String, Object> parameters) {
+        addParameters(parameters);
     }
 
-    public void addAnd(String condicao, Map<String, Object> parameters) {
-        addParameters(parameters);
-        addAnd(condicao);
+    public void addJoin(String condicao) {
+        sql.append("\n" + condicao);
     }
 
     private void limparCondicoes() {
         this.condicoes = 0;
     }
 
-    public void sqlFormat(SQLBuilder sql, Object... args) {
+    public void sqlFormat(SqlBuilder sql, Object... args) {
         this.sql = new StringBuilder(String.format(sql.toString(), args));
     }
 
-    public static SQLBuilder file(String filePath){
-        return new SQLBuilder(SQLUtils.lerSql(filePath));
+    public static SqlBuilder file(String filePath){
+        return new SqlBuilder(SQLUtils.lerSql(filePath));
     }
 
 }

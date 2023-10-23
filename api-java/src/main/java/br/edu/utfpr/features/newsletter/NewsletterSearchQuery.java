@@ -4,7 +4,7 @@ import br.edu.utfpr.auth.AuthSecurityFilter;
 import br.edu.utfpr.features.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.features.newsletter.requests.NewsletterSearchRequest;
 import br.edu.utfpr.features.user.User;
-import br.edu.utfpr.sql.SQLBuilder;
+import br.edu.utfpr.sql.builder.SqlBuilder;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -23,7 +23,7 @@ public class NewsletterSearchQuery {
     AuthSecurityFilter authSecurityFilter;
 
     public List<Newsletter> search(NewsletterSearchRequest newsletterSearchRequest) {
-        SQLBuilder sqlBuilder = new SQLBuilder("select newsletter.* from newsletter");
+        SqlBuilder sqlBuilder = new SqlBuilder("select newsletter.* from newsletter");
         if ((Objects.nonNull(newsletterSearchRequest.getDescription())) && (!newsletterSearchRequest.getDescription().isEmpty()))
             sqlBuilder.addAnd("(newsletter.description ilike '%' || :description || '%')", "description", newsletterSearchRequest.getDescription());
         addFilterNewsletterSentOrNot(sqlBuilder, newsletterSearchRequest);
@@ -32,7 +32,7 @@ public class NewsletterSearchQuery {
         return query.getResultList();
     }
 
-    private void addFilterNewsletterSentOrNot(SQLBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
+    private void addFilterNewsletterSentOrNot(SqlBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
         if (newsletterSearchRequest.isNewslettersSent() == newsletterSearchRequest.isNewslettersNotSent())
             return;
 
@@ -47,7 +47,7 @@ public class NewsletterSearchQuery {
             sqlBuilder.addAnd("(not " + NEWSLETTER_SENT_FILTER + ")", "sentStatusSent", SendEmailLogStatusEnum.SENT.name());
     }
 
-    private void addFilterNewslettersTemplateMineOrShared(SQLBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
+    private void addFilterNewslettersTemplateMineOrShared(SqlBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {
         User loggedUser = authSecurityFilter.getAuthUserContext().findByToken();
 
         final String PARAM_LOGGED_USER_ID = "loggedUserId";
