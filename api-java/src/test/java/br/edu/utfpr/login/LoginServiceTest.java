@@ -21,6 +21,9 @@ class LoginServiceTest {
 
     private LoginServiceTestScenario loginServiceTestScenario = new LoginServiceTestScenario();
 
+    /**
+     * O @Spy deve estar por primeiro para funcionar
+     */
     @Spy
     @InjectMocks
     LoginService loginService;
@@ -63,8 +66,9 @@ class LoginServiceTest {
 
         LoginRequest loginRequest = loginServiceTestScenario.getLoginRequest();
         Optional<TokenResponse> tokenResponseOptional = loginService.logar(loginRequest);
-        Assertions.assertTrue(
-                tokenResponseOptional.get().getToken().equals(tokenResponseMock.getToken()),
+        Assertions.assertEquals(
+                tokenResponseMock.getToken(),
+                tokenResponseOptional.get().getToken(),
                 "Quando encontrar o usuário passado na request e senha passada " +
                         "na request for igual a do usuário encontrado, deve retornar " +
                         "o token permitindo o login"
