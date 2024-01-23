@@ -4,9 +4,9 @@ import br.edu.utfpr.auth.AuthSecurityFilter;
 import br.edu.utfpr.reponses.GenericResponse;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
 

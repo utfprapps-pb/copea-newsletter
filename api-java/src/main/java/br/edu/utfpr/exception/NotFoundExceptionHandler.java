@@ -2,12 +2,12 @@ package br.edu.utfpr.exception;
 
 import br.edu.utfpr.reponses.GenericResponse;
 
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
 
 @Provider
 public class NotFoundExceptionHandler implements ExceptionMapper<NotFoundException> {

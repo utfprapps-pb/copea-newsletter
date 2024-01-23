@@ -9,10 +9,10 @@ import br.edu.utfpr.features.quartz.tasks.QuartzTasksService;
 import br.edu.utfpr.sql.builder.SqlBuilder;
 import org.quartz.JobDataMap;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

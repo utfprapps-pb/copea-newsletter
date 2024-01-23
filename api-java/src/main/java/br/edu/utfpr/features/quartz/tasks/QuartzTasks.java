@@ -7,8 +7,8 @@ import lombok.Setter;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter

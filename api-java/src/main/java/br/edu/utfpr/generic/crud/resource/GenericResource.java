@@ -5,11 +5,11 @@ import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.GenericResponse;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 /**

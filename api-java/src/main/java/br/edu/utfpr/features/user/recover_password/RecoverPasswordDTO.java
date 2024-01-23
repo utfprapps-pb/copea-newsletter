@@ -3,7 +3,7 @@ package br.edu.utfpr.features.user.recover_password;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @Getter
 @Setter

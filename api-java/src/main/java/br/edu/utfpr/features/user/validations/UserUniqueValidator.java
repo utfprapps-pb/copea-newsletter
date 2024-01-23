@@ -5,9 +5,9 @@ import br.edu.utfpr.features.user.UserService;
 import br.edu.utfpr.features.user.UserDTO;
 import br.edu.utfpr.features.user.validations.constraints.UserUniqueConstraint;
 
-import javax.inject.Inject;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.inject.Inject;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.Optional;
 
 public class UserUniqueValidator implements ConstraintValidator<UserUniqueConstraint, UserDTO> {

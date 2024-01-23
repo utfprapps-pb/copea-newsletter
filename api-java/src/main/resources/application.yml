@@ -14,7 +14,9 @@ quarkus:
     database:
       generation: validate
   http:
-    cors: true
+    cors:
+      ~: true
+      origins: /.*/
     port: ${PORT:8620}
     test-port: 8083
     auth:

@@ -5,7 +5,7 @@ import io.quarkus.scheduler.Scheduled;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;

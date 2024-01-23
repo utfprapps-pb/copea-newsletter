@@ -11,8 +11,8 @@ import org.wildfly.security.password.PasswordFactory;
 import org.wildfly.security.password.interfaces.BCryptPassword;
 import org.wildfly.security.password.util.ModularCrypt;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import java.util.Optional;
 
 @RequestScoped

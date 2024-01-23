@@ -3,10 +3,10 @@ package br.edu.utfpr.features.email.group;
 import br.edu.utfpr.generic.crud.resource.GenericResource;
 import br.edu.utfpr.features.user.responses.ExistsResponse;
 
-import javax.enterprise.context.RequestScoped;
-import javax.transaction.Transactional;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
 
 @Path("v1/email-group")
 @RequestScoped

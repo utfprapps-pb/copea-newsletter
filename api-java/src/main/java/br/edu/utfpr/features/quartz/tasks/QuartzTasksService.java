@@ -8,9 +8,9 @@ import br.edu.utfpr.features.quartz.tasks.schedule.IQuartzTasksSchedule;
 import org.quartz.JobDataMap;
 import org.quartz.SchedulerException;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;

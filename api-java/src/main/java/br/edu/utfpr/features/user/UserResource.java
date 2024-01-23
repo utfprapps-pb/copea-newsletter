@@ -6,10 +6,10 @@ import br.edu.utfpr.features.user.responses.SendEmailCodeRecoverPassword;
 import br.edu.utfpr.generic.crud.resource.mapstruct.GenericResourceDto;
 import br.edu.utfpr.reponses.DefaultResponse;
 
-import javax.enterprise.context.RequestScoped;
-import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Response;
 import java.util.Objects;
 
 @RequestScoped

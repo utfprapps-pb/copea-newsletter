@@ -9,10 +9,10 @@ import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

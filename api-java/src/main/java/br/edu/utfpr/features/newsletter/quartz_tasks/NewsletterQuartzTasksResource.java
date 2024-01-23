@@ -2,11 +2,11 @@ package br.edu.utfpr.features.newsletter.quartz_tasks;
 
 import br.edu.utfpr.generic.crud.resource.GenericResource;
 
-import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Response;
 
 @Path("v1/newsletter/quartz-task")
 @RequestScoped

@@ -2,15 +2,13 @@ package br.edu.utfpr.sql.builder;
 
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.utils.SQLUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.Getter;
 import org.hibernate.Session;
-import org.hibernate.type.BooleanType;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.LongType;
-import org.hibernate.type.Type;
+import org.hibernate.type.BasicTypeReference;
+import org.hibernate.type.StandardBasicTypes;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,15 +148,15 @@ public class SqlBuilder {
         return query;
     }
 
-    private Type getType(Class classe) {
+    private BasicTypeReference getType(Class classe) {
         if (classe.equals(Long.class)) {
-            return LongType.INSTANCE;
+            return StandardBasicTypes.LONG;
         }
         if (classe.equals(Integer.class)) {
-            return IntegerType.INSTANCE;
+            return StandardBasicTypes.INTEGER;
         }
         if (classe.equals(Boolean.class)) {
-            return BooleanType.INSTANCE;
+            return StandardBasicTypes.BOOLEAN;
         }
         throw new ValidationException("O tipo " + classe.getSimpleName() + " Não foi definido");
     }

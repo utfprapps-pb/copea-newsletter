@@ -4,10 +4,10 @@ import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.GenericResponse;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
