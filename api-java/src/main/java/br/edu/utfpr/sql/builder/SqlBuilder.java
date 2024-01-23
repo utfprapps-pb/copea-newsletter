@@ -148,6 +148,8 @@ public class SqlBuilder {
         return query;
     }
 
+    // TODO: testar se vai funcionar pois quando era o javax utilizava o IntegerType.Instance por exemplo,
+    //  agora com o Jakarta não foi testado se funciona com o BasicTypeReference
     private BasicTypeReference getType(Class classe) {
         if (classe.equals(Long.class)) {
             return StandardBasicTypes.LONG;
