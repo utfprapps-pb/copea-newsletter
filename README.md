@@ -7,8 +7,8 @@ Sistema para criação e envio por email de notícias.
 * Angular: 14.2.9
 * npm: 8.19.2.
 * Java: 17.
-* Maven: 3.8.1.
-* Quarkus: 2.15.3.Final.
+* Maven: 3.9.6.
+* Quarkus: 3.6.6.
 
 ## :runner: Rodar projeto
 Para rodar o projeto, basta utilizar o comando <b>quarkus dev</b>, mais informações é possível verificar na documentação (https://quarkus.io/get-started/) do Quarkus.
