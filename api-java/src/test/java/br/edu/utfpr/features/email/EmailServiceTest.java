@@ -1,40 +1,35 @@
 package br.edu.utfpr.features.email;
 
+import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.email.group.EmailGroupService;
 import br.edu.utfpr.features.email.scenarios.EmailServiceTestScenario;
 import br.edu.utfpr.features.email.self_registration.EmailSelfRegistration;
-import br.edu.utfpr.exception.validation.ValidationException;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 @QuarkusTest
-@ExtendWith(MockitoExtension.class)
 class EmailServiceTest {
 
     private EmailServiceTestScenario emailServiceTestScenario = new EmailServiceTestScenario();
 
-    @InjectMocks
+    @Inject
     EmailService emailService;
 
-    @Mock
+    @InjectMock
     EmailGroupService emailGroupService;
 
-    @Mock
+    @InjectMock
     EmailRepository emailRepository;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
     }
 
     @Test

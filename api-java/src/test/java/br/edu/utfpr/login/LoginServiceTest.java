@@ -5,38 +5,39 @@ import br.edu.utfpr.features.user.UserRepository;
 import br.edu.utfpr.login.scenarios.LoginServiceTestScenario;
 import br.edu.utfpr.reponses.TokenResponse;
 import br.edu.utfpr.utils.TokenUtils;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectSpy;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mockito;
 
 import java.util.Optional;
 
 @QuarkusTest
-@ExtendWith(MockitoExtension.class)
 class LoginServiceTest {
 
     private LoginServiceTestScenario loginServiceTestScenario = new LoginServiceTestScenario();
 
     /**
      * O @Spy deve estar por primeiro para funcionar
+     * (Dava erro quando utilizava as anotações do mockito puro,
+     * porém agora utilizando somente as classes do Quarkus, não importa a ordem)
      */
-    @Spy
-    @InjectMocks
+    @InjectSpy
+    @Inject
     LoginService loginService;
 
-    @Mock
+    @InjectMock
     UserRepository userRepository;
 
-    @Mock
+    @InjectMock
     TokenUtils tokenUtils;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
     }
 
     @Test

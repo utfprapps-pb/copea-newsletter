@@ -1,36 +1,30 @@
 package br.edu.utfpr.features.email.send;
 
-import br.edu.utfpr.features.email.config.ConfigEmail;
-import br.edu.utfpr.features.email.send.SendEmailService;
-import br.edu.utfpr.features.email.send.log.SendEmailLogService;
 import br.edu.utfpr.exception.validation.ValidationException;
+import br.edu.utfpr.features.email.config.ConfigEmail;
+import br.edu.utfpr.features.email.send.log.SendEmailLogService;
 import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @QuarkusTest
-@ExtendWith(MockitoExtension.class)
 class SendEmailServiceTest {
 
-    @InjectMocks
+    @Inject
     SendEmailService sendEmailService;
 
-    @Mock
+    @InjectMock
     SendEmailLogService sendEmailLogService;
 
-    @Mock
+    @InjectMock
     HtmlFilesWithCidInsteadBase64Service htmlFilesWithCidInsteadBase64Service;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
     }
 
     @Test

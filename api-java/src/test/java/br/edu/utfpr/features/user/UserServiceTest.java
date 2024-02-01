@@ -2,53 +2,48 @@ package br.edu.utfpr.features.user;
 
 import br.edu.utfpr.features.email.config.ConfigEmailService;
 import br.edu.utfpr.features.email.send.SendEmailService;
-import br.edu.utfpr.features.user.scenarios.UserServiceTestScenario;
-import br.edu.utfpr.reponses.DefaultResponse;
 import br.edu.utfpr.features.user.recover_password.RecoverPassword;
 import br.edu.utfpr.features.user.recover_password.RecoverPasswordDTO;
 import br.edu.utfpr.features.user.recover_password.RecoverPasswordService;
 import br.edu.utfpr.features.user.responses.SendEmailCodeRecoverPassword;
+import br.edu.utfpr.features.user.scenarios.UserServiceTestScenario;
+import br.edu.utfpr.reponses.DefaultResponse;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import jakarta.ws.rs.NotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 @QuarkusTest
-@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-
-    @InjectMocks
-    UserService userService;
 
     private UserServiceTestScenario userServiceTestScenario = new UserServiceTestScenario();
 
-    @Mock
+    @Inject
+    UserService userService;
+
+    @InjectMock
     UserRepository userRepository;
 
-    @Mock
+    @InjectMock
     RecoverPasswordService recoverPasswordService;
 
-    @Mock
+    @InjectMock
     SendEmailService sendEmailService;
 
-    @Mock
+    @InjectMock
     ConfigEmailService configEmailService;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
     }
 
     @Test
