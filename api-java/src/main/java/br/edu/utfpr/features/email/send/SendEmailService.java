@@ -1,25 +1,29 @@
 package br.edu.utfpr.features.email.send;
 
+import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.email.Email;
 import br.edu.utfpr.features.email.config.ConfigEmail;
 import br.edu.utfpr.features.email.send.log.SendEmailLog;
 import br.edu.utfpr.features.email.send.log.SendEmailLogService;
-import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
 import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.models.HtmlFileModel;
 import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
+import br.edu.utfpr.features.newsletter.Newsletter;
+import br.edu.utfpr.frontend_config.FrontEndConfigService;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
+import javax.mail.MessagingException;
 import javax.mail.internet.*;
-import jakarta.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @RequestScoped
 public class SendEmailService {
@@ -32,7 +36,70 @@ public class SendEmailService {
 
     private ConfigEmail configEmail;
 
-    public SendEmailLog send(String title, String body, ConfigEmail configEmail, String ...emailsList) throws Exception {
+    public List<SendEmailLog> sendOneAtTime(String title, String body, ConfigEmail configEmail, List<Email> emails) throws Exception {
+        if (Objects.isNull(emails) || emails.isEmpty())
+            throw new ValidationException("Nenhum e-mail inscrito encontrado para a newsletter.");
+
+        this.configEmail = configEmail;
+
+        HtmlFilesWithCidInsteadBase64Model htmlFilesWithCidInsteadBase64Model =
+                htmlFilesWithCidInsteadBase64Service.findHtmlFilesWithCidInsteadBase64Model(body);
+        if (Objects.nonNull(htmlFilesWithCidInsteadBase64Model))
+            body = htmlFilesWithCidInsteadBase64Model.getHtml_with_content_id_instead_base64();
+        MimeMultipart mimeMultipart = getMimeMultipartFilesWithCID(htmlFilesWithCidInsteadBase64Model);
+
+        List<SendEmailLog> sendEmailLogs = new ArrayList<>();
+
+        for (Email email : emails) {
+            HtmlEmail htmlEmail = buildEmail();
+            htmlEmail.setSubject(title);
+            if (mimeMultipart.getCount() > 0)
+                htmlEmail.addPart(mimeMultipart);
+            if (Objects.nonNull(email.getUuidToUnsubscribe()) &&
+                    !email.getUuidToUnsubscribe().isEmpty() &&
+                    body.contains(Newsletter.URL_TO_UNSUBSCRIBE_KEY))
+                body = body.replace(Newsletter.URL_TO_UNSUBSCRIBE_KEY,
+                        FrontEndConfigService.frontEndConfig.getUrl() +
+                                (FrontEndConfigService.frontEndConfig.getUrl().endsWith("/") ? "" : "/") +
+                                "email-unsubscribe/" + email.getUuidToUnsubscribe());
+            htmlEmail.setHtmlMsg(body);
+            htmlEmail.addTo(email.getEmail());
+            try {
+                if (htmlEmail.getMimeMessage() == null)
+                    htmlEmail.buildMimeMessage();
+                htmlEmail.sendMimeMessage();
+                sendEmailLogs.add(sendEmailLogService.saveLog(htmlEmail, body, null));
+            } catch (Exception exception) {
+                sendEmailLogs.add(sendEmailLogService.saveLog(htmlEmail, body, exception.getMessage()));
+
+                // Não deve parar a API pois já vai salvar o log e precisa tentar enviar pra todos os emails
+//                if (exception instanceof NotFoundException)
+//                    throw new NotFoundException(exception.getMessage());
+//
+//                throw new Exception(exception.getMessage());
+            }
+        }
+
+        return sendEmailLogs;
+    }
+
+    private MimeMultipart getMimeMultipartFilesWithCID(HtmlFilesWithCidInsteadBase64Model htmlFilesWithCidInsteadBase64Model) throws MessagingException {
+        MimeMultipart mimeMultipart = new MimeMultipart();
+        if (htmlFilesWithCidInsteadBase64Model != null) {
+            // TODO: ajustar código duplicado
+            for (HtmlFileModel htmlFileModel : htmlFilesWithCidInsteadBase64Model.getHtml_files()) {
+                MimeBodyPart filePart = new PreencodedMimeBodyPart("base64");
+                filePart.setHeader("Content-ID", "<" + htmlFileModel.getContent_id() + ">");
+                filePart.setFileName(htmlFileModel.getContent_id() + '.' + htmlFileModel.getType_file());
+                filePart.setText(htmlFileModel.getJustbase64());
+
+                mimeMultipart.addBodyPart(filePart);
+            }
+        }
+        return mimeMultipart;
+    }
+
+    public SendEmailLog sendAllAtOnce(String title, String body, ConfigEmail configEmail, String ...emailsList) throws Exception {
         HtmlEmail htmlEmail = new HtmlEmail();
         if (emailsList.length == 0)
             throw new ValidationException("Nenhum e-mail inscrito encontrado para a newsletter.");

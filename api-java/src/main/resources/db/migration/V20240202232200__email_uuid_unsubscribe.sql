@@ -1,0 +1,1 @@
+alter table ${public_schema}.email add uuid_to_unsubscribe varchar(255);

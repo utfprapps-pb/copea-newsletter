@@ -4,11 +4,11 @@ import br.edu.utfpr.features.email.group.relation.EmailGroupRelation;
 import br.edu.utfpr.generic.crud.EntityId;
 import br.edu.utfpr.shared.enums.NoYesEnum;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,6 +46,9 @@ public class Email implements EntityId<Long> {
 
     @Column(name = "last_email_unsubscribed_message_id")
     private String lastEmailUnsubscribedMessageID;
+
+    @Column(name = "uuid_to_unsubscribe")
+    private String uuidToUnsubscribe;
 
     @OneToMany(mappedBy = "email", cascade = { CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval = true)
     @JsonManagedReference

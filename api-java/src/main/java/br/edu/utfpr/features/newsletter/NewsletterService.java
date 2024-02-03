@@ -142,30 +142,32 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
 
         validateSubscribedEmails(subscribedEmails);
         checkAnswersInEmailToUnsubscribe(subscribedEmails, configEmail);
-        SendEmailLog sendEmailLog = sendEmailService.send(
+        List<SendEmailLog> sendEmailLogs = sendEmailService.sendOneAtTime(
                 newsletter.getSubject(),
                 newsletter.getNewsletter(),
                 configEmail,
-                sendEmailService.convertArrayEmailEntityToStringArray(subscribedEmails));
+                subscribedEmails);
 
         // TODO: Encontrar uma forma melhor de setar esse id, pois no método sendEmailService.send já é feito um save da entidade no banco
         if ((Objects.nonNull(quartzTaskId)) && (quartzTaskId > 0)) {
-            sendEmailLog.setQuartzTaskId(quartzTaskId);
-            sendEmailLogService.update(sendEmailLog);
+            sendEmailLogs.forEach((sendEmailLog -> {
+                sendEmailLog.setQuartzTaskId(quartzTaskId);
+                sendEmailLogService.update(sendEmailLog);
+            }));
         }
 
-        newsletter.getSendEmailLogs().add(sendEmailLog);
+        newsletter.getSendEmailLogs().addAll(sendEmailLogs);
         getRepository().save(newsletter);
 
-        if (SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus()))
+        if (sendEmailLogs.stream().anyMatch((sendEmailLog -> !SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus()))))
             return DefaultResponse.builder()
-                    .httpStatus(RestResponse.StatusCode.OK)
-                    .message("Newsletter enviada aos emails vinculados com sucesso.")
+                    .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
+                    .message("Algumas newsletter não foram enviadas com sucesso. Verifique os logs para maiores detalhes.")
                     .build();
 
         return DefaultResponse.builder()
-                .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
-                .message(sendEmailLog.getError())
+                .httpStatus(RestResponse.StatusCode.OK)
+                .message("Newsletter enviada aos emails vinculados com sucesso.")
                 .build();
     }
 

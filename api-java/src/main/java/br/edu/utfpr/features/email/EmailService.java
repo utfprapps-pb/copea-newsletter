@@ -1,23 +1,20 @@
 package br.edu.utfpr.features.email;
 
+import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.email.group.EmailGroup;
 import br.edu.utfpr.features.email.group.EmailGroupService;
 import br.edu.utfpr.features.email.group.relation.EmailGroupRelation;
 import br.edu.utfpr.features.email.self_registration.EmailSelfRegistration;
-import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RequestScoped
 public class EmailService extends GenericService<Email, Long, EmailRepository> {
@@ -29,22 +26,29 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
     EmailGroupService emailGroupService;
 
     @Override
-    public GenericResponse save(Email entity) {
-        validJustOneEmailByEmail(entity);
-        return super.save(entity);
+    public GenericResponse save(Email email) {
+        validJustOneEmailByEmail(email);
+        generateUuidToUnsubscribe(email);
+        return super.save(email);
     }
 
     @Override
-    public GenericResponse update(Email entity) {
-        validJustOneEmailByEmail(entity);
-        return super.update(entity);
+    public GenericResponse update(Email email) {
+        validJustOneEmailByEmail(email);
+        generateUuidToUnsubscribe(email);
+        return super.update(email);
     }
 
-    private void validJustOneEmailByEmail(Email entity) {
-        if (emailEqualsEmailDatabase(entity.getId(), entity.getEmail()))
+    private void generateUuidToUnsubscribe(Email email) {
+        if (Objects.isNull(email.getUuidToUnsubscribe()) || email.getUuidToUnsubscribe().isEmpty())
+            email.setUuidToUnsubscribe(UUID.randomUUID().toString());
+    }
+
+    private void validJustOneEmailByEmail(Email email) {
+        if (emailEqualsEmailDatabase(email.getId(), email.getEmail()))
             return;
 
-        Optional<Email> emailOptional = findByEmail(entity.getEmail());
+        Optional<Email> emailOptional = findByEmail(email.getEmail());
         if (emailOptional.isPresent())
             throw new ValidationException("Já existe um destinatário com o e-mail informado. Por favor, informe outro.");
     }
@@ -61,8 +65,8 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
     }
 
     @Override
-    public void setDefaultValuesWhenNew(Email entity) {
-        entity.setCreatedAt(LocalDateTime.now());
+    public void setDefaultValuesWhenNew(Email email) {
+        email.setCreatedAt(LocalDateTime.now());
     }
 
     public List<Email> findAllEmail() {

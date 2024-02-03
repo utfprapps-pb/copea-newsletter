@@ -20,7 +20,7 @@ public class SendEmailResource {
     @POST
     public Response sendEmail(SendEmailRequest emailSendRequest) {
         try {
-            sendEmailService.send(
+            sendEmailService.sendAllAtOnce(
                     emailSendRequest.getTitle(),
                     emailSendRequest.getBody(),
                     configEmailService.getConfigEmailByLoggedUser(),

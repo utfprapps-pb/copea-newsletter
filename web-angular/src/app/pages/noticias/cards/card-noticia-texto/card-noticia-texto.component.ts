@@ -1,7 +1,7 @@
 import { LastSentEmailNewsletter } from '../../models/last-sent-email-newsletter';
 import { DrawerService } from '../../../admin/drawer.service';
 import { Component, ViewChild, OnInit, ElementRef, Output, Input, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
 import { QuartzTasksService } from 'src/app/pages/noticias/services/quartz-tasks.service';
 import { MensagemService } from 'src/app/shared/services/mensagem.service';
 import { errorTransform } from 'src/app/shared/pipes/error-transform';
+import { FrontendConfigService } from 'src/app/services/frontend-config.service';
 
 @Component({
   selector: 'app-card-noticia-texto',
@@ -49,12 +50,25 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
     private datePipe: DatePipe,
     private quartzTasksService: QuartzTasksService,
     private mensagemService: MensagemService,
+    private frontendConfigService: FrontendConfigService,
   ) {
     super(crudController, formBuilder);
   }
 
+  override setRegistro(registro: any): void {
+    // TESTE - TODO: colocar essa chamada em um listener pra sempre atualizar ou criar uma configuração pra setar manualmente,
+    // pois quando executar a task agendada pode ser que não tenha atualizado no backend a url ainda e envie sem o replace da url.
+    // OU toda vez que inicia o angular salvar em uma tabela a url, assim a task agendada pega a última url disponível
+    this.frontendConfigService.update({ url: `${location.origin}/#/` }).subscribe();
+    Object.assign(registro, this.form.getRawValue())
+  }
+
+  public get newsletter(): AbstractControl {
+    return this.form.get('newsletter') as AbstractControl;
+  }
+
   public get texto(): string {
-    return this.form.get('newsletter')?.value;
+    return this.newsletter.value;
   }
 
   public get id(): number {
@@ -86,7 +100,8 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
       //     console.log('The ' + e.command + ' command was fired.');
       //   });
       // },
-      setup: (editor) => { this.addEventFullscreenStateChanged(editor) }
+      setup: (editor) => { this.addEventFullscreenStateChanged(editor) },
+      convert_urls: false,
     }
   }
 

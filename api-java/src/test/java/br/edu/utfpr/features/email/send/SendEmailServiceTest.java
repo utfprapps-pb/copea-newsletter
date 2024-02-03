@@ -32,7 +32,7 @@ class SendEmailServiceTest {
         ConfigEmail configEmail = new ConfigEmail();
         Assertions.assertThrows(
                 ValidationException.class,
-                () -> sendEmailService.send("titulo", "corpo", configEmail),
+                () -> sendEmailService.sendAllAtOnce("titulo", "corpo", configEmail),
                 "Quando não passar e-mail no método send, deve retornar a " +
                         "exceção do tipo ValidationException."
         );

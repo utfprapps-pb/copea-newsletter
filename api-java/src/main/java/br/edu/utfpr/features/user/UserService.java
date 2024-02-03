@@ -67,7 +67,7 @@ public class UserService extends GenericService<User, Long, UserRepository> {
         Integer codigo = new Random().nextInt(1000000);
         recoverPasswordService.addCode(username, new RecoverPassword(username, codigo, DateTimeUtils.getCurrentDateTime()));
 
-        sendEmailService.send(
+        sendEmailService.sendAllAtOnce(
                 "Recuperação de senha",
                 "O código para recuperação da sua senha no sistema de Newsletter é <b>"+codigo+"</b>.",
                 configEmailService.getConfigEmailByUsernameOrEmailUser(username),

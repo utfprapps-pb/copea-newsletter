@@ -23,6 +23,8 @@ import java.util.Set;
 @Table(name = "newsletter")
 public class Newsletter implements EntityId<Long> {
 
+    public static final String URL_TO_UNSUBSCRIBE_KEY = "${URL_TO_UNSUBSCRIBE}";
+
     @Id
     @SequenceGenerator(name = "newsletter_id_sequence", sequenceName = "newsletter_id_sequence", allocationSize = 1, initialValue = 1)
     @GeneratedValue(generator = "newsletter_id_sequence")
