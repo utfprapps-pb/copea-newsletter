@@ -141,7 +141,9 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         addEmailsOfGroupsInListEmailsToSendNewsletter(newsletter, subscribedEmails);
 
         validateSubscribedEmails(subscribedEmails);
-        checkAnswersInEmailToUnsubscribe(subscribedEmails, configEmail);
+        // TODO: comentado pois estou testando o cancelamento da inscrição por um link,
+        //  após finalizar remover o cancelamento da forma atual, que é pela resposta no e-mail, pois deixa lento o processo
+//        checkAnswersInEmailToUnsubscribe(subscribedEmails, configEmail);
         List<SendEmailLog> sendEmailLogs = sendEmailService.sendOneAtTime(
                 newsletter.getSubject(),
                 newsletter.getNewsletter(),

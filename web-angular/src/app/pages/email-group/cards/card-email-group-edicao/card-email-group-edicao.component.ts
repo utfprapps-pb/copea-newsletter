@@ -145,7 +145,7 @@ export class CardEmailGroupEdicaoComponent implements OnInit {
   }
 
   private mountLinkEmailSelfRegistration(uuid: string) {
-    return `${location.origin}/#/email-self-registration/group/${uuid}`;
+    return "${URL_TO_SELF_REGISTRATION}/" + uuid;
   }
 
   public onRemoveLinkClick() {

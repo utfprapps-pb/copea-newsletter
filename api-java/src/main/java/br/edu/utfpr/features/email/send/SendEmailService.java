@@ -1,7 +1,9 @@
 package br.edu.utfpr.features.email.send;
 
 import br.edu.utfpr.exception.validation.ValidationException;
+import br.edu.utfpr.features.config.application.ConfigApplicationService;
 import br.edu.utfpr.features.email.Email;
+import br.edu.utfpr.features.email.EmailService;
 import br.edu.utfpr.features.email.config.ConfigEmail;
 import br.edu.utfpr.features.email.send.log.SendEmailLog;
 import br.edu.utfpr.features.email.send.log.SendEmailLogService;
@@ -9,7 +11,6 @@ import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInste
 import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.models.HtmlFileModel;
 import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
 import br.edu.utfpr.features.newsletter.Newsletter;
-import br.edu.utfpr.frontend_config.FrontEndConfigService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
@@ -34,6 +35,12 @@ public class SendEmailService {
     @Inject
     SendEmailLogService sendEmailLogService;
 
+    @Inject
+    ConfigApplicationService configApplicationService;
+
+    @Inject
+    EmailService emailService;
+
     private ConfigEmail configEmail;
 
     public List<SendEmailLog> sendOneAtTime(String title, String body, ConfigEmail configEmail, List<Email> emails) throws Exception {
@@ -55,13 +62,38 @@ public class SendEmailService {
             htmlEmail.setSubject(title);
             if (mimeMultipart.getCount() > 0)
                 htmlEmail.addPart(mimeMultipart);
-            if (Objects.nonNull(email.getUuidToUnsubscribe()) &&
-                    !email.getUuidToUnsubscribe().isEmpty() &&
-                    body.contains(Newsletter.URL_TO_UNSUBSCRIBE_KEY))
-                body = body.replace(Newsletter.URL_TO_UNSUBSCRIBE_KEY,
-                        FrontEndConfigService.frontEndConfig.getUrl() +
-                                (FrontEndConfigService.frontEndConfig.getUrl().endsWith("/") ? "" : "/") +
-                                "email-unsubscribe/" + email.getUuidToUnsubscribe());
+
+            // TODO: TESTE - refatorar para outro método
+            String urlWeb = configApplicationService.getOneOrElseThrowException().getUrlWeb();
+            if (body.contains(Newsletter.URL_TO_UNSUBSCRIBE_KEY)) {
+                if (Objects.isNull(email.getUuidToUnsubscribe()) ||
+                        email.getUuidToUnsubscribe().isEmpty())
+                    emailService.generateUuidToUnsubscribeAndSave(email);
+                if (Objects.isNull(urlWeb) || urlWeb.isEmpty())
+                    // TODO: verificar como será feito o tratamento de excessão pois vai chamar esse método também quando for pela tarefa agendada
+                    throw new ValidationException(
+                            "Para realizar o envio da newsletter é necessário configurar " +
+                                    "o campo 'URL web' nas configurações da aplicação."
+                    );
+                body = body.replace(
+                        Newsletter.URL_TO_UNSUBSCRIBE_KEY,
+                        urlWeb + (urlWeb.endsWith("/") ? "" : "/") + "email-unsubscribe/" + email.getUuidToUnsubscribe()
+                );
+            }
+            // TODO: TESTE - refatorar para outro método
+            if (body.contains(Email.URL_TO_SELF_REGISTRATION_KEY)) {
+                if (Objects.isNull(urlWeb) || urlWeb.isEmpty())
+                    // TODO: verificar como será feito o tratamento de excessão pois vai chamar esse método também quando for pela tarefa agendada
+                    throw new ValidationException(
+                            "Para realizar o envio da newsletter é necessário configurar " +
+                                    "o campo 'URL web' nas configurações da aplicação."
+                    );
+                body = body.replace(
+                        Email.URL_TO_SELF_REGISTRATION_KEY,
+                        urlWeb + (urlWeb.endsWith("/") ? "" : "/") + "email-self-registration/group"
+                );
+            }
+
             htmlEmail.setHtmlMsg(body);
             htmlEmail.addTo(email.getEmail());
             try {
@@ -72,7 +104,7 @@ public class SendEmailService {
             } catch (Exception exception) {
                 sendEmailLogs.add(sendEmailLogService.saveLog(htmlEmail, body, exception.getMessage()));
 
-                // Não deve parar a API pois já vai salvar o log e precisa tentar enviar pra todos os emails
+                // TODO: verificar como será feito o tratamento de excessão pois vai chamar esse método também quando for pela tarefa agendada
 //                if (exception instanceof NotFoundException)
 //                    throw new NotFoundException(exception.getMessage());
 //

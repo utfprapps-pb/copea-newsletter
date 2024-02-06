@@ -23,6 +23,8 @@ import java.util.List;
 )
 public class Email implements EntityId<Long> {
 
+    public static final String URL_TO_SELF_REGISTRATION_KEY = "${URL_TO_SELF_REGISTRATION}";
+
     @Id
     @SequenceGenerator(name = "email_id_sequence", sequenceName = "email_id_sequence", allocationSize = 1, initialValue = 1)
     @GeneratedValue(generator = "email_id_sequence")

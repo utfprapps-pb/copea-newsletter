@@ -39,6 +39,11 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
         return super.update(email);
     }
 
+    public void generateUuidToUnsubscribeAndSave(Email email) {
+        generateUuidToUnsubscribe(email);
+        super.update(email);
+    }
+
     private void generateUuidToUnsubscribe(Email email) {
         if (Objects.isNull(email.getUuidToUnsubscribe()) || email.getUuidToUnsubscribe().isEmpty())
             email.setUuidToUnsubscribe(UUID.randomUUID().toString());
