@@ -3,7 +3,7 @@ package br.edu.utfpr.features.email;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.email.group.EmailGroupService;
 import br.edu.utfpr.features.email.scenarios.EmailServiceTestScenario;
-import br.edu.utfpr.features.email.self_registration.EmailSelfRegistration;
+import br.edu.utfpr.features.email.request.EmailSelfRegistrationRequest;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -36,7 +36,7 @@ class EmailServiceTest {
     void test_Return_ValidationException_When_GroupToSelfRegistration_IsInvalid() {
         Mockito.when(emailGroupService.findByUuidToSelfRegistration(Mockito.any()))
                 .thenReturn(Optional.empty());
-        EmailSelfRegistration emailSelfRegistration = emailServiceTestScenario.getEmailSelfRegistration();
+        EmailSelfRegistrationRequest emailSelfRegistration = emailServiceTestScenario.getEmailSelfRegistration();
         Assertions.assertThrows(
                 ValidationException.class,
                 () -> emailService.saveSelfEmailRegistration(emailSelfRegistration),
@@ -53,7 +53,7 @@ class EmailServiceTest {
         Mockito.when(emailRepository.findByEmailAndGroupId(Mockito.any(), Mockito.any()))
                 .thenReturn(Optional.of(emailServiceTestScenario.getEmail()));
 
-        EmailSelfRegistration emailSelfRegistration = emailServiceTestScenario.getEmailSelfRegistration();
+        EmailSelfRegistrationRequest emailSelfRegistration = emailServiceTestScenario.getEmailSelfRegistration();
         Assertions.assertThrows(
                 ValidationException.class,
                 () -> emailService.saveSelfEmailRegistration(emailSelfRegistration),

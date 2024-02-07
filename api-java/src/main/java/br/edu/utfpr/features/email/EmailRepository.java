@@ -32,4 +32,6 @@ public interface EmailRepository extends GenericRepository<Email, Long> {
             "WHERE (g.emailGroup.id = :groupId)")
     List<Email> findByGroupId(Long groupId);
 
+    Optional<Email> findByUuidToUnsubscribe(String uuid);
+
 }

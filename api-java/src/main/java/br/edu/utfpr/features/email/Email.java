@@ -52,6 +52,9 @@ public class Email implements EntityId<Long> {
     @Column(name = "uuid_to_unsubscribe")
     private String uuidToUnsubscribe;
 
+    @Column(name = "unsubscribe_reason")
+    private String unsubscribeReason;
+
     @OneToMany(mappedBy = "email", cascade = { CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval = true)
     @JsonManagedReference
     private List<EmailGroupRelation> emailGroupRelations;

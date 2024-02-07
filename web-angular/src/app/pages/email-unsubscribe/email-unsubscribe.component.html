@@ -1,3 +1,33 @@
-<p>
-  email-unsubscribe works!
-</p>
+<form *ngIf="pendingUnsubscribe else unsubscribed" [formGroup]="form" class="auth-container min-height-400px">
+  <mat-card>
+
+    <mat-card-header>
+      <mat-card-title>É uma pena ver você ir embora :(</mat-card-title>
+      <span>Sentimos muito que você queira cancelar sua inscrição em nossa Newsletter. <br>
+        Se possível, poderia nos informar abaixo o motivo do cancelamento e/ou alguma sugestão de melhoria?</span>
+    </mat-card-header>
+    <mat-card-content>
+
+      <!-- E-mail -->
+      <mat-form-field [appearance]="'outline'">
+        <textarea class="reason-max-height" matInput rows="6" formControlName="reason"
+          placeholder="Motivo e/ou sugestão de melhoria (Opcional)" type="text"></textarea>
+        <mat-error>{{reason.errors | erro}}</mat-error>
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions class="full-width align-center no-margin">
+      <button class="full-width btn-entrar" color="primary" [disabled]="form.invalid" (click)="onUnsubscribe()"
+        mat-raised-button>
+        Cancelar inscrição
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+
+</form>
+
+<ng-template #unsubscribed>
+  <div class="middle-align">Inscrição cancelada com sucesso!</div>
+</ng-template>
