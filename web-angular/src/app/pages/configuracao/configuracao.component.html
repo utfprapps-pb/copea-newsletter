@@ -1,51 +1,26 @@
 <mat-dialog-content class="configuracao-dialog">
+  <mat-tab-group animationDuration="0ms">
+    <mat-tab label="E-mail">
+      <app-configuracao-email></app-configuracao-email>
+    </mat-tab>
 
-    <!-- Form -->
-    <form [formGroup]="form" *ngIf="!loading">
+    <mat-tab label="Aplicação">
+      <app-configuracao-aplicacao></app-configuracao-aplicacao>
+    </mat-tab>
+  </mat-tab-group>
 
-        <!-- Email -->
-        <mat-form-field class="full-width" appearance="fill">
-            <mat-label>E-mail</mat-label>
-            <input matInput formControlName="emailFrom" placeholder="Insira o e-mail que fará o envio das newsletters..."
-                type="email" required cdkFocusInitial>
-            <mat-error>{{form.controls['emailFrom'].errors | erro}}</mat-error>
-        </mat-form-field>
-
-        <!-- Senha -->
-        <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Senha</mat-label>
-            <input matInput formControlName="passwordEmailFrom" placeholder="Insira a senha do email..." type="password"
-                required>
-            <mat-error>{{form.controls['passwordEmailFrom'].errors | erro}}</mat-error>
-        </mat-form-field>
-
-        <!-- Host -->
-        <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Provedor</mat-label>
-            <input matInput formControlName="sendHost" placeholder="Insira o provedor do e-mail..." cdkFocusInitial
-                required>
-            <mat-error>{{form.controls['sendHost'].errors | erro}}</mat-error>
-        </mat-form-field>
-
-        <!-- Porta -->
-        <mat-form-field class="full-width" appearance="fill">
-            <mat-label>Porta</mat-label>
-            <input matInput type="number" formControlName="sendPort"
-                placeholder="Insira a porta do serviço de e-mail... (ex: 465)" required>
-            <mat-error>{{form.controls['sendPort'].errors | erro}}</mat-error>
-        </mat-form-field>
-
-    </form>
-
-    <!-- Spinner -->
-    <div *ngIf="loading" class="d-flex justify-center full-width">
-        <mat-progress-spinner class="d-m-right full-width" mode="indeterminate">
-        </mat-progress-spinner>
-    </div>
-
+  <!-- Spinner -->
+  <!-- <div *ngIf="configuracaoEmailComponent?.loading || configuracaoAplicacaoComponent?.loading"
+    TODO: ajustar erro de ExpressionChangedAfterItHasBeenCheckedError -->
+  <div *ngIf="false" class="d-flex justify-center full-width">
+    <mat-progress-spinner class="d-m-right full-width" mode="indeterminate">
+    </mat-progress-spinner>
+  </div>
 </mat-dialog-content>
 
-<mat-dialog-actions *ngIf="!loading" align="end">
-    <button mat-button (click)="persistirAlteracoes()" color="accent">Gravar</button>
-    <button mat-stroked-button mat-dialog-close>Fechar</button>
+<!-- <mat-dialog-actions *ngIf="!configuracaoEmailComponent?.loading && !configuracaoAplicacaoComponent?.loading" align="end">
+  TODO: ajustar erro de ExpressionChangedAfterItHasBeenCheckedError-->
+<mat-dialog-actions *ngIf="true" align="end">
+  <button mat-button (click)="gravar()" color="accent">Gravar</button>
+  <button mat-stroked-button mat-dialog-close>Fechar</button>
 </mat-dialog-actions>
