@@ -8,7 +8,6 @@ import br.edu.utfpr.utils.TokenUtils;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectSpy;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,13 +20,7 @@ class LoginServiceTest {
 
     private LoginServiceTestScenario loginServiceTestScenario = new LoginServiceTestScenario();
 
-    /**
-     * O @Spy deve estar por primeiro para funcionar
-     * (Dava erro quando utilizava as anotações do mockito puro,
-     * porém agora utilizando somente as classes do Quarkus, não importa a ordem)
-     */
     @InjectSpy
-    @Inject
     LoginService loginService;
 
     @InjectMock
@@ -60,8 +53,8 @@ class LoginServiceTest {
         Mockito.when(tokenUtils.generateToken(Mockito.any(), Mockito.any())).thenReturn(tokenResponseMock);
 
         /**
-         * Quando mockado um método da classe alvo (InjectMocks) deve ser usado o
-         * @Spy em cima do @InjectMocks e feito dessa forma o mock, com o doReturn...
+         * Quando mockado um método da classe alvo (nesse caso loginService) deve ser usado o
+         * @InjectSpy e feito dessa forma o mock, com o doReturn...
          */
         Mockito.doReturn(true).when(loginService).verifyPassword(Mockito.any(), Mockito.any());
 

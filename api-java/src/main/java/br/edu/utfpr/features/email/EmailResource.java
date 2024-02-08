@@ -3,9 +3,8 @@ package br.edu.utfpr.features.email;
 import br.edu.utfpr.features.email.request.EmailSelfRegistrationRequest;
 import br.edu.utfpr.features.email.request.EmailUnsubscribeRequest;
 import br.edu.utfpr.features.user.responses.ExistsResponse;
-import br.edu.utfpr.generic.crud.resource.GenericResource;
+import br.edu.utfpr.generic.crud.resource.mapstruct.GenericResourceDto;
 import br.edu.utfpr.reponses.DefaultResponse;
-import br.edu.utfpr.reponses.GenericResponse;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.GET;
@@ -18,20 +17,24 @@ import java.util.List;
 
 @Path("v1/email")
 @RequestScoped
-public class EmailResource extends GenericResource<Email, Long, EmailService> {
+public class EmailResource extends GenericResourceDto<Email, EmailDTO, EmailMapper, Long, EmailService> {
 
     @GET
     @Path("find-email")
-    public Response get(@QueryParam("email") String email) {
-        return Response.ok(getService().findEmailOrElseAll(email)).build();
+    public List<EmailDTO> get(@QueryParam("email") String email) {
+        return getGenericMapper().toDtoList(
+                getService().findEmailOrElseAll(email)
+        );
     }
 
     @GET
     @Path("find-by-group")
-    public List<Email> buscarPorGrupo(
+    public List<EmailDTO> buscarPorGrupo(
             @QueryParam("groupId") Long groupId
     ) {
-        return getService().findEmailsByGroup(groupId);
+        return getGenericMapper().toDtoList(
+                getService().findEmailsByGroup(groupId)
+        );
     }
 
     @POST

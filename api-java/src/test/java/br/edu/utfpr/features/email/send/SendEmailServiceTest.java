@@ -5,13 +5,13 @@ import br.edu.utfpr.features.email.config.ConfigEmail;
 import br.edu.utfpr.features.email.send.log.SendEmailLogService;
 import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.HtmlFilesWithCidInsteadBase64Service;
 import io.quarkus.test.InjectMock;
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@QuarkusTest
+@QuarkusComponentTest
 class SendEmailServiceTest {
 
     @Inject

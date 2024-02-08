@@ -9,7 +9,7 @@ import br.edu.utfpr.features.user.responses.SendEmailCodeRecoverPassword;
 import br.edu.utfpr.features.user.scenarios.UserServiceTestScenario;
 import br.edu.utfpr.reponses.DefaultResponse;
 import io.quarkus.test.InjectMock;
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import org.jboss.resteasy.reactive.RestResponse;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@QuarkusTest
+@QuarkusComponentTest
 class UserServiceTest {
 
     private UserServiceTestScenario userServiceTestScenario = new UserServiceTestScenario();

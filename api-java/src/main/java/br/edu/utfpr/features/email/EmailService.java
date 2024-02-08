@@ -144,11 +144,19 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
             createEmailAndAddGroup(emailSelfRegistration, emailGroup);
     }
 
-    private void selfRegistrationWhenEmailExists(EmailSelfRegistrationRequest emailSelfRegistration, Email email, EmailGroup emailGroupBeingAdded) {
-        Optional<Email> emailByGroupOptional = getRepository().findByEmailAndGroupId(emailSelfRegistration.getEmail(), emailGroupBeingAdded.getId());
-        if (emailByGroupOptional.isPresent()) {
-            validEmailAlreadySubscribed(emailByGroupOptional.get());
-            subscribeEmailAndUpdateUuidWasSelfRegistration(emailByGroupOptional.get(), emailGroupBeingAdded);
+    private void selfRegistrationWhenEmailExists(
+            EmailSelfRegistrationRequest emailSelfRegistration,
+            Email email,
+            EmailGroup emailGroupBeingAdded
+    ) {
+        Optional<EmailGroupRelation> emailGroupRelationOptional =
+                email.getEmailGroupRelations().stream().filter(item ->
+                        Objects.equals(item.getEmailGroup().getId(), emailGroupBeingAdded.getId())
+                ).findAny();
+        boolean groupAlreadyExistsInEmail = emailGroupRelationOptional.isPresent();
+        if (groupAlreadyExistsInEmail) {
+            validEmailAlreadySubscribed(email);
+            subscribeEmailAndUpdateUuidWasSelfRegistration(email, emailGroupRelationOptional.get(), emailGroupBeingAdded);
             return;
         }
 
@@ -161,18 +169,21 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
         }
     }
 
-    private void subscribeEmailAndUpdateUuidWasSelfRegistration(Email emailByGroup, EmailGroup emailGroupBeingAdded) {
-        emailByGroup.setSubscribed(NoYesEnum.YES);
-        emailByGroup.getEmailGroupRelations().forEach(emailGroupRelation -> {
-            if (Objects.equals(emailGroupRelation.getEmail().getId(), emailByGroup.getId()) &&
-                    Objects.equals(emailGroupRelation.getEmailGroup().getId(), emailGroupBeingAdded.getId())) {
-                emailGroupRelation.setUuidWasSelfRegistration(emailGroupBeingAdded.getUuidToSelfRegistration());
-            }
-        });
-        update(emailByGroup);
+    private void subscribeEmailAndUpdateUuidWasSelfRegistration(
+            Email email,
+            EmailGroupRelation emailGroupRelation,
+            EmailGroup emailGroupBeingAdded
+    ) {
+        email.setSubscribed(NoYesEnum.YES);
+        emailGroupRelation.setUuidWasSelfRegistration(emailGroupBeingAdded.getUuidToSelfRegistration());
+        update(email);
     }
 
-    private void addGroupInEmail(EmailSelfRegistrationRequest emailSelfRegistration, Email email, EmailGroup emailGroupBeingAdded) {
+    private void addGroupInEmail(
+            EmailSelfRegistrationRequest emailSelfRegistration,
+            Email email,
+            EmailGroup emailGroupBeingAdded
+    ) {
         List<EmailGroupRelation> emailGroups = email.getEmailGroupRelations();
         if (Objects.isNull(emailGroups))
             emailGroups = new ArrayList<>();

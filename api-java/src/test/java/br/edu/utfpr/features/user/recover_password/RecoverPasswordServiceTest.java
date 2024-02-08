@@ -1,7 +1,7 @@
 package br.edu.utfpr.features.user.recover_password;
 
 import br.edu.utfpr.features.user.recover_password.scenarios.RecoverPasswordServiceTestScenario;
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-@QuarkusTest
+@QuarkusComponentTest
 class RecoverPasswordServiceTest {
 
     private RecoverPasswordServiceTestScenario recoverPasswordServiceTestScenario = new RecoverPasswordServiceTestScenario();
