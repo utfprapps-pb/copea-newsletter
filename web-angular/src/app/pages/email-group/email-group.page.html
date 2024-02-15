@@ -2,17 +2,18 @@
 
   <div class="d-pad-card-container">
 
-      <!-- Título -->
-      <h2 class="d-flex align-center d-m align-self-start">
-          <b class="d-m-right">Cadastro de grupos</b>
-          <mat-icon class="icon-offset-top">person</mat-icon>
-      </h2>
+    <!-- Título -->
+    <h2 class="d-flex align-center d-m align-self-start">
+      <b class="d-m-right">Cadastro de grupos</b>
+      <mat-icon class="icon-offset-top">person</mat-icon>
+    </h2>
 
-      <!-- Card edição -->
-      <app-card-email-group-edicao class="full-width" [form]="form"></app-card-email-group-edicao>
+    <!-- Card edição -->
+    <app-card-email-group-edicao class="full-width" [form]="form"
+      (carregarRegistrosPesquisa)="onCarregarRegistrosPesquisa()"></app-card-email-group-edicao>
 
-      <!-- Card pesquisa -->
-      <app-card-email-group-pesquisa class="full-width"></app-card-email-group-pesquisa>
+    <!-- Card pesquisa -->
+    <app-card-email-group-pesquisa class="full-width"></app-card-email-group-pesquisa>
 
   </div>
 

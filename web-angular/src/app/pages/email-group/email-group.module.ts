@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from 'src/app/shared/interceptors/token-interceptor.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SysPipesModule } from 'src/app/shared/pipes/sys-pipes.module';
+import { UuidSelfRegistrationButtonsHandleComponent } from 'src/app/pages/email-group/components/uuid-self-registration-buttons-handle/uuid-self-registration-buttons-handle.component';
 
 const routes: Routes = [
   { path: '', component: EmailGroupPage }
@@ -19,6 +20,7 @@ const routes: Routes = [
     EmailGroupPage,
     CardEmailGroupPesquisaComponent,
     CardEmailGroupEdicaoComponent,
+    UuidSelfRegistrationButtonsHandleComponent,
   ],
   imports: [
     CommonModule,
