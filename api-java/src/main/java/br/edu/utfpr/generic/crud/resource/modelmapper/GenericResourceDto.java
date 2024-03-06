@@ -79,6 +79,10 @@ public abstract class GenericResourceDto<
         if (Objects.isNull(dto.getId()))
             return modelMapperUtils.convertToEntity(dto);
         else {
+            // TODO: quando tem propriedade bidirecional,
+            //  fica nulo a entidade pai nos filhos e acaba ficando registro sem vínculo no banco,
+            //  verificar como ajustar com o modelmapper,
+            //  com o mapstruct consegui arrumar em cada mapper pra setar manualmente
             return modelMapperUtils.convertToEntity(dto, getDetachedEntityFromDb(dto.getId()));
         }
     }
@@ -87,7 +91,7 @@ public abstract class GenericResourceDto<
      * Cria uma nova instância da entidade e passa todos os campos da
      * entidade encontrada no banco para a nova instância,
      * isso é feito para forçar o get de todos os campos na entidade do banco, inicializando as propriedades LAZY.
-     * Tentei utilizar o entityManager.detach na própria entidade do banco após converter,
+     * Tentei utilizar somente o detach do EntityManager na própria entidade do banco após converter,
      * para não precisar criar uma nova instância, porém assim,
      * se tiver propriedades LAZY que não foram carregadas antes de chamar o detach,
      * irá ocorrer o erro 'failed to lazily initialize a collection of role' ao chamar o get dessas propriedades.
@@ -98,6 +102,7 @@ public abstract class GenericResourceDto<
         T databaseEntity = (T) service.findById(id);
         T entityDetached = newEntityInstance();
         modelMapperUtils.getModelMapper().map(databaseEntity, entityDetached);
+        service.getEntityManager().detach(databaseEntity);
         return entityDetached;
     }
 

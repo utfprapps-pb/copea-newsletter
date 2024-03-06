@@ -3,6 +3,7 @@ package br.edu.utfpr.generic.crud;
 import br.edu.utfpr.auth.AuthSecurityFilter;
 import br.edu.utfpr.reponses.GenericResponse;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import lombok.Getter;
@@ -18,6 +19,9 @@ public abstract class GenericService<T, ID, R extends GenericRepository> {
 
     @Inject
     R repository;
+
+    @Inject
+    EntityManager entityManager;
 
     public List<T> findAll() {
         return repository.findAll();
