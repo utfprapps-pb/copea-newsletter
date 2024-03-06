@@ -31,7 +31,7 @@ export class CardEmailGroupPesquisaComponent implements OnInit {
   /**
      * @description Armazena as colunas da tabela
      */
-  public columns: string[] = ['id', 'name', 'acoes'];
+  public columns: string[] = ['id', 'name', 'uuidToSelfRegistration', 'acoes'];
 
   /**
      * @description Flag que identifica o estado de "carregamento"
@@ -130,6 +130,19 @@ export class CardEmailGroupPesquisaComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  public onNewUuid(uuid: string, grupo: GrupoDestinatario) {
+    grupo.uuidToSelfRegistration = uuid;
+    if (grupo.id)
+      this.editarRegistro(grupo.id);
+  }
+
+  public onRemoveUuid(grupo: GrupoDestinatario) {
+    grupo.uuidToSelfRegistration = '';
+    this.mensagemService.mostrarMensagem('Link removido com sucesso.');
+    if (grupo.id)
+      this.editarRegistro(grupo.id);
   }
 
 }

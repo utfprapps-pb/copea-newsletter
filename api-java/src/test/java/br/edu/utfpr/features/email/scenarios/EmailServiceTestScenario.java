@@ -2,12 +2,12 @@ package br.edu.utfpr.features.email.scenarios;
 
 import br.edu.utfpr.features.email.Email;
 import br.edu.utfpr.features.email.group.EmailGroup;
-import br.edu.utfpr.features.email.self_registration.EmailSelfRegistration;
+import br.edu.utfpr.features.email.request.EmailSelfRegistrationRequest;
 
 public class EmailServiceTestScenario {
 
-    public EmailSelfRegistration getEmailSelfRegistration() {
-        EmailSelfRegistration emailSelfRegistration = new EmailSelfRegistration();
+    public EmailSelfRegistrationRequest getEmailSelfRegistration() {
+        EmailSelfRegistrationRequest emailSelfRegistration = new EmailSelfRegistrationRequest();
         emailSelfRegistration.setEmail("teste@gmail.com");
         emailSelfRegistration.setGroupUuid("4rt5-tth5-3455-gg34");
         return emailSelfRegistration;

@@ -31,7 +31,7 @@ public class EmailGroupResource extends GenericResource<EmailGroup, Long, EmailG
     @GET
     public Response groupExists(@QueryParam("id") Long id, @QueryParam("name") String name) {
         return Response.ok(
-                new ExistsResponse(getService().existsByName(id, name))
+                new ExistsResponse(getService().existsByNameIgnoreCase(id, name))
         ).build();
     }
 

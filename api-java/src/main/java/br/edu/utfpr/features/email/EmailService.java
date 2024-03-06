@@ -1,23 +1,22 @@
 package br.edu.utfpr.features.email;
 
+import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.email.group.EmailGroup;
 import br.edu.utfpr.features.email.group.EmailGroupService;
 import br.edu.utfpr.features.email.group.relation.EmailGroupRelation;
-import br.edu.utfpr.features.email.self_registration.EmailSelfRegistration;
-import br.edu.utfpr.exception.validation.ValidationException;
+import br.edu.utfpr.features.email.request.EmailSelfRegistrationRequest;
+import br.edu.utfpr.features.email.request.EmailUnsubscribeRequest;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.ws.rs.NotFoundException;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RequestScoped
 public class EmailService extends GenericService<Email, Long, EmailRepository> {
@@ -29,22 +28,34 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
     EmailGroupService emailGroupService;
 
     @Override
-    public GenericResponse save(Email entity) {
-        validJustOneEmailByEmail(entity);
-        return super.save(entity);
+    public GenericResponse save(Email email) {
+        validJustOneEmailByEmail(email);
+        generateUuidToUnsubscribe(email);
+        return super.save(email);
     }
 
     @Override
-    public GenericResponse update(Email entity) {
-        validJustOneEmailByEmail(entity);
-        return super.update(entity);
+    public GenericResponse update(Email email) {
+        validJustOneEmailByEmail(email);
+        generateUuidToUnsubscribe(email);
+        return super.update(email);
     }
 
-    private void validJustOneEmailByEmail(Email entity) {
-        if (emailEqualsEmailDatabase(entity.getId(), entity.getEmail()))
+    public void generateUuidToUnsubscribeAndSave(Email email) {
+        generateUuidToUnsubscribe(email);
+        super.update(email);
+    }
+
+    private void generateUuidToUnsubscribe(Email email) {
+        if (Objects.isNull(email.getUuidToUnsubscribe()) || email.getUuidToUnsubscribe().isEmpty())
+            email.setUuidToUnsubscribe(UUID.randomUUID().toString());
+    }
+
+    private void validJustOneEmailByEmail(Email email) {
+        if (emailEqualsEmailDatabase(email.getId(), email.getEmail()))
             return;
 
-        Optional<Email> emailOptional = findByEmail(entity.getEmail());
+        Optional<Email> emailOptional = findByEmail(email.getEmail());
         if (emailOptional.isPresent())
             throw new ValidationException("Já existe um destinatário com o e-mail informado. Por favor, informe outro.");
     }
@@ -61,8 +72,8 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
     }
 
     @Override
-    public void setDefaultValuesWhenNew(Email entity) {
-        entity.setCreatedAt(LocalDateTime.now());
+    public void setDefaultValuesWhenNew(Email email) {
+        email.setCreatedAt(LocalDateTime.now());
     }
 
     public List<Email> findAllEmail() {
@@ -120,41 +131,74 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
         return super.deleteById(id);
     }
 
-    public void saveSelfEmailRegistration(EmailSelfRegistration emailSelfRegistration) {
+    public void saveSelfEmailRegistration(EmailSelfRegistrationRequest emailSelfRegistration) {
         EmailGroup emailGroup =
                 emailGroupService.findByUuidToSelfRegistration(emailSelfRegistration.getGroupUuid())
                         .orElseThrow(
                                 () -> new ValidationException("Não foi possível incluir o e-mail pois o código do grupo é inválido.")
                         );
-        validEmailAlreadySubscribedInGroup(emailSelfRegistration, emailGroup.getId());
         Optional<Email> emailOptional = getRepository().findByEmail(emailSelfRegistration.getEmail());
         if (emailOptional.isPresent())
-            addGroupInEmail(emailSelfRegistration, emailOptional.get(), emailGroup);
+            selfRegistrationWhenEmailExists(emailSelfRegistration, emailOptional.get(), emailGroup);
         else
             createEmailAndAddGroup(emailSelfRegistration, emailGroup);
     }
 
-    private void validEmailAlreadySubscribedInGroup(EmailSelfRegistration emailSelfRegistration, Long emailGroupId) {
-        Optional<Email> emailByGroup = getRepository().findByEmailAndGroupId(emailSelfRegistration.getEmail(), emailGroupId);
-        if (emailByGroup.isPresent())
-            throw new ValidationException("O e-mail informado já está inscrito.");
+    private void selfRegistrationWhenEmailExists(
+            EmailSelfRegistrationRequest emailSelfRegistration,
+            Email email,
+            EmailGroup emailGroupBeingAdded
+    ) {
+        Optional<EmailGroupRelation> emailGroupRelationOptional =
+                email.getEmailGroupRelations().stream().filter(item ->
+                        Objects.equals(item.getEmailGroup().getId(), emailGroupBeingAdded.getId())
+                ).findAny();
+        boolean groupAlreadyExistsInEmail = emailGroupRelationOptional.isPresent();
+        if (groupAlreadyExistsInEmail) {
+            validEmailAlreadySubscribed(email);
+            subscribeEmailAndUpdateUuidWasSelfRegistration(email, emailGroupRelationOptional.get(), emailGroupBeingAdded);
+            return;
+        }
+
+        addGroupInEmail(emailSelfRegistration, email, emailGroupBeingAdded);
     }
 
-    private void addGroupInEmail(EmailSelfRegistration emailSelfRegistration, Email email, EmailGroup emailGroup) {
+    private void validEmailAlreadySubscribed(Email email) {
+        if (Objects.equals(email.getSubscribed(), NoYesEnum.YES)) {
+            throw new ValidationException("O e-mail informado já está inscrito.");
+        }
+    }
+
+    private void subscribeEmailAndUpdateUuidWasSelfRegistration(
+            Email email,
+            EmailGroupRelation emailGroupRelation,
+            EmailGroup emailGroupBeingAdded
+    ) {
+        email.setSubscribed(NoYesEnum.YES);
+        emailGroupRelation.setUuidWasSelfRegistration(emailGroupBeingAdded.getUuidToSelfRegistration());
+        update(email);
+    }
+
+    private void addGroupInEmail(
+            EmailSelfRegistrationRequest emailSelfRegistration,
+            Email email,
+            EmailGroup emailGroupBeingAdded
+    ) {
         List<EmailGroupRelation> emailGroups = email.getEmailGroupRelations();
         if (Objects.isNull(emailGroups))
             emailGroups = new ArrayList<>();
 
         EmailGroupRelation emailGroupRelation = new EmailGroupRelation();
         emailGroupRelation.setEmail(email);
-        emailGroupRelation.setEmailGroup(emailGroup);
+        emailGroupRelation.setEmailGroup(emailGroupBeingAdded);
         emailGroupRelation.setUuidWasSelfRegistration(emailSelfRegistration.getGroupUuid());
 
         emailGroups.add(emailGroupRelation);
+        email.setSubscribed(NoYesEnum.YES);
         update(email);
     }
 
-    private void createEmailAndAddGroup(EmailSelfRegistration emailSelfRegistration, EmailGroup emailGroup) {
+    private void createEmailAndAddGroup(EmailSelfRegistrationRequest emailSelfRegistration, EmailGroup emailGroup) {
         Email newEmail = new Email();
         newEmail.setSubscribed(NoYesEnum.YES);
         newEmail.setEmail(emailSelfRegistration.getEmail());
@@ -173,6 +217,19 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
 
     public List<Email> findByGroupId(Long groupId) {
         return getRepository().findByGroupId(groupId);
+    }
+
+    public void unsubscribe(EmailUnsubscribeRequest emailUnsubscribeRequest) {
+        Optional<Email> emailOptional = getRepository().findByUuidToUnsubscribe(emailUnsubscribeRequest.getUuid());
+        if (emailOptional.isEmpty())
+            throw new NotFoundException("Não foi possível cancelar a inscrição pois nenhum e-mail pertence ao UUID informado.");
+
+        Email email = emailOptional.get();
+        email.setSubscribed(NoYesEnum.NO);
+        email.setLastUnsubscribedDate(LocalDateTime.now());
+        email.setLastEmailUnsubscribedDate(LocalDateTime.now());
+        email.setUnsubscribeReason(emailUnsubscribeRequest.getReason());
+        getRepository().save(email);
     }
 
 }

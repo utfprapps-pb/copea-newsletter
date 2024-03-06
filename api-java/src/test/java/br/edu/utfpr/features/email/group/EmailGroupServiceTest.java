@@ -3,7 +3,7 @@ package br.edu.utfpr.features.email.group;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.email.group.scenarios.EmailGroupServiceTestScenario;
 import io.quarkus.test.InjectMock;
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 
 import java.util.Optional;
 
-@QuarkusTest
+@QuarkusComponentTest
 class EmailGroupServiceTest {
 
     private EmailGroupServiceTestScenario emailGroupServiceTestScenario = new EmailGroupServiceTestScenario();

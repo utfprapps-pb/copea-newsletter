@@ -1,0 +1,5 @@
+<button mat-icon-button title="Gerar novo link" (click)="onGerarLinkClick()"><mat-icon>autorenew</mat-icon></button>
+<button *ngIf="currentUuid" mat-icon-button title="Remover link"
+  (click)="onRemoveLinkClick()"><mat-icon>clear</mat-icon></button>
+<button *ngIf="currentUuid" mat-icon-button title="Copiar link" (click)="onClickContentCopy()"><mat-icon
+    svgIcon="content-copy"></mat-icon></button>

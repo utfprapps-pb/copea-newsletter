@@ -9,6 +9,7 @@ import { CrudService } from 'src/app/shared/crud/crud.service';
 import { Destinatario } from './model/destinatario';
 import { EmailSelfRegistration } from 'src/app/pages/email-self-registration/models/email-self-registration';
 import { DefaultResponse } from 'src/app/shared/models/default-response';
+import { EmailUnsubscribeRequest } from 'src/app/pages/email-unsubscribe/request/email-unsubscribe-request';
 
 @Injectable()
 export class DestinatarioService extends CrudService<Destinatario> {
@@ -42,5 +43,8 @@ export class DestinatarioService extends CrudService<Destinatario> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}${this.url}/self-registration`, emailSelfRegistration);
   }
 
+  public unsubscribe(emailUnsubscribeRequest: EmailUnsubscribeRequest): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}${this.url}/unsubscribe`, emailUnsubscribeRequest);
+  }
 
 }

@@ -13,7 +13,10 @@
 
       <div class="">
         <div>
-          <span class="font-size-14px">Palavra chave para cancelar a inscrição via e-mail: <b>unsubscribe</b></span>
+          <span class="font-size-14px">Para adicionar o link de cancelamento da inscrição, informe a chave {{ '${URL_TO_UNSUBSCRIBE}' }}</span>
+        </div>
+        <div>
+          <span class="font-size-14px">Para adicionar o link de autoinscrição, copie-o do cadastro do grupo desejado</span>
         </div>
         <div>
           <span *ngIf="(lastSentEmailNewsletter && lastSentEmailNewsletter.logDate)" class="font-size-14px">O último

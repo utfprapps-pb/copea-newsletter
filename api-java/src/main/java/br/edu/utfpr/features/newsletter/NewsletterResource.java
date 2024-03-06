@@ -1,16 +1,16 @@
 package br.edu.utfpr.features.newsletter;
 
-import br.edu.utfpr.generic.crud.resource.mapstruct.GenericResourceDto;
 import br.edu.utfpr.features.newsletter.requests.NewsletterSearchRequest;
+import br.edu.utfpr.generic.crud.resource.mapstruct.GenericResourceDto;
 import br.edu.utfpr.reponses.DefaultResponse;
-import org.jboss.resteasy.reactive.RestResponse;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
+import org.jboss.resteasy.reactive.RestResponse;
+
 import java.util.List;
 
 @Path("v1/newsletter")
@@ -21,6 +21,10 @@ public class NewsletterResource extends GenericResourceDto<
         NewsletterMapper,
         Long,
         NewsletterService> {
+
+    public NewsletterResource() {
+        super(Newsletter.class, NewsletterDTO.class);
+    }
 
     @Override
     public List<NewsletterDTO> get() {

@@ -21,13 +21,9 @@
             {{linkEmailSelfRegistration}}
           </mat-cart-content>
           <mat-card-actions>
-            <button mat-icon-button title="Gerar novo link"
-              (click)="onGerarLinkClick()"><mat-icon>autorenew</mat-icon></button>
-            <button *ngIf="uuidToSelfRegistration.value" mat-icon-button title="Remover link"
-              (click)="onRemoveLinkClick()"><mat-icon>clear</mat-icon></button>
-            <button *ngIf="uuidToSelfRegistration.value" mat-icon-button title="Copiar link"
-              [cdkCopyToClipboard]="linkEmailSelfRegistration" (click)="onClickContentCopy()"><mat-icon
-                svgIcon="content-copy"></mat-icon></button>
+            <app-uuid-self-registration-buttons-handle [emailGroupId]="id.value"
+              [currentUuid]="uuidToSelfRegistration.value" (newUuid)="onNewUuid($event)"
+              (removeUuid)="onRemoveUuid()"></app-uuid-self-registration-buttons-handle>
           </mat-card-actions>
         </mat-card>
       </div>

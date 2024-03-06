@@ -2,7 +2,6 @@ import { EmailGroupRelation } from "../../grupo-destinatarios/model/grupo-destin
 
 export interface Destinatario {
     id?: number;
-    createdAt?: Date;
     email?: string;
     emailGroupRelations?: EmailGroupRelation[],
     subscribed?: string;
