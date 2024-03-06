@@ -4,13 +4,13 @@ import br.edu.utfpr.generic.crud.EntityId;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.generic.mapstruct.GenericMapper;
 import br.edu.utfpr.reponses.GenericResponse;
-import lombok.Getter;
-
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import lombok.Getter;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +28,9 @@ public abstract class GenericResourceDto<
         I,
         S extends GenericService> {
 
+    private final Class<T> entityClass;
+    private final Class<D> dtoClass;
+
     @Getter
     @Inject
     M genericMapper;
@@ -35,6 +38,11 @@ public abstract class GenericResourceDto<
     @Getter
     @Inject
     S service;
+
+    protected GenericResourceDto(Class<T> entityClass, Class<D> dtoClass) {
+        this.entityClass = entityClass;
+        this.dtoClass = dtoClass;
+    }
 
     @GET
     public List<D> get() {
@@ -73,9 +81,36 @@ public abstract class GenericResourceDto<
         if (Objects.isNull(dto.getId()))
             return genericMapper.toEntity(dto);
         else {
-            T entityDatabase = (T) service.findById(dto.getId());
-            genericMapper.copyDtoToEntity(dto, entityDatabase);
-            return entityDatabase;
+            T detachedEntity = getDetachedEntityFromDb(dto.getId());
+            genericMapper.copyDtoToEntity(dto, detachedEntity);
+            return detachedEntity;
+        }
+    }
+
+    /**
+     * Cria uma nova instância da entidade e passa todos os campos da
+     * entidade encontrada no banco para a nova instância,
+     * isso é feito para forçar o get de todos os campos na entidade do banco, inicializando as propriedades LAZY.
+     * Tentei utilizar o entityManager.detach na própria entidade do banco após converter,
+     * para não precisar criar uma nova instância, porém assim,
+     * se tiver propriedades LAZY que não foram carregadas antes de chamar o detach,
+     * irá ocorrer o erro 'failed to lazily initialize a collection of role' ao chamar o get dessas propriedades.
+     * @param id
+     * @return
+     */
+    private T getDetachedEntityFromDb(I id) {
+        T databaseEntity = (T) service.findById(id);
+        T entityDetached = newEntityInstance();
+        genericMapper.copyEntityToEntity(databaseEntity, entityDetached);
+        return entityDetached;
+    }
+
+    private T newEntityInstance() {
+        try {
+            return entityClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao criar instância da classe " + entityClass.getName() + ".\nDetalhes: " + e.getMessage());
         }
     }
 

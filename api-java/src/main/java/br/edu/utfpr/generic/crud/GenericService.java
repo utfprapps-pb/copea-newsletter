@@ -2,11 +2,11 @@ package br.edu.utfpr.generic.crud;
 
 import br.edu.utfpr.auth.AuthSecurityFilter;
 import br.edu.utfpr.reponses.GenericResponse;
-import lombok.Getter;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
+import lombok.Getter;
+
 import java.util.List;
 import java.util.Optional;
 

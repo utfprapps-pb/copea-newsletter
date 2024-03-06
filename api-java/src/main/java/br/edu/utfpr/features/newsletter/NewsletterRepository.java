@@ -21,4 +21,6 @@ public interface NewsletterRepository extends GenericRepository<Newsletter, Long
     @Query("select max(send_email_logs.logDate) from Newsletter newsletter join newsletter.sendEmailLogs send_email_logs where (send_email_logs.sentStatus = 'SENT') and (newsletter.id = :newsletterId)")
     LocalDateTime findLastSentEmail(Long newsletterId);
 
+    Optional<Newsletter> findByDescriptionIgnoreCase(String description);
+
 }

@@ -22,6 +22,10 @@ public class NewsletterResource extends GenericResourceDto<
         Long,
         NewsletterService> {
 
+    public NewsletterResource() {
+        super(Newsletter.class, NewsletterDTO.class);
+    }
+
     @Override
     public List<NewsletterDTO> get() {
         return getGenericMapper().toDtoList(

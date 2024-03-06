@@ -22,10 +22,10 @@ import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
 import br.edu.utfpr.utils.DateTimeUtils;
 import com.sun.mail.imap.IMAPMessage;
-import org.jboss.resteasy.reactive.RestResponse;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import org.jboss.resteasy.reactive.RestResponse;
+
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -70,10 +70,28 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     }
 
     private GenericResponse saveOrUpdate(Newsletter entity) {
+        validJustOneNewsletterByDescription(entity);
         setDefaultValues(entity);
         GenericResponse response = super.save(entity);
         response.setMessage(entity.getId().toString());
         return response;
+    }
+
+    private void validJustOneNewsletterByDescription(Newsletter entity) {
+        if (descriptionEqualsDescriptionDatabaseIgnoreCase(entity.getId(), entity.getDescription()))
+            return;
+
+        Optional<Newsletter> newsletterOptional = getRepository().findByDescriptionIgnoreCase(entity.getDescription());
+        if (newsletterOptional.isPresent())
+            throw new ValidationException("Já existe uma newsletter com o título informado. Por favor, informe outro.");
+    }
+
+    private boolean descriptionEqualsDescriptionDatabaseIgnoreCase(Long id, String description) {
+        if (Objects.isNull(id))
+            return false;
+
+        Newsletter newsletterDb = findById(id);
+        return (Objects.nonNull(newsletterDb) && description.equalsIgnoreCase(newsletterDb.getDescription()));
     }
 
     private void setDatesByNewOrUpdate(Newsletter entity) {

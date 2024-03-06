@@ -19,6 +19,10 @@ import java.util.List;
 @RequestScoped
 public class EmailResource extends GenericResourceDto<Email, EmailDTO, EmailMapper, Long, EmailService> {
 
+    public EmailResource() {
+        super(Email.class, EmailDTO.class);
+    }
+
     @GET
     @Path("find-email")
     public List<EmailDTO> get(@QueryParam("email") String email) {

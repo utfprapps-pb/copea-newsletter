@@ -4,14 +4,15 @@ import br.edu.utfpr.generic.crud.EntityId;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.utils.ModelMapperUtils;
-import lombok.Getter;
-
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import lombok.Getter;
+
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @param <T> Entity
@@ -25,10 +26,15 @@ public abstract class GenericResourceDto<
         I,
         S extends GenericService> {
 
+    private final Class<T> entityClass;
+    private final Class<D> dtoClass;
+
     @Getter
     private final ModelMapperUtils<T, D> modelMapperUtils;
 
     protected GenericResourceDto(Class<T> entityClass, Class<D> dtoClass) {
+        this.entityClass = entityClass;
+        this.dtoClass = dtoClass;
         this.modelMapperUtils = new ModelMapperUtils<>(entityClass, dtoClass);
     }
 
@@ -50,17 +56,58 @@ public abstract class GenericResourceDto<
     @POST
     @Transactional
     public Response save(@Valid D dto) {
-        return Response.status(Response.Status.CREATED)
-                .entity(service.save(
-                                modelMapperUtils.convertToEntity(dto)
-                        )
-                ).build();
+        T entity = getEntityFromDtoById(dto);
+        return Response.status(Response.Status.CREATED).entity(service.save(entity)).build();
     }
 
     @PUT
     @Transactional
     public GenericResponse update(@Valid D dto) {
-        return service.update(modelMapperUtils.convertToEntity(dto));
+        T entity = getEntityFromDtoById(dto);
+        return service.update(entity);
+    }
+
+    /**
+     * Caso não possuir o id no DTO, somente é feito a conversão, caso existir,
+     * buscar o registro do banco para depois realizar a conversão,
+     * isso serve para evitar de setar nulo no banco para os campos
+     * que existem somente na entidade e não no DTO.
+     * @param dto
+     * @return
+     */
+    public T getEntityFromDtoById(D dto) {
+        if (Objects.isNull(dto.getId()))
+            return modelMapperUtils.convertToEntity(dto);
+        else {
+            return modelMapperUtils.convertToEntity(dto, getDetachedEntityFromDb(dto.getId()));
+        }
+    }
+
+    /**
+     * Cria uma nova instância da entidade e passa todos os campos da
+     * entidade encontrada no banco para a nova instância,
+     * isso é feito para forçar o get de todos os campos na entidade do banco, inicializando as propriedades LAZY.
+     * Tentei utilizar o entityManager.detach na própria entidade do banco após converter,
+     * para não precisar criar uma nova instância, porém assim,
+     * se tiver propriedades LAZY que não foram carregadas antes de chamar o detach,
+     * irá ocorrer o erro 'failed to lazily initialize a collection of role' ao chamar o get dessas propriedades.
+     * @param id
+     * @return
+     */
+    private T getDetachedEntityFromDb(I id) {
+        T databaseEntity = (T) service.findById(id);
+        T entityDetached = newEntityInstance();
+        modelMapperUtils.getModelMapper().map(databaseEntity, entityDetached);
+        return entityDetached;
+    }
+
+    private T newEntityInstance() {
+        try {
+            return entityClass.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao criar instância da classe " + entityClass.getName() + ".\nDetalhes: " + e.getMessage());
+        }
     }
 
     @DELETE

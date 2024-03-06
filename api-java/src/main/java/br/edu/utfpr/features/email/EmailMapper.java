@@ -9,7 +9,7 @@ import org.mapstruct.MappingTarget;
 import java.util.Optional;
 
 @Mapper(componentModel = GenericMapperConfig.COMPONENT_MODEL_CDI)
-interface EmailMapper extends GenericMapper<Email, EmailDTO> {
+public interface EmailMapper extends GenericMapper<Email, EmailDTO> {
 
     @AfterMapping
     default void setEmail(@MappingTarget Email email) {
