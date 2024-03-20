@@ -23,7 +23,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
    * @description FormGroup do filtro de busca
    */
   public form = this.formBuilder.group({
-    descricao: [''],
+    description: [''],
     filtros: [['ENVIADAS', 'NAO_ENVIADAS']]
   });
 
@@ -83,7 +83,7 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
 
   private implementChanges() {
     this.subscription = new Subscription();
-    this.setBuscaAutomaticaChangeFieldForm('descricao');
+    this.setBuscaAutomaticaChangeFieldForm('description');
     this.setBuscaAutomaticaChangeFieldForm('filtros');
   }
 
