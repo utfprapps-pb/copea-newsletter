@@ -104,11 +104,11 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
 
 
     public List<Email> findEmailsByGroup(Long groupId) {
-        Query query = em.createNativeQuery(
-                "SELECT e.id as id, e.email as email " +
-                        "FROM email_group_relation ege " +
-                        "LEFT JOIN email e on ege.email_id = e.id " +
-                        "WHERE ege.email_group_id = :groupId"
+        Query query = em.createQuery(
+                "select email from Email email " +
+                        "join fetch email.emailGroupRelations relations " +
+                        "where relations.emailGroup.id = :groupId",
+                Email.class
         );
         query.setParameter("groupId", groupId);
         return query.getResultList();
