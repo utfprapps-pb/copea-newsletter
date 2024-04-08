@@ -3,16 +3,16 @@ package br.edu.utfpr.features.newsletter.quartz_tasks;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.features.newsletter.Newsletter;
 import br.edu.utfpr.features.newsletter.quartz_tasks.schedule.NewsletterQuartzTasksScheduleJob;
-import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.features.quartz.tasks.QuartzTasks;
 import br.edu.utfpr.features.quartz.tasks.QuartzTasksService;
+import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.sql.builder.SqlBuilder;
-import org.quartz.JobDataMap;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import org.quartz.JobDataMap;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -45,8 +45,7 @@ public class NewsletterQuartzTasksService extends GenericService<NewsletterQuart
         validJustOneActiveQuartzTasksByNewsletter(newsletter.getId());
         validScheduleDates(quartzTask);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy_HHmmss");
-        String name = "newsletter_" + newsletter.getId() + "_start_at_" + quartzTask.getStartAt().format(formatter);
+        String name = getUniqueNameTask(newsletter.getId(), quartzTask.getStartAt());
         quartzTask.setJobName("job_" + name);
         quartzTask.setJobGroup("newsletter_email_tasks");
         quartzTask.setTriggerName("trigger_" + name);
@@ -59,6 +58,18 @@ public class NewsletterQuartzTasksService extends GenericService<NewsletterQuart
         List<QuartzTasks> quartzTasks = new ArrayList<>();
         quartzTasks.add(quartzTask);
         quartzTasksService.scheduleJob(quartzTasks);
+    }
+
+    private String getUniqueNameTask(Long newsletterId, LocalDateTime startAt) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmssMs");
+        return new StringBuilder()
+                .append("newsletter_")
+                .append(newsletterId)
+                .append("_start_")
+                .append(startAt.format(dateTimeFormatter))
+                .append("_created_")
+                .append(LocalDateTime.now().format(dateTimeFormatter))
+                .toString();
     }
 
     private void validJustOneActiveQuartzTasksByNewsletter(Long newsletterId) {
