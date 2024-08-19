@@ -6,10 +6,10 @@ import { Observable, of } from 'rxjs';
 import { CrudService } from 'src/app/shared/crud/crud.service';
 
 // aplicação
-import { ConfigEmail } from './models/config-email';
+import { ConfigEmail } from '../models/config-email';
 
-@Injectable({ providedIn: 'root' })
-export class ConfiguracaoService extends CrudService<ConfigEmail> {
+@Injectable()
+export class ConfiguracaoEmailService extends CrudService<ConfigEmail> {
 
     constructor(public override http: HttpClient) {
         super('/v1/email/config', http);

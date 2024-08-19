@@ -4,7 +4,7 @@ import br.edu.utfpr.generic.crud.GenericRepository;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Objects;
 
 public abstract class AuthContextGeneric<T, ID, R extends GenericRepository<T, ID>> {

@@ -1,47 +1,46 @@
 package br.edu.utfpr.features.email;
 
-import br.edu.utfpr.features.email.group.EmailGroupService;
-import br.edu.utfpr.features.email.scenarios.EmailServiceTestScenario;
-import br.edu.utfpr.features.email.self_registration.EmailSelfRegistration;
 import br.edu.utfpr.exception.validation.ValidationException;
-import io.quarkus.test.junit.QuarkusTest;
+import br.edu.utfpr.features.email.group.EmailGroup;
+import br.edu.utfpr.features.email.group.EmailGroupService;
+import br.edu.utfpr.features.email.group.relation.EmailGroupRelation;
+import br.edu.utfpr.features.email.request.EmailSelfRegistrationRequest;
+import br.edu.utfpr.features.email.scenarios.EmailServiceTestScenario;
+import br.edu.utfpr.shared.enums.NoYesEnum;
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.component.QuarkusComponentTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
-@QuarkusTest
-@ExtendWith(MockitoExtension.class)
+@QuarkusComponentTest
 class EmailServiceTest {
 
     private EmailServiceTestScenario emailServiceTestScenario = new EmailServiceTestScenario();
 
-    @InjectMocks
+    @Inject
     EmailService emailService;
 
-    @Mock
+    @InjectMock
     EmailGroupService emailGroupService;
 
-    @Mock
+    @InjectMock
     EmailRepository emailRepository;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
     }
 
     @Test
     void test_Return_ValidationException_When_GroupToSelfRegistration_IsInvalid() {
         Mockito.when(emailGroupService.findByUuidToSelfRegistration(Mockito.any()))
                 .thenReturn(Optional.empty());
-        EmailSelfRegistration emailSelfRegistration = emailServiceTestScenario.getEmailSelfRegistration();
+        EmailSelfRegistrationRequest emailSelfRegistration = emailServiceTestScenario.getEmailSelfRegistration();
         Assertions.assertThrows(
                 ValidationException.class,
                 () -> emailService.saveSelfEmailRegistration(emailSelfRegistration),
@@ -52,13 +51,19 @@ class EmailServiceTest {
 
     @Test
     void test_Return_ValidationException_When_Email_Already_SubscribedInGroup() {
+        EmailGroup emailGroup = emailServiceTestScenario.getEmailGroup();
+        Email email = emailServiceTestScenario.getEmail();
+        email.setSubscribed(NoYesEnum.YES);
+        EmailGroupRelation emailGroupRelation = new EmailGroupRelation();
+        emailGroupRelation.setEmail(email);
+        emailGroupRelation.setEmailGroup(emailGroup);
+        email.setEmailGroupRelations(List.of(emailGroupRelation));
+
         Mockito.when(emailGroupService.findByUuidToSelfRegistration(Mockito.any()))
-                .thenReturn(Optional.of(emailServiceTestScenario.getEmailGroup()));
+                .thenReturn(Optional.of(emailGroup));
+        Mockito.when(emailRepository.findByEmail(Mockito.any())).thenReturn(Optional.of(email));
 
-        Mockito.when(emailRepository.findByEmailAndGroupId(Mockito.any(), Mockito.any()))
-                .thenReturn(Optional.of(emailServiceTestScenario.getEmail()));
-
-        EmailSelfRegistration emailSelfRegistration = emailServiceTestScenario.getEmailSelfRegistration();
+        EmailSelfRegistrationRequest emailSelfRegistration = emailServiceTestScenario.getEmailSelfRegistration();
         Assertions.assertThrows(
                 ValidationException.class,
                 () -> emailService.saveSelfEmailRegistration(emailSelfRegistration),

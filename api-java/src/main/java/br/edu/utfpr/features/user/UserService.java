@@ -13,9 +13,9 @@ import br.edu.utfpr.utils.DateTimeUtils;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import org.jboss.resteasy.reactive.RestResponse;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import java.util.Objects;
 import java.util.Random;
 
@@ -67,7 +67,7 @@ public class UserService extends GenericService<User, Long, UserRepository> {
         Integer codigo = new Random().nextInt(1000000);
         recoverPasswordService.addCode(username, new RecoverPassword(username, codigo, DateTimeUtils.getCurrentDateTime()));
 
-        sendEmailService.send(
+        sendEmailService.sendAllAtOnce(
                 "Recuperação de senha",
                 "O código para recuperação da sua senha no sistema de Newsletter é <b>"+codigo+"</b>.",
                 configEmailService.getConfigEmailByUsernameOrEmailUser(username),

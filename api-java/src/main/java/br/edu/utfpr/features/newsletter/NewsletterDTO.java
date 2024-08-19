@@ -1,12 +1,12 @@
 package br.edu.utfpr.features.newsletter;
 
-import br.edu.utfpr.features.email.Email;
-import br.edu.utfpr.features.newsletter.email_group.NewsletterEmailGroup;
+import br.edu.utfpr.features.email.EmailDTO;
+import br.edu.utfpr.features.newsletter.email_group.NewsletterEmailGroupDTO;
 import br.edu.utfpr.generic.crud.EntityId;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,9 +25,9 @@ public class NewsletterDTO implements EntityId<Long> {
     @NotBlank(message = "Parameter newsletter is required.")
     private String newsletter;
 
-    private Set<Email> emails = new HashSet<>();
+    private Set<EmailDTO> emails = new HashSet<>();
 
-    private Set<NewsletterEmailGroup> emailGroups = new HashSet<>();
+    private Set<NewsletterEmailGroupDTO> emailGroups = new HashSet<>();
 
     private Boolean newsletterTemplate;
 

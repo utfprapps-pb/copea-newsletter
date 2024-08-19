@@ -5,38 +5,32 @@ import br.edu.utfpr.features.user.UserRepository;
 import br.edu.utfpr.login.scenarios.LoginServiceTestScenario;
 import br.edu.utfpr.reponses.TokenResponse;
 import br.edu.utfpr.utils.TokenUtils;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectSpy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mockito;
 
 import java.util.Optional;
 
 @QuarkusTest
-@ExtendWith(MockitoExtension.class)
 class LoginServiceTest {
 
     private LoginServiceTestScenario loginServiceTestScenario = new LoginServiceTestScenario();
 
-    /**
-     * O @Spy deve estar por primeiro para funcionar
-     */
-    @Spy
-    @InjectMocks
+    @InjectSpy
     LoginService loginService;
 
-    @Mock
+    @InjectMock
     UserRepository userRepository;
 
-    @Mock
+    @InjectMock
     TokenUtils tokenUtils;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -59,8 +53,8 @@ class LoginServiceTest {
         Mockito.when(tokenUtils.generateToken(Mockito.any(), Mockito.any())).thenReturn(tokenResponseMock);
 
         /**
-         * Quando mockado um método da classe alvo (InjectMocks) deve ser usado o
-         * @Spy em cima do @InjectMocks e feito dessa forma o mock, com o doReturn...
+         * Quando mockado um método da classe alvo (nesse caso loginService) deve ser usado o
+         * @InjectSpy e feito dessa forma o mock, com o doReturn...
          */
         Mockito.doReturn(true).when(loginService).verifyPassword(Mockito.any(), Mockito.any());
 

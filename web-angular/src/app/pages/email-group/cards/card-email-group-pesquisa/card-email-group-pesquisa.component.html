@@ -36,6 +36,16 @@
           <td mat-cell *matCellDef="let grupo"> {{grupo.name}} </td>
         </ng-container>
 
+        <!-- Link para autoinscrição Column -->
+        <ng-container matColumnDef="uuidToSelfRegistration">
+          <th mat-header-cell *matHeaderCellDef> Link para autoinscrição </th>
+          <td mat-cell *matCellDef="let grupo">
+            <app-uuid-self-registration-buttons-handle [emailGroupId]="grupo.id"
+              [currentUuid]="grupo.uuidToSelfRegistration" (newUuid)="onNewUuid($event, grupo)"
+              (removeUuid)="onRemoveUuid(grupo)"></app-uuid-self-registration-buttons-handle>
+          </td>
+        </ng-container>
+
         <!-- Ações -->
         <ng-container matColumnDef="acoes">
           <th mat-header-cell *matHeaderCellDef> Ações </th>

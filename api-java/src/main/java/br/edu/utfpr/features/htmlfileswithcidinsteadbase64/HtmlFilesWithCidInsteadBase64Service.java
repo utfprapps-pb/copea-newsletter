@@ -3,13 +3,12 @@ package br.edu.utfpr.features.htmlfileswithcidinsteadbase64;
 import br.edu.utfpr.features.htmlfileswithcidinsteadbase64.models.HtmlFilesWithCidInsteadBase64Model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Service;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-@Service
+@RequestScoped
 public class HtmlFilesWithCidInsteadBase64Service {
 
     @Inject

@@ -1,7 +1,7 @@
 import { LastSentEmailNewsletter } from '../../models/last-sent-email-newsletter';
 import { DrawerService } from '../../../admin/drawer.service';
 import { Component, ViewChild, OnInit, ElementRef, Output, Input, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -53,8 +53,12 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
     super(crudController, formBuilder);
   }
 
+  public get newsletter(): AbstractControl {
+    return this.form.get('newsletter') as AbstractControl;
+  }
+
   public get texto(): string {
-    return this.form.get('newsletter')?.value;
+    return this.newsletter.value;
   }
 
   public get id(): number {
@@ -86,7 +90,8 @@ export class CardNoticiaTextoComponent extends AdvancedCrudCard<Noticia> impleme
       //     console.log('The ' + e.command + ' command was fired.');
       //   });
       // },
-      setup: (editor) => { this.addEventFullscreenStateChanged(editor) }
+      setup: (editor) => { this.addEventFullscreenStateChanged(editor) },
+      convert_urls: false,
     }
   }
 

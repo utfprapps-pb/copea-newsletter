@@ -10,8 +10,8 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 
-import javax.enterprise.context.control.ActivateRequestContext;
-import javax.inject.Inject;
+import jakarta.enterprise.context.control.ActivateRequestContext;
+import jakarta.inject.Inject;
 import java.util.Objects;
 import java.util.logging.Logger;
 

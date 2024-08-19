@@ -8,11 +8,11 @@ import br.edu.utfpr.features.user.User;
 import br.edu.utfpr.generic.crud.EntityId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +22,8 @@ import java.util.Set;
 @Entity
 @Table(name = "newsletter")
 public class Newsletter implements EntityId<Long> {
+
+    public static final String URL_TO_UNSUBSCRIBE_KEY = "${URL_TO_UNSUBSCRIBE}";
 
     @Id
     @SequenceGenerator(name = "newsletter_id_sequence", sequenceName = "newsletter_id_sequence", allocationSize = 1, initialValue = 1)

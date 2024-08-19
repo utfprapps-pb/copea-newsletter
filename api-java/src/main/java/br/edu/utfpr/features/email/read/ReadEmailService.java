@@ -3,8 +3,8 @@ package br.edu.utfpr.features.email.read;
 import br.edu.utfpr.features.email.config.ConfigEmail;
 import br.edu.utfpr.features.email.config.ConfigEmailService;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import javax.mail.*;
 import javax.mail.search.SearchTerm;
 import java.util.ArrayList;

@@ -66,13 +66,10 @@ export class DestinatarioComponent extends BasicCrudComponent<Destinatario> impl
   public criarForm(): FormGroup {
     return this.formBuilder.group({
       id: [null],
-      createdAt: [null],
       email: [null, [Validators.required, Validators.email]],
       emailGroupRelations: [null],
       subscribed: [null],
-      lastUnsubscribedDate: [null],
       lastEmailUnsubscribedDate: [null],
-      lastEmailUnsubscribedMessageID: [null],
     })
   }
 

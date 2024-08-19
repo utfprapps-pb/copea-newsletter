@@ -12,4 +12,6 @@ public interface EmailGroupRepository extends GenericRepository<EmailGroup, Long
 
     Optional<EmailGroup> findByName(String name);
 
+    Optional<EmailGroup> findByNameIgnoreCase(String name);
+
 }

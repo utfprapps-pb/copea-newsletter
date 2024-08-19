@@ -3,8 +3,8 @@ package br.edu.utfpr.http;
 import io.vertx.core.http.HttpServerRequest;
 import lombok.Getter;
 
-import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.core.Context;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.ws.rs.core.Context;
 
 @Getter
 @RequestScoped

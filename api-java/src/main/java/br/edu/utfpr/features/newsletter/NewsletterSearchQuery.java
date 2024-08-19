@@ -6,10 +6,10 @@ import br.edu.utfpr.features.newsletter.requests.NewsletterSearchRequest;
 import br.edu.utfpr.features.user.User;
 import br.edu.utfpr.sql.builder.SqlBuilder;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import java.util.List;
 import java.util.Objects;
 

@@ -1,0 +1,16 @@
+# Propriedades para desenvolvimento
+quarkus:
+  datasource:
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/newsletter?ApplicationName=${postgreSQL-app-name}
+    username: postgres
+    password: admin
+  log:
+    file:
+      enable: false
+  hibernate-orm:
+    log:
+      format-sql: true
+      sql: true
+  http:
+    port: 8082

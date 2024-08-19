@@ -22,10 +22,10 @@ import br.edu.utfpr.reponses.GenericResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
 import br.edu.utfpr.utils.DateTimeUtils;
 import com.sun.mail.imap.IMAPMessage;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import org.jboss.resteasy.reactive.RestResponse;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -70,10 +70,28 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     }
 
     private GenericResponse saveOrUpdate(Newsletter entity) {
+        validJustOneNewsletterByDescription(entity);
         setDefaultValues(entity);
         GenericResponse response = super.save(entity);
         response.setMessage(entity.getId().toString());
         return response;
+    }
+
+    private void validJustOneNewsletterByDescription(Newsletter entity) {
+        if (descriptionEqualsDescriptionDatabaseIgnoreCase(entity.getId(), entity.getDescription()))
+            return;
+
+        Optional<Newsletter> newsletterOptional = getRepository().findByDescriptionIgnoreCase(entity.getDescription());
+        if (newsletterOptional.isPresent())
+            throw new ValidationException("Já existe uma newsletter com o título informado. Por favor, informe outro.");
+    }
+
+    private boolean descriptionEqualsDescriptionDatabaseIgnoreCase(Long id, String description) {
+        if (Objects.isNull(id))
+            return false;
+
+        Newsletter newsletterDb = findById(id);
+        return (Objects.nonNull(newsletterDb) && description.equalsIgnoreCase(newsletterDb.getDescription()));
     }
 
     private void setDatesByNewOrUpdate(Newsletter entity) {
@@ -141,31 +159,35 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         addEmailsOfGroupsInListEmailsToSendNewsletter(newsletter, subscribedEmails);
 
         validateSubscribedEmails(subscribedEmails);
-        checkAnswersInEmailToUnsubscribe(subscribedEmails, configEmail);
-        SendEmailLog sendEmailLog = sendEmailService.send(
+        // TODO: comentado pois estou testando o cancelamento da inscrição por um link,
+        //  após finalizar remover o cancelamento da forma atual, que é pela resposta no e-mail, pois deixa lento o processo
+//        checkAnswersInEmailToUnsubscribe(subscribedEmails, configEmail);
+        List<SendEmailLog> sendEmailLogs = sendEmailService.sendOneAtTime(
                 newsletter.getSubject(),
                 newsletter.getNewsletter(),
                 configEmail,
-                sendEmailService.convertArrayEmailEntityToStringArray(subscribedEmails));
+                subscribedEmails);
 
         // TODO: Encontrar uma forma melhor de setar esse id, pois no método sendEmailService.send já é feito um save da entidade no banco
         if ((Objects.nonNull(quartzTaskId)) && (quartzTaskId > 0)) {
-            sendEmailLog.setQuartzTaskId(quartzTaskId);
-            sendEmailLogService.update(sendEmailLog);
+            sendEmailLogs.forEach((sendEmailLog -> {
+                sendEmailLog.setQuartzTaskId(quartzTaskId);
+                sendEmailLogService.update(sendEmailLog);
+            }));
         }
 
-        newsletter.getSendEmailLogs().add(sendEmailLog);
+        newsletter.getSendEmailLogs().addAll(sendEmailLogs);
         getRepository().save(newsletter);
 
-        if (SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus()))
+        if (sendEmailLogs.stream().anyMatch((sendEmailLog -> !SendEmailLogStatusEnum.SENT.equals(sendEmailLog.getSentStatus()))))
             return DefaultResponse.builder()
-                    .httpStatus(RestResponse.StatusCode.OK)
-                    .message("Newsletter enviada aos emails vinculados com sucesso.")
+                    .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
+                    .message("Algumas newsletter não foram enviadas com sucesso. Verifique os logs para maiores detalhes.")
                     .build();
 
         return DefaultResponse.builder()
-                .httpStatus(RestResponse.StatusCode.BAD_REQUEST)
-                .message(sendEmailLog.getError())
+                .httpStatus(RestResponse.StatusCode.OK)
+                .message("Newsletter enviada aos emails vinculados com sucesso.")
                 .build();
     }
 

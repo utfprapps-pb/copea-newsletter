@@ -155,11 +155,9 @@ export class CardNoticiaCabecalhoComponent extends AdvancedCrudCard<Noticia> imp
     const dialogRef = this.dialog.open(GrupoDestinatarioPesquisaDialogComponent);
     dialogRef.afterClosed().subscribe((res: Destinatario[]) => {
       if (res) {
-        res.forEach(d => {
-          let id: number = d['0'];
-          let email: string = d['1'];
-          if (!this.findDestinatarioNoArray(email))
-            this.destinatarios.push({ id: id, email: email });
+        res.forEach(email => {
+          if (!this.findDestinatarioNoArray(email.email))
+            this.destinatarios.push(email);
         });
       }
     })

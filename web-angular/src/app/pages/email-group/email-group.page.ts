@@ -82,6 +82,8 @@ export class EmailGroupPage extends BasicCrudComponent<GrupoDestinatario> implem
     this.subscription.unsubscribe();
   }
 
-
+  public onCarregarRegistrosPesquisa() {
+    this.cardPesquisa.carregarRegistros();
+  }
 
 }

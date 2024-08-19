@@ -3,11 +3,11 @@ package br.edu.utfpr.features.email.group;
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.GenericResponse;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,10 +31,10 @@ public class EmailGroupService extends GenericService<EmailGroup, Long, EmailGro
     }
 
     private void validJustOneEmailGroupByName(EmailGroup entity) {
-        if (nameEqualsNameDatabase(entity.getId(), entity.getName()))
+        if (nameEqualsNameDatabaseIgnoreCase(entity.getId(), entity.getName()))
             return;
 
-        Optional<EmailGroup> emailGroupOptional = findByName(entity.getName());
+        Optional<EmailGroup> emailGroupOptional = getRepository().findByNameIgnoreCase(entity.getName());
         if (emailGroupOptional.isPresent())
             throw new ValidationException("Já existe um grupo com o nome informado. Por favor, informe outro.");
     }
@@ -43,15 +43,16 @@ public class EmailGroupService extends GenericService<EmailGroup, Long, EmailGro
         return getRepository().findByName(name);
     }
 
-    public boolean existsByName(Long id, String name) {
-        return (!nameEqualsNameDatabase(id, name)) && (findByName(name).isPresent());
+    public boolean existsByNameIgnoreCase(Long id, String name) {
+        return (!nameEqualsNameDatabaseIgnoreCase(id, name)) && (getRepository().findByNameIgnoreCase(name).isPresent());
     }
 
-    private boolean nameEqualsNameDatabase(Long id, String name) {
+    private boolean nameEqualsNameDatabaseIgnoreCase(Long id, String name) {
         if (Objects.isNull(id))
             return false;
+
         EmailGroup emailGroupDb = findById(id);
-        return (Objects.nonNull(emailGroupDb) && Objects.equals(name, emailGroupDb.getName()));
+        return (Objects.nonNull(emailGroupDb) && name.equalsIgnoreCase(emailGroupDb.getName()));
     }
 
     @Override

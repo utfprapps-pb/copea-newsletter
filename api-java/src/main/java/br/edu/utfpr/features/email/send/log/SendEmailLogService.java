@@ -2,9 +2,9 @@ package br.edu.utfpr.features.email.send.log;
 
 import br.edu.utfpr.features.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.generic.crud.GenericService;
+import jakarta.enterprise.context.RequestScoped;
 import org.apache.commons.mail.HtmlEmail;
 
-import javax.enterprise.context.RequestScoped;
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.Objects;

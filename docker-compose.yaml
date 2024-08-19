@@ -16,6 +16,8 @@ services:
       retries: 6
     ports:
       - "5433:5432"
+    volumes:
+      - database_data:/var/lib/postgresql/data
     networks:
       - newsletter-net
 
@@ -59,3 +61,6 @@ services:
 networks:
   newsletter-net:
     driver: bridge
+
+volumes:
+  database_data:
