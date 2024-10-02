@@ -1,6 +1,6 @@
 import { MensagemService } from './../../../../shared/services/mensagem.service';
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, Subscription } from 'rxjs';
 
 // shared
@@ -10,6 +10,8 @@ import { errorTransform } from 'src/app/shared/pipes/error-transform';
 // aplicação
 import { DestinatarioService } from '../../destinatario.service';
 import { Destinatario } from '../../model/destinatario';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDataSimpleComponent } from 'src/app/shared/components/dialog-data-simple/dialog-data-simple.component';
 
 @Component({
     selector: 'app-card-destinatario-pesquisa',
@@ -36,7 +38,7 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
     /**
      * @description Armazena as colunas da tabela
      */
-    public columns: string[] = ['id', 'description', 'emailGroupRelations', 'acoes'];
+    public columns: string[] = ['id', 'description', 'subscribed', 'unsubscribeReason', 'emailGroupRelations', 'acoes'];
 
     /**
      * @description Filtro da tabela
@@ -57,6 +59,8 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
      * @description Armazena as incrições de eventos do componente
      */
     private subscription: Subscription;
+
+    dialog = inject(MatDialog);
 
     constructor(
         private service: DestinatarioService,
@@ -136,4 +140,14 @@ export class CardDestinatarioPesquisaComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
+
+    public showUnsubscribeReason(destinatario: Destinatario) {
+      this.dialog.open(DialogDataSimpleComponent, {
+        data: {
+          title: `Motivo do cancelamento da inscrição de ${destinatario.email}`,
+          content: destinatario.unsubscribeReason
+        },
+      })
+    }
+
 }

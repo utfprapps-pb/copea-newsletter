@@ -2,7 +2,7 @@ package br.edu.utfpr.generic.crud.resource;
 
 import br.edu.utfpr.generic.crud.EntityId;
 import br.edu.utfpr.generic.crud.GenericService;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import lombok.Getter;
 
 import jakarta.inject.Inject;
@@ -45,14 +45,14 @@ public abstract class GenericResource<
 
     @PUT
     @Transactional
-    public GenericResponse update(@Valid T entity) {
+    public GenericErrorResponse update(@Valid T entity) {
         return service.update(entity);
     }
 
     @DELETE
     @Path("{id}")
     @Transactional
-    public GenericResponse deleteById(@PathParam("id") I id) {
+    public GenericErrorResponse deleteById(@PathParam("id") I id) {
         return service.deleteById(id);
     }
 

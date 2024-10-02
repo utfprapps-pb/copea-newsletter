@@ -1,6 +1,6 @@
 package br.edu.utfpr.exception;
 
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.ws.rs.core.Response;
@@ -17,7 +17,7 @@ public class ExceptionHandler implements ExceptionMapper<Exception> {
         String errorId = UUID.randomUUID().toString();
         log.error("errorId[{}]", errorId, exception);
         return Response.serverError()
-                .entity(GenericResponse.getGenericResponse(
+                .entity(GenericErrorResponse.getGenericResponse(
                         errorId,
                         "Ocorreu um erro inesperado no sistema.",
                         exception.getMessage(),

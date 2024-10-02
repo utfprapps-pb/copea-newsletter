@@ -3,13 +3,15 @@ package br.edu.utfpr.features.newsletter;
 import br.edu.utfpr.auth.AuthSecurityFilter;
 import br.edu.utfpr.features.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.features.newsletter.requests.NewsletterSearchRequest;
+import br.edu.utfpr.features.newsletter.responses.NewsletterSearchResponse;
 import br.edu.utfpr.features.user.User;
 import br.edu.utfpr.sql.builder.SqlBuilder;
-
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.persistence.Tuple;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -22,14 +24,20 @@ public class NewsletterSearchQuery {
     @Inject
     AuthSecurityFilter authSecurityFilter;
 
-    public List<Newsletter> search(NewsletterSearchRequest newsletterSearchRequest) {
-        SqlBuilder sqlBuilder = new SqlBuilder("select newsletter.* from newsletter");
+    public List<NewsletterSearchResponse> search(NewsletterSearchRequest newsletterSearchRequest) {
+        SqlBuilder sqlBuilder = new SqlBuilder("select newsletter.id, newsletter.description from newsletter");
         if ((Objects.nonNull(newsletterSearchRequest.getDescription())) && (!newsletterSearchRequest.getDescription().isEmpty()))
             sqlBuilder.addAnd("(newsletter.description ilike '%' || :description || '%')", "description", newsletterSearchRequest.getDescription());
         addFilterNewsletterSentOrNot(sqlBuilder, newsletterSearchRequest);
         addFilterNewslettersTemplateMineOrShared(sqlBuilder, newsletterSearchRequest);
-        Query query = sqlBuilder.createNativeQuery(entityManager, Newsletter.class);
-        return query.getResultList();
+        Query query = sqlBuilder.createNativeQuery(entityManager, Tuple.class);
+        List<Tuple> result = query.getResultList();
+        return result.stream().map((newsletter) -> {
+            NewsletterSearchResponse response = new NewsletterSearchResponse();
+            response.setId(newsletter.get("id", Long.class));
+            response.setDescription(newsletter.get("description", String.class));
+            return response;
+        }).toList();
     }
 
     private void addFilterNewsletterSentOrNot(SqlBuilder sqlBuilder, NewsletterSearchRequest newsletterSearchRequest) {

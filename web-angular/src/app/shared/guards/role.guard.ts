@@ -27,14 +27,13 @@ export class RoleGuard implements CanActivate {
                 this.alertNoPermission();
                 observer.next(false);
                 observer.complete();
-                this.router.navigateByUrl('');
+                this.router.navigateByUrl('login');
             }
         });
     }
 
     private alertNoPermission(): void {
       this.mensagemService.mostrarMensagem('Você não tem permissão para acessar esse recurso!');
-        this.router.navigateByUrl('');
     }
 
 }

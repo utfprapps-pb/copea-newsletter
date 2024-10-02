@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -48,11 +48,15 @@ export class LoginComponent implements OnInit {
     this._loginService.login(this.form.value).subscribe((resposta: any) => {
       // this.auth.token = resposta.data.token;
       this.mensagemErro = '';
-      this.router.navigateByUrl('admin/bem-vindo');
+      this.goBemVindoPage();
     }, error => {
       console.error(error);
       this.mensagemErro = error;
     });
+  }
+
+  private goBemVindoPage(): Promise<boolean> {
+    return this.router.navigateByUrl('admin/bem-vindo');
   }
 
 }

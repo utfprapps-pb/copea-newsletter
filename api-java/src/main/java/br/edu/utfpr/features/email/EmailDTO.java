@@ -21,6 +21,7 @@ public class EmailDTO implements EntityId<Long> {
     private String email;
     @Enumerated(EnumType.STRING)
     private NoYesEnum subscribed;
+    private String unsubscribeReason;
     private LocalDateTime lastEmailUnsubscribedDate;
     private List<EmailGroupRelation> emailGroupRelations;
 

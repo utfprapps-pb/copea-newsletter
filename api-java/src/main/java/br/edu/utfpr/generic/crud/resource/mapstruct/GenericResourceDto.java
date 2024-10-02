@@ -3,7 +3,7 @@ package br.edu.utfpr.generic.crud.resource.mapstruct;
 import br.edu.utfpr.generic.crud.EntityId;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.generic.mapstruct.GenericMapper;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -64,7 +64,7 @@ public abstract class GenericResourceDto<
 
     @PUT
     @Transactional
-    public GenericResponse update(@Valid D dto) {
+    public GenericErrorResponse update(@Valid D dto) {
         T entity = getEntityFromDtoById(dto);
         return service.update(entity);
     }
@@ -118,7 +118,7 @@ public abstract class GenericResourceDto<
     @DELETE
     @Path("{id}")
     @Transactional
-    public GenericResponse deleteById(@PathParam("id") I id) {
+    public GenericErrorResponse deleteById(@PathParam("id") I id) {
         return service.deleteById(id);
     }
 

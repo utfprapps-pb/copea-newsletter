@@ -9,6 +9,7 @@ import { LastSentEmailNewsletter } from '../models/last-sent-email-newsletter';
 // aplicação
 import { Noticia } from '../models/noticia';
 import { NewsletterSearchRequest } from 'src/app/pages/noticias/models/newsletter-search-request';
+import { GenericResponse } from 'src/app/shared/models/generic-response';
 
 @Injectable()
 export class NoticiaService extends CrudService<Noticia> {
@@ -33,6 +34,10 @@ export class NoticiaService extends CrudService<Noticia> {
     if (!newsletterId)
       return new Observable<LastSentEmailNewsletter>;
     return this.http.get<LastSentEmailNewsletter>(`${this.baseUrl}${this.url}/last-sent-email/newsletter/${newsletterId}`);
+  }
+
+  public getTextById(id: number): Observable<GenericResponse<string>> {
+    return this.http.get<GenericResponse<string>>(`${this.baseUrl}/v1/newsletter/text/${id}`);
   }
 
 }

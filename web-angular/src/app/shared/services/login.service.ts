@@ -188,7 +188,7 @@ export abstract class LoginService {
     localStorage.removeItem('token');
     this._loginEvent.next(false);
     this.stopRefreshInterval();
-    this._router.navigateByUrl('').then(res => res);
+    this._router.navigateByUrl('login').then(res => res);
   }
 
 }

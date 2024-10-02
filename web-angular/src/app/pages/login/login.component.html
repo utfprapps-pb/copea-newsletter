@@ -15,11 +15,7 @@
       <span><a class="link-esqueceu-senha" routerLink="/recuperacao-senha">Esqueci minha senha</a></span>
 
       <!-- Nova senha -->
-      <mat-form-field [appearance]="'outline'">
-        <mat-label>Senha</mat-label>
-        <input matInput formControlName="password" required placeholder="Informe sua senha" type="password">
-        <mat-error>{{password.errors | erro}}</mat-error>
-      </mat-form-field>
+      <app-input-password [control]="this.form.controls['password']"></app-input-password>
 
     </mat-card-content>
 

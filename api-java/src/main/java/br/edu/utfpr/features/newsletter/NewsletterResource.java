@@ -1,8 +1,10 @@
 package br.edu.utfpr.features.newsletter;
 
 import br.edu.utfpr.features.newsletter.requests.NewsletterSearchRequest;
+import br.edu.utfpr.features.newsletter.responses.NewsletterSearchResponse;
 import br.edu.utfpr.generic.crud.resource.mapstruct.GenericResourceDto;
 import br.edu.utfpr.reponses.DefaultResponse;
+import br.edu.utfpr.reponses.GenericResponse;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -40,6 +42,15 @@ public class NewsletterResource extends GenericResourceDto<
         );
     }
 
+    /**
+     * Busca apenas o texto da newsletter pelo id.
+     */
+    @GET
+    @Path("text/{id}")
+    public GenericResponse<String> getTextById(@PathParam("id") Long id) {
+        return GenericResponse.of(getService().findById(id).getNewsletter());
+    }
+
     @GET
     @Path("{id}/send-email")
     public Response sendEmailsNewsletter(@PathParam("id") Long newsletterId) {
@@ -59,12 +70,13 @@ public class NewsletterResource extends GenericResourceDto<
         }
     }
 
+    /**
+     * Busca apenas os dados necessários para mostrar na pesquisa, sem o texto da newsletter, pois afeta a performance devido ao tamanho.
+     */
     @POST
     @Path("search")
-    public List<NewsletterDTO> search(NewsletterSearchRequest newsletterSearchRequest) {
-        return getGenericMapper().toDtoList(
-                getService().search(newsletterSearchRequest)
-        );
+    public List<NewsletterSearchResponse> search(NewsletterSearchRequest newsletterSearchRequest) {
+        return getService().search(newsletterSearchRequest);
     }
 
     @GET

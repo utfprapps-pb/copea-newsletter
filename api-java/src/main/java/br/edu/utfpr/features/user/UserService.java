@@ -5,7 +5,7 @@ import br.edu.utfpr.features.email.send.SendEmailService;
 import br.edu.utfpr.features.user.responses.SendEmailCodeRecoverPassword;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.DefaultResponse;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import br.edu.utfpr.features.user.recover_password.RecoverPassword;
 import br.edu.utfpr.features.user.recover_password.RecoverPasswordDTO;
 import br.edu.utfpr.features.user.recover_password.RecoverPasswordService;
@@ -32,13 +32,13 @@ public class UserService extends GenericService<User, Long, UserRepository> {
     ConfigEmailService configEmailService;
 
     @Override
-    public GenericResponse save(User entity) {
+    public GenericErrorResponse save(User entity) {
         encryptPassword(entity);
         return super.save(entity);
     }
 
     @Override
-    public GenericResponse update(User entity) {
+    public GenericErrorResponse update(User entity) {
         encryptPassword(entity);
         return super.update(entity);
     }

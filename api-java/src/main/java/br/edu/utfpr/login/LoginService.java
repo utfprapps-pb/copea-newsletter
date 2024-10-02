@@ -1,18 +1,18 @@
 package br.edu.utfpr.login;
 
 import br.edu.utfpr.auth.AuthSecurityFilter;
-import br.edu.utfpr.reponses.TokenResponse;
-import br.edu.utfpr.roles.RoleNewsletterType;
 import br.edu.utfpr.features.user.User;
 import br.edu.utfpr.features.user.UserRepository;
+import br.edu.utfpr.reponses.TokenResponse;
+import br.edu.utfpr.roles.RoleNewsletterType;
 import br.edu.utfpr.utils.TokenUtils;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import org.wildfly.security.password.Password;
 import org.wildfly.security.password.PasswordFactory;
 import org.wildfly.security.password.interfaces.BCryptPassword;
 import org.wildfly.security.password.util.ModularCrypt;
 
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import java.util.Optional;
 
 @RequestScoped

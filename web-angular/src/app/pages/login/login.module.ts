@@ -12,6 +12,7 @@ import { MaterialModule } from 'src/app/modules/material.module';
 import { LoginComponent } from './login.component';
 
 import { MatTabsModule } from '@angular/material/tabs';
+import { InputPasswordModule } from 'src/app/shared/components/input-password/input-password.module';
 
 const routes: Routes = [
     { path: '', component: LoginComponent }
@@ -27,6 +28,7 @@ const routes: Routes = [
         MaterialModule,
         MatTabsModule,
         SysPipesModule,
+        InputPasswordModule,
     ],
     exports: [],
     providers: [],

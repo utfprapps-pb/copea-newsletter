@@ -7,7 +7,7 @@ import br.edu.utfpr.features.email.group.relation.EmailGroupRelation;
 import br.edu.utfpr.features.email.request.EmailSelfRegistrationRequest;
 import br.edu.utfpr.features.email.request.EmailUnsubscribeRequest;
 import br.edu.utfpr.generic.crud.GenericService;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -28,14 +28,14 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
     EmailGroupService emailGroupService;
 
     @Override
-    public GenericResponse save(Email email) {
+    public GenericErrorResponse save(Email email) {
         validJustOneEmailByEmail(email);
         generateUuidToUnsubscribe(email);
         return super.save(email);
     }
 
     @Override
-    public GenericResponse update(Email email) {
+    public GenericErrorResponse update(Email email) {
         validJustOneEmailByEmail(email);
         generateUuidToUnsubscribe(email);
         return super.update(email);
@@ -115,7 +115,7 @@ public class EmailService extends GenericService<Email, Long, EmailRepository> {
     }
 
     @Override
-    public GenericResponse deleteById(Long id) {
+    public GenericErrorResponse deleteById(Long id) {
         // remove instâncias do grupo de destinatários
         Query queryGroup = em.createNativeQuery("DELETE FROM email_group_relation ege " +
                 "WHERE ege.email_id = :emailId");
