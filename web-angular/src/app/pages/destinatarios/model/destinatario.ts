@@ -6,4 +6,5 @@ export interface Destinatario {
     emailGroupRelations?: EmailGroupRelation[],
     subscribed?: string;
     lastEmailUnsubscribedDate?: Date;
+    unsubscribeReason?: string;
 }

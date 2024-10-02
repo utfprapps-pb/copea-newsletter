@@ -36,6 +36,23 @@
           <td mat-cell *matCellDef="let destinatario"> {{destinatario.email}} </td>
         </ng-container>
 
+        <!-- Inscrito Column -->
+        <ng-container matColumnDef="subscribed">
+          <th mat-header-cell *matHeaderCellDef> Inscrito </th>
+          <td mat-cell *matCellDef="let destinatario"> {{destinatario.subscribed == 'YES' ? 'Sim' : 'Não' }} </td>
+        </ng-container>
+
+        <!-- Motivo canc. Column -->
+        <ng-container matColumnDef="unsubscribeReason">
+          <th mat-header-cell *matHeaderCellDef> Motivo canc. </th>
+          <td mat-cell *matCellDef="let destinatario">
+            <button *ngIf="destinatario.subscribed != 'YES'" mat-icon-button title="Visualizar motivo do cancelamento da inscrição"
+              (click)="showUnsubscribeReason(destinatario)">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
         <!-- Grupo Column -->
         <ng-container matColumnDef="emailGroupRelations">
           <th mat-header-cell *matHeaderCellDef> Grupos </th>

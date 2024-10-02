@@ -2,7 +2,7 @@ package br.edu.utfpr.features.email.group;
 
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -19,13 +19,13 @@ public class EmailGroupService extends GenericService<EmailGroup, Long, EmailGro
     EntityManager entityManager;
 
     @Override
-    public GenericResponse save(EmailGroup entity) {
+    public GenericErrorResponse save(EmailGroup entity) {
         validJustOneEmailGroupByName(entity);
         return super.save(entity);
     }
 
     @Override
-    public GenericResponse update(EmailGroup entity) {
+    public GenericErrorResponse update(EmailGroup entity) {
         validJustOneEmailGroupByName(entity);
         return super.update(entity);
     }
@@ -56,7 +56,7 @@ public class EmailGroupService extends GenericService<EmailGroup, Long, EmailGro
     }
 
     @Override
-    public GenericResponse deleteById(Long id) {
+    public GenericErrorResponse deleteById(Long id) {
         deleteEmailGroupRelation(id);
         return super.deleteById(id);
     }

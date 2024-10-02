@@ -1,6 +1,6 @@
 package br.edu.utfpr.exception;
 
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Produces;
@@ -16,7 +16,7 @@ public class NotFoundExceptionHandler implements ExceptionMapper<NotFoundExcepti
     @Produces(MediaType.APPLICATION_JSON)
     public Response toResponse(NotFoundException e) {
         return Response.status(Response.Status.NOT_FOUND)
-                .entity(GenericResponse
+                .entity(GenericErrorResponse
                         .getGenericResponse(e.getMessage(), Response.Status.NOT_FOUND.getStatusCode()))
                 .build();
     }

@@ -1,7 +1,7 @@
 package br.edu.utfpr.generic.crud;
 
 import br.edu.utfpr.auth.AuthSecurityFilter;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.NotFoundException;
@@ -35,27 +35,27 @@ public abstract class GenericService<T, ID, R extends GenericRepository> {
         return optional.get();
     }
 
-    public GenericResponse save(T entity) {
+    public GenericErrorResponse save(T entity) {
         setDefaultValuesWhenNew(entity);
         repository.save(entity);
-        return GenericResponse.getGenericResponse("Registro(s) incluído(s) com sucesso.", Response.Status.CREATED.getStatusCode());
+        return GenericErrorResponse.getGenericResponse("Registro(s) incluído(s) com sucesso.", Response.Status.CREATED.getStatusCode());
     }
 
     public void setDefaultValuesWhenNew(T entity) {
     }
 
-    public GenericResponse update(T entity) {
+    public GenericErrorResponse update(T entity) {
         repository.save(entity);
-        return GenericResponse.getGenericResponse("Registro(s) atualizado(s) com sucesso.", Response.Status.OK.getStatusCode());
+        return GenericErrorResponse.getGenericResponse("Registro(s) atualizado(s) com sucesso.", Response.Status.OK.getStatusCode());
     }
 
-    public GenericResponse deleteById(ID id) {
+    public GenericErrorResponse deleteById(ID id) {
         if (!repository.existsById(id))
             throwNotFoundException();
 
         repository.deleteById(id);
 
-        return GenericResponse.getGenericResponse("Registro deletado com sucesso.", Response.Status.OK.getStatusCode());
+        return GenericErrorResponse.getGenericResponse("Registro deletado com sucesso.", Response.Status.OK.getStatusCode());
     }
 
     public void throwNotFoundException() {

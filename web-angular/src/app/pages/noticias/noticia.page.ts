@@ -121,11 +121,16 @@ export class NoticiaComponent extends AdvancedCrudComponent<Noticia> implements 
   public criarEventAoFecharDialogSelecaoNoticiaModelo(dialogRef: MatDialogRef<CardSelecionarNoticiaModeloComponent>) {
     dialogRef.afterClosed().subscribe({
       next: (value) => {
-        if (!value)
+        if (!value) {
           return;
-
-        this.registro.newsletter = value.newsletter;
-        this.updateValueForm('newsletter', this.registro.newsletter!);
+        }
+        this.service.getTextById(value.id).subscribe({
+          next: (response) => {
+            this.registro.newsletter = response.data;
+            this.updateValueForm('newsletter', this.registro.newsletter);
+          },
+          error: (error) => this.mensagemService.mostrarMensagem(errorTransform(error)),
+        });
       }
     })
   }

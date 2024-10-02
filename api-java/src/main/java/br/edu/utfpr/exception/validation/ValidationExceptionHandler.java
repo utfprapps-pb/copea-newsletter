@@ -1,6 +1,6 @@
 package br.edu.utfpr.exception.validation;
 
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.ws.rs.core.Response;
@@ -14,7 +14,7 @@ public class ValidationExceptionHandler implements ExceptionMapper<ValidationExc
     @Override
     public Response toResponse(ValidationException exception) {
         return Response.status(Response.Status.BAD_REQUEST)
-                .entity(GenericResponse.getGenericResponse(
+                .entity(GenericErrorResponse.getGenericResponse(
                         exception.getMessage(),
                         Response.Status.BAD_REQUEST.getStatusCode()))
                 .build();

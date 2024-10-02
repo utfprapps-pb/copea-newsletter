@@ -88,7 +88,13 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
   }
 
   private setBuscaAutomaticaChangeFieldForm(fieldName: string) {
-    this.subscription!.add(this.form.get(fieldName)!.valueChanges.pipe(debounceTime(300)).subscribe(() => this.filtrarNoticias()));
+    this.subscription!.add(
+      this.form.get(fieldName)!.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+        if (this.form.get(fieldName)?.dirty) {
+          this.filtrarNoticias();
+        }
+      })
+    );
   }
 
   private removeChanges() {
@@ -148,7 +154,6 @@ export class PesquisaNoticiaComponent implements OnInit, OnDestroy {
   public getStylePadding(): string {
     return ((this.pesquisaNoticiasModelos) ? "d-pad-top" : "d-pad-card-container");
   }
-
 
   private get description(): AbstractControl | null {
     return this.form.get('description');

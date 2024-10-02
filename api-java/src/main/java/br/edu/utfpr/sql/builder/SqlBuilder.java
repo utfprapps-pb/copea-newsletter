@@ -125,7 +125,7 @@ public class SqlBuilder {
         return q;
     }
 
-    public Query createQuery(EntityManager em) {
+    public Query createNativeQuery(EntityManager em) {
         Query q = em.createNativeQuery(sql.toString());
         for (Map.Entry<String,Object> entry : parameters.entrySet()) {
             q.setParameter(entry.getKey(), entry.getValue());
@@ -139,10 +139,7 @@ public class SqlBuilder {
         return query;
     }
 
-    public <T> Query createQuery(EntityManager em, Boolean nativeQuery) {
-        if (nativeQuery)
-            return createQuery(em);
-
+    public <T> Query createQuery(EntityManager em) {
         Query query = em.createQuery(sql.toString());
         setParameters(query);
         return query;

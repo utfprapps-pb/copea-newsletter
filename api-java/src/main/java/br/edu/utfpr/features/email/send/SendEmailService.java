@@ -60,12 +60,14 @@ public class SendEmailService {
         for (Email email : emails) {
             HtmlEmail htmlEmail = buildEmail();
             htmlEmail.setSubject(title);
-            if (mimeMultipart.getCount() > 0)
+            if (mimeMultipart.getCount() > 0) {
                 htmlEmail.addPart(mimeMultipart);
+            }
 
+            String bodyWithReplaces = body;
             // TODO: TESTE - refatorar para outro método
             String urlWeb = configApplicationService.getOneOrElseThrowException().getUrlWeb();
-            if (body.contains(Newsletter.URL_TO_UNSUBSCRIBE_KEY)) {
+            if (bodyWithReplaces.contains(Newsletter.URL_TO_UNSUBSCRIBE_KEY)) {
                 if (Objects.isNull(email.getUuidToUnsubscribe()) ||
                         email.getUuidToUnsubscribe().isEmpty())
                     emailService.generateUuidToUnsubscribeAndSave(email);
@@ -75,26 +77,25 @@ public class SendEmailService {
                             "Para realizar o envio da newsletter é necessário configurar " +
                                     "o campo 'URL web' nas configurações da aplicação."
                     );
-                body = body.replace(
+                bodyWithReplaces = bodyWithReplaces.replace(
                         Newsletter.URL_TO_UNSUBSCRIBE_KEY,
                         urlWeb + (urlWeb.endsWith("/") ? "" : "/") + "email-unsubscribe/" + email.getUuidToUnsubscribe()
                 );
             }
             // TODO: TESTE - refatorar para outro método
-            if (body.contains(Email.URL_TO_SELF_REGISTRATION_KEY)) {
+            if (bodyWithReplaces.contains(Email.URL_TO_SELF_REGISTRATION_KEY)) {
                 if (Objects.isNull(urlWeb) || urlWeb.isEmpty())
                     // TODO: verificar como será feito o tratamento de excessão pois vai chamar esse método também quando for pela tarefa agendada
                     throw new ValidationException(
                             "Para realizar o envio da newsletter é necessário configurar " +
                                     "o campo 'URL web' nas configurações da aplicação."
                     );
-                body = body.replace(
+                bodyWithReplaces = bodyWithReplaces.replace(
                         Email.URL_TO_SELF_REGISTRATION_KEY,
                         urlWeb + (urlWeb.endsWith("/") ? "" : "/") + "email-self-registration/group"
                 );
             }
-
-            htmlEmail.setHtmlMsg(body);
+            htmlEmail.setHtmlMsg(bodyWithReplaces);
             htmlEmail.addTo(email.getEmail());
             try {
                 if (htmlEmail.getMimeMessage() == null)

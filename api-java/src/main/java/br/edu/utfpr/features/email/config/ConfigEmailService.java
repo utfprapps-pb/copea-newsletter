@@ -1,7 +1,7 @@
 package br.edu.utfpr.features.email.config;
 
 import br.edu.utfpr.generic.crud.GenericService;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import br.edu.utfpr.features.user.User;
 import br.edu.utfpr.features.user.UserService;
 
@@ -20,16 +20,16 @@ public class ConfigEmailService extends GenericService<ConfigEmail, Long, Config
     UserService userService;
 
     @Override
-    public GenericResponse save(ConfigEmail entity) {
+    public GenericErrorResponse save(ConfigEmail entity) {
         return saveOrUpdate(entity);
     }
 
     @Override
-    public GenericResponse update(ConfigEmail entity) {
+    public GenericErrorResponse update(ConfigEmail entity) {
         return saveOrUpdate(entity);
     }
 
-    private GenericResponse saveOrUpdate(ConfigEmail entity) {
+    private GenericErrorResponse saveOrUpdate(ConfigEmail entity) {
         setDefaultValues(entity);
         return super.save(entity);
     }

@@ -14,11 +14,12 @@ import br.edu.utfpr.features.email.send.log.enums.SendEmailLogStatusEnum;
 import br.edu.utfpr.features.newsletter.email_group.NewsletterEmailGroup;
 import br.edu.utfpr.features.newsletter.requests.NewsletterSearchRequest;
 import br.edu.utfpr.features.newsletter.responses.LastSentEmailNewsletter;
+import br.edu.utfpr.features.newsletter.responses.NewsletterSearchResponse;
 import br.edu.utfpr.features.quartz.tasks.QuartzTasks;
 import br.edu.utfpr.features.quartz.tasks.QuartzTasksService;
 import br.edu.utfpr.generic.crud.GenericService;
 import br.edu.utfpr.reponses.DefaultResponse;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import br.edu.utfpr.shared.enums.NoYesEnum;
 import br.edu.utfpr.utils.DateTimeUtils;
 import com.sun.mail.imap.IMAPMessage;
@@ -60,19 +61,19 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
     NewsletterSearchQuery newsletterSearchQuery;
 
     @Override
-    public GenericResponse save(Newsletter entity) {
+    public GenericErrorResponse save(Newsletter entity) {
         return saveOrUpdate(entity);
     }
 
     @Override
-    public GenericResponse update(Newsletter entity) {
+    public GenericErrorResponse update(Newsletter entity) {
         return saveOrUpdate(entity);
     }
 
-    private GenericResponse saveOrUpdate(Newsletter entity) {
+    private GenericErrorResponse saveOrUpdate(Newsletter entity) {
         validJustOneNewsletterByDescription(entity);
         setDefaultValues(entity);
-        GenericResponse response = super.save(entity);
+        GenericErrorResponse response = super.save(entity);
         response.setMessage(entity.getId().toString());
         return response;
     }
@@ -272,7 +273,7 @@ public class NewsletterService extends GenericService<Newsletter, Long, Newslett
         return newsletterOptional.get();
     }
 
-    public List<Newsletter> search(NewsletterSearchRequest newsletterSearchRequest) {
+    public List<NewsletterSearchResponse> search(NewsletterSearchRequest newsletterSearchRequest) {
         return newsletterSearchQuery.search(newsletterSearchRequest);
     }
 

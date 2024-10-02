@@ -2,7 +2,7 @@ package br.edu.utfpr.features.config.application;
 
 import br.edu.utfpr.exception.validation.ValidationException;
 import br.edu.utfpr.generic.crud.GenericService;
-import br.edu.utfpr.reponses.GenericResponse;
+import br.edu.utfpr.reponses.GenericErrorResponse;
 import jakarta.enterprise.context.RequestScoped;
 
 import java.util.List;
@@ -23,13 +23,13 @@ public class ConfigApplicationService extends GenericService<ConfigApplication, 
     }
 
     @Override
-    public GenericResponse save(ConfigApplication configApplication) {
+    public GenericErrorResponse save(ConfigApplication configApplication) {
         validJustOneConfig(configApplication);
         return super.save(configApplication);
     }
 
     @Override
-    public GenericResponse update(ConfigApplication configApplication) {
+    public GenericErrorResponse update(ConfigApplication configApplication) {
         validJustOneConfig(configApplication);
         return super.update(configApplication);
     }
