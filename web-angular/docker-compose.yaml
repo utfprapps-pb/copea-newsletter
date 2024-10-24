@@ -3,8 +3,8 @@ version: '3.9'
 ########################### SERVICES
 services:
 ########################### FRONT-END
-  copea-newsletter:   
-    image: copea-newsletter:${BUILD_NUMBER}
+  copea-newsletter:
+    image: copea-newsletter:${BUILD_NUMBER:-1}
     container_name: copea-newsletter
     build:
       context: ./
@@ -13,7 +13,7 @@ services:
       - 8621:80
     networks:
       - web
-    environment:      
+    environment:
       - API_URL=${API_URL:-https://copea-newsletter-api.app.pb.utfpr.edu.br/api}
       - PORT=${PORT_WEB:-80}
       - TZ=${TZ_WEB:-America/Sao_Paulo}
